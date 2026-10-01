@@ -260,8 +260,8 @@ body { font-family: "Inter", sans-serif; color: #FFFFFF; }
     median: track([[F1, 0.2], [F1 + 1.3, 1.6, "power3.inOut"]]),
     medianOp: track([[F1 - 0.01, 0], [F1 + 0.15, 1, "power2.out"], [F2 + 0.5, 1], [F2 + 0.51, 0, "none"]]),
     logo: track([[0, 0], [A2 - 0.01, 0], [A2, 1, "none"], [A3 + 0.35, 1], [A3 + 0.36, 0, "none"], [L0 - 0.05, 0], [L0, 1, "none"]]),
-    logoPos: track([[A2, [0, 0.15, 0]], [A3 - 0.4, [0, 0.15, 0]], [A3 + 0.3, [0, 4.0, 0], "power3.in"], [L0, [0, 0.55, 0]], [L1, [0, 0.55, 0]], [L1 + 0.6, [0, 1.05, 0], "power3.inOut"]]),
-    logoRot: track([[A2, [0.1, -1.55, 0]], [P(2, 2), [0, -0.22, 0], "expo.out"], [A3 - 0.4, [0, -0.12, 0], "none"], [A3 + 0.3, [-0.6, 0.2, 0], "power3.in"],
+    logoPos: track([[A2, [0, 0.15, 0]], [A3 - 0.6, [0, 0.15, 0]], [A3 + 0.05, [0, 4.0, 0], "power3.in"], [L0, [0, 0.55, 0]], [L1, [0, 0.55, 0]], [L1 + 0.6, [0, 1.05, 0], "power3.inOut"]]),
+    logoRot: track([[A2, [0.1, -1.55, 0]], [P(2, 2), [0, -0.22, 0], "expo.out"], [A3 - 0.6, [0, -0.12, 0], "none"], [A3 + 0.05, [-0.6, 0.2, 0], "power3.in"],
                     [L0, [0.1, 1.6, 0]], [L0 + 0.8, [0, -0.2, 0], "expo.out"], [END, [0, 0.12, 0], "power1.inOut"]]),
     logoScale: track([[A2, 0.82], [A3, 0.8], [L0, 0.8], [L1, 0.8], [L1 + 0.6, 0.58, "power3.inOut"]]),
     ballVis: track([[0, 1], [A3 + 0.35, 1], [A3 + 0.36, 0, "none"], [F0 - 0.01, 0], [F0, 1, "none"], [F2 + 0.5, 1], [F2 + 0.51, 0, "none"], [L0, 0], [L0 + 0.01, 1, "none"]]),
@@ -307,7 +307,8 @@ body { font-family: "Inter", sans-serif; color: #FFFFFF; }
   const B4 = P(4), B5 = P(5);
   init("#card", { clipPath: "inset(0px 0px 312px 0px round 36px)" });
   init("#card-wrap", { y: 0 });
-  ft("#card-wrap", { y: 520, rotationX: 38, opacity: 0, scale: 0.92 }, { y: 156, rotationX: 0, opacity: 1, scale: 1, duration: 0.55, ease: "expo.out" }, A3 - 0.2);
+  init("#card-wrap", { opacity: 0 });
+  ft("#card-wrap", { y: 520, rotationX: 38, opacity: 0, scale: 0.92 }, { y: 156, rotationX: 0, opacity: 1, scale: 1, duration: 0.55, ease: "expo.out" }, A3 - 0.05);
   ft("#card-shine", { x: -300 }, { x: 1000, duration: 0.7, ease: "power2.inOut" }, A3 + 0.2);
   cap("Call the *exact score.", 840, P(3, 1), B4 - 0.2);
   // home 0 → 1 → 2, away 0 → 1, each driven by a stepper press
@@ -367,8 +368,9 @@ body { font-family: "Inter", sans-serif; color: #FFFFFF; }
   // ═════ P8 · settled position ═════
   const S8 = P(8);
   vis("#pnl", S8 - 0.05, P(9) + 0.5);
-  ft("#flood", { clipPath: "circle(1250px at 960px 520px)" }, { clipPath: "circle(0px at 960px 1200px)", duration: 0.45, ease: "power3.inOut" }, S8 - 0.05);
-  ft("#pnl-card", { y: 360, rotationX: 30, opacity: 0 }, { y: 0, rotationX: 0, opacity: 1, duration: 0.55, ease: "expo.out" }, S8 + 0.05);
+  ft("#flood", { clipPath: "inset(0px 0px 0px 0px)" }, { clipPath: "inset(0px 0px 1080px 0px)", duration: 0.4, ease: "power3.inOut" }, S8 - 0.15);
+  init("#pnl-card", { opacity: 0 });
+  ft("#pnl-card", { y: 360, rotationX: 30, opacity: 0 }, { y: 0, rotationX: 0, opacity: 1, duration: 0.55, ease: "expo.out" }, S8 + 0.2);
   const ROWS = [["Your stake", "$10.00", "rgba(255,255,255,0.9)"], ["Losing stakes", "$30.00", "rgba(255,255,255,0.9)"], ["Fee · 10% of losers only", "−$3.00", "rgba(255,255,255,0.55)"], ["Your share of the pool", "+$23.23", "#00C805"]];
   ROWS.forEach(([k, v, c], i) => {
     const r = el("div", "row", $("#pnl-rows"), `top:${i * 70}px;`);
