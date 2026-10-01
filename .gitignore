@@ -6,3 +6,5 @@ build/*/snaps*/
 build/*/renders/
 build/*/assets/bgm/*.log
 build/*/.hyperframes/
+ref/
+renders/
