@@ -49,4 +49,5 @@ Pending: compare against the reference video the user mentioned (not yet receive
 - Pace: 60s → 38s (about 1.6× overall). One idea per phrase or bar; two-phrase-length acts only for the match and the hero grid.
 - Holds capped at about 1.5s, and every act has a continuous push so nothing stops moving.
 - The story now matches the footage: the call is 2-2, Agüero strikes at 93:20 for 3-2, and the 2-2 call is close and still pays.
-- Re-measure the v2 render with `recipes/motion-profile.py` and compare its still share against the 41% recorded above.
+- Measured v2: quiet stretches (only ambient drift moving) fell from five (longest 5.5s) to three: 13.6–15.6s (2.0s, grid after the legend), 17.1–19.0s (1.9s, pool push), 35.6–37.3s (1.7s, end card). Overall still share reads 43%, because the metric's threshold counts slow pushes as still. The long dead holds are gone, but the slow pushes still register as near-still.
+- Next if needed: make the grid hold and the pool push faster or more visible (a truck across the bars, a rack focus), and end the film about 1s sooner.
