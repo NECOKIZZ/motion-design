@@ -60,6 +60,9 @@ Native transition:
 - transition_in: cold open
 - status: outline
 
+**Event:** 
+**Reads:**
+-  –  
 **On screen (verbatim):** 
 **Layout:** 
 **Depth:** BG · MG · FG

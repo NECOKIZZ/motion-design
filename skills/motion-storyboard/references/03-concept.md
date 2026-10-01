@@ -31,6 +31,17 @@ The spine is the single device that threads every beat, so the video feels like 
 
 A good spine makes transitions easy: if a shape persists, the transition is that shape moving.
 
+### Structure devices that make it one piece
+
+- **A recurring set that escalates:** return to the same place each act and escalate it (same stage: party → pyro → flood → alarm).
+- **A diegetic prop that escalates:** a meter, scale, cash box or scoreboard in the world, acted on in every act, ending in a payoff (it overflows, cracks, pops).
+- **A cast with an arc:** a hero (mascot, user, the product given body language) and a foil the action happens to. Plan the emotion keys across the whole film.
+- **A colour arc:** the palette (or the proportion of the accent) shifts as the story turns.
+- **A rhyme:** the last frame answers the first (same place, pose or motif, changed), ideally recontextualising it.
+- **Literalised lines:** each phrase of the script or jargon becomes a physical gag ("training loss drops" → a character sledding down the loss curve).
+
+See `13-reads-events-and-acting.md` for each.
+
 ## 3. Signature moments
 
 Pick 1–2 moments that only this product could have, built from signature props (see `02-terrain.md`). These get the boldest motion, the strongest music hits, and the most build time. Everything else supports them.

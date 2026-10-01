@@ -12,7 +12,7 @@ mode: collaborative
 
 # AvioMax 30s storyboard v1 (worked example)
 
-> This is a worked example of the format, written from the brief in the README. Times assume 108 BPM until the real beat grid is measured; the build re-derives every time from the grid with `at(phrase, pulse)`.
+> This is a worked example of the format (v2: events and reads added per frame), written from the brief in the README. Times assume 108 BPM until the real beat grid is measured; the build re-derives every time from the grid with `at(phrase, pulse)`.
 
 ## Concept
 
@@ -93,6 +93,11 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - transition_in: cold open
 - status: outline
 
+**Event:** two complaints pile up, then get shoved aside by the answer.
+**Reads:**
+- 0.56–1.6 "Overpriced?": a seller's pain (one word, big, left)
+- 1.67–2.7 "Low reach?": a second pain (eye jumps right, it drops from above)
+- 2.78–4.2 "Better way." in red: there's an answer (the others dim, so only one read is live)
 **On screen (verbatim):** "Overpriced?" · "Low reach?" · "Better way."
 **Layout:** "Overpriced?" left third, y 380, 150px white; "Low reach?" right third, y 560, 150px white; "Better way." centre, y 540, 220px red. Ghost word "SELL" 600px charcoal-tint `#3A3A3A` bottom-right bleeding off-frame.
 **Depth:** BG charcoal + blobs + grain (0.3×) · MG words (1×) · FG two thin white streaks (1.4×) that pass during the slam.
@@ -123,6 +128,12 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - transition_in: cut 1 (iris from the full stop)
 - status: outline
 
+**Event:** the red full stop becomes the brand; the brand draws its link.
+**Reads:**
+- 4.44–5.6 the red dot became a logo: this is the answer (glow leads the eye to it)
+- 5.6–6.6 its name: AVIOMAX
+- 6.67–7.5 "One link." (the claim, part 1)
+- 7.5–8.8 the red line draws out + "All of Nigeria." (the claim, part 2; the line is the spine, introduced while the words land)
 **On screen (verbatim):** logo · "AVIOMAX" · "One link." · "All of Nigeria."
 **Layout:** logo centre-left (x 620, 220px tall) on charcoal; "AVIOMAX" to its right, 180px white; then the message lines replace the wordmark area (reflow: logo slides left 120px).
 **Depth:** BG charcoal + blobs · MG logo, words · FG link-chip head and line.
@@ -156,6 +167,12 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - transition_in: cut 2
 - status: outline
 
+**Event:** a grey seller tag gets stamped "Verified" (cause: the scroll stops on it; reaction: the card lifts and turns red).
+**Reads:**
+- 8.95–9.6 phone arrives: the AvioMax home feed
+- 9.6–10.4 card 3's seller tag is grey (the scroll stops on it)
+- 10.4–11.2 it gets stamped "Verified" (brightest, fastest thing on screen)
+- 11.2–12.6 the box seals: "Delivered" (eye travels left and down after the stamp)
 **On screen (verbatim):** "Verified sellers" · "Delivered"
 **Layout:** white scene. Phone mockup right third (62% frame height, centre x 1300) showing the recreated home screen (`assets/home.png`); words left third, top-aligned y 360, 120px charcoal; chips 52px.
 **Depth:** BG white + dot grid · MG phone, words · FG a blurred parcel corner bottom-left (1.4×, blur 14px).
@@ -187,6 +204,12 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - transition_in: cut 3
 - status: outline
 
+**Event:** one link splits into three chats and comes back as three orders.
+**Reads:**
+- 13.4–14.4 three chat apps fan in (IG, TikTok, WhatsApp shapes, recognisable without colour)
+- 14.4–15.2 the link forks and lands in all three at once
+- 15.5–16.6 three "New order" bubbles answer, one after another
+- 16.6–17.7 hold: the result sinks in while the camera pushes toward WhatsApp
 **On screen (verbatim):** "One link." · "Every chat."
 **Layout:** charcoal. Three chat panels fanned across the right two-thirds (Instagram DM, TikTok inbox, WhatsApp chat), each 420×560, tilted ±4°, white outline platform marks (no brand colours). Words top-left, 130px white.
 **Depth:** BG charcoal + blobs · MG chat panels · FG the link line and chips (1.4×).
@@ -218,6 +241,12 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - transition_in: cut 4 (bubble morph)
 - status: outline
 
+**Event:** a ₦10,000 sale splits; the seller's wallet takes ₦9,400.
+**Reads:**
+- 17.8–18.8 a new ₦10,000 order drops in (on the drop)
+- 18.9–19.8 the note splits in two (punch-in makes it the only thing moving)
+- 19.8–20.9 the big piece flies to the wallet; the total counts up
+- 20.9–22.1 the thin sliver peels away, stamped "6%"; "You keep more."
 **On screen (verbatim):** "₦10,000" → "₦9,400" · "6%" · "You keep more."
 **Layout:** white. Vendor dashboard (recreated from `assets/vendor-dashboard.png`) as a large card left-centre (1100×640); wallet widget top-right of the card; words right third, 120px charcoal.
 **Depth:** BG white + dot grid · MG dashboard · FG the ₦ notes and the "6%" sliver (1.4×).
@@ -251,6 +280,12 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - transition_in: cut 5
 - status: outline
 
+**Event:** three safety promises lock into place, and a light passes over them.
+**Reads:**
+- 22.8–23.4 card 1: verified (badge stamp)
+- 23.4–24.0 card 2: payment sealed by Paystack (the card number collapsing into a token)
+- 24.0–24.7 card 3: buyer protection (box lid closes)
+- 24.9–26.6 held frame: the shine passes; nothing new to read (the breath before the sign-off)
 **On screen (verbatim):** "Verified" · "Paystack secure" · "Buyer protection"
 **Layout:** charcoal. Three glass cards in a row (each 460×300, gap 60), centred vertically; each card: icon (red badge, shield, box) + one label 52px white. Ghost type "TRUST" 520px `#3A3A3A` drifting behind the cards at 0.3×.
 **Depth:** BG charcoal + red/charcoal blobs + ghost type · MG glass cards · FG small glints.
@@ -282,6 +317,11 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - transition_in: cut 6 (collapse + red flood)
 - status: outline
 
+**Event:** everything collapses into the logo and the world turns red.
+**Reads:**
+- 26.7–27.5 the logo, white on red
+- 27.4–28.4 "Shop smart." then "Sell big."
+- 28.3–30.0 the URL (1.7s; the final read needs time to land, so nothing else new appears after it)
 **On screen (verbatim):** logo (white) · "Shop smart." · "Sell big." · "aviomax.store"
 **Layout:** red `#CC0000` background. Logo centre, y 380, 200px tall; "Shop smart." / "Sell big." stacked y 600–760, 120px white; URL pill y 900, white pill with red text 48px.
 **Depth:** BG red + faint darker-red blob (`#8A0000` 30%) + grain · MG logo, lines · FG one anamorphic white streak behind the logo.
@@ -293,9 +333,9 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 | P6.0+0.1 | logo | SETTLE | scale 1.15 → 1 | 0.4s | expo.out | anamorphic streak crosses behind (0.5s) |
 | P6.1 | "Shop smart." | MASK RISE | y 105% → 0 | 0.4s | expo.out | |
 | P6.2 | "Sell big." | SCALE SLAM | scale 1.8 → 1 | 0.18s | expo.out | 6px shake |
-| P6.3 | logo | SHINE + GLINTS | band across the logo; glints at +0.3s, +0.42s | 0.7s | power2.inOut | |
-| P6.4 | "aviomax.store" pill | RISE | y +80 → 0 | 0.45s | power3.out | |
-| P6.5–end | — | HOLD | drift only; music fades 28.5 → 30.0s | — | none | URL readable ≥ 2.5s |
+| P6.3 | "aviomax.store" pill | RISE | y +80 → 0 | 0.45s | power3.out | |
+| P6.4 | logo | SHINE + GLINTS | band across the logo; glints at +0.3s, +0.42s | 0.7s | power2.inOut | secondary: light only, no new read |
+| P6.5–end | — | HOLD | drift only; music fades 28.5 → 30.0s | — | none | URL on screen 1.7s; if the track allows, end at 31s for 2.7s |
 
 **Camera:** `.world` scale 1.02 → 1 (settling, none).
 **Audio cue:** final hit on P6.0; fade out.

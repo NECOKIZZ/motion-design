@@ -67,6 +67,12 @@ One `## Frame N — Name` per beat (a beat is one idea; often one musical phrase
 - transition_in: Bubble morph from Frame 2 (see seam map, cut 2)
 - status: outline
 
+**Event:** a grey seller tag gets stamped "Verified" (cause: the scroll stops on it; reaction: the card lifts and turns accent).
+**Reads:**
+- 8.95–9.6 phone arrives; it's the AvioMax home feed (eye: centre-right, big, moving)
+- 9.6–10.4 card 3's seller tag is grey (the scroll stops on it)
+- 10.4–11.2 it gets stamped "Verified" (brightest, fastest thing on screen)
+- 11.2–12.4 "Verified sellers" · "Delivered" (eye travels left after the stamp)
 **On screen (verbatim):** "Verified sellers" · "Delivered"
 **Layout:** phone mockup right third (62% height, centre x 1290); words left third, top-aligned at y 340; ghost type "SAFE" bottom-left.
 **Depth:** BG charcoal mesh (red/charcoal blobs, grain) 0.3× · MG phone + chips 1× · FG two small red glints + blurred parcel corner 1.4×.
@@ -98,7 +104,9 @@ One `## Frame N — Name` per beat (a beat is one idea; often one musical phrase
 |---|---|
 | time | Music positions + resolved seconds + duration. Durations sum to the total (state it). |
 | role / why | Role in the arc; why traces to the message. No why → cut the frame. |
-| On screen | Every word verbatim, in quotes. ≤ 3 words of message at once. |
+| Event | What is different between the frame's first and last moment; cause → reaction. No event → not a frame. |
+| Reads | What the viewer must understand, in order, each with start–end and where the eye is. No overlapping reads; reads set the length (`13-reads-events-and-acting.md`). |
+| On screen | Every word verbatim, in quotes. ≤ 3 words of message at once. Never a label repeating what the picture shows. |
 | Layout | Zones and coordinates or thirds; sizes as % of frame or px. Two focal points. |
 | Depth | BG / MG / FG with parallax factors. |
 | Material/light | Treatment + the light event and its time. |
@@ -112,7 +120,7 @@ One `## Frame N — Name` per beat (a beat is one idea; often one musical phrase
 ## 4. Quality bar for a finished storyboard
 
 - Every element on screen has a verb, values, a duration and an ease.
-- Every frame has a breath and a frame check.
+- Every frame has an event, reads that fit its length, a breath and a frame check.
 - The seam map has one primary, one or two accents, and the boldest transition on the hero moment.
 - The message is on screen by the end of the second frame.
 - Each feature has its proof moment, depicted as a state change.

@@ -24,6 +24,12 @@ Read the storyboard as a critic. Fix every "no" before presenting.
 - [ ] No fade-outs before transitions? No plain crossfades between scenes?
 - [ ] Velocity matched (out `.in`, in `.out`, peak at the cut)?
 
+**Reads and events**
+- [ ] Every frame has an event (different at the end than the start), with cause then reaction?
+- [ ] Every frame lists its reads, none overlapping, each long enough to land? Does the last read of the film have time?
+- [ ] No word labels what the picture already shows?
+- [ ] Does the ending rhyme with the opening?
+
 **Frame**
 - [ ] ≤ 3 words of message on screen at once, held ≥ 0.3s/word + 0.5s?
 - [ ] Two focal points, three depth layers, one accent per frame?
@@ -41,7 +47,8 @@ Read the storyboard as a critic. Fix every "no" before presenting.
 2. Project: `npx hyperframes init <dir> --non-interactive --resolution landscape|portrait|square`. Vendor fonts and GSAP into `assets/` (CDN loads can fail behind proxies).
 3. Music first: add the audio, run `npx hyperframes beats .`, put the beat times in a constant, write the `at(phrase, pulse)` helper. Every time in the code comes from the helper.
 4. One sub-composition per frame (or one file with scene wrappers for short pieces); one paused timeline; global camera rig and background layer built once.
-5. Build frame by frame in storyboard order. Do not redesign: if something in the storyboard does not work, change the storyboard first and say why.
+5. Build frame by frame in storyboard order. Within a frame, **block the key poses first** (the storytelling states at the frame's key times) and check them as stills before animating between them. If the key poses don't read, motion won't fix them.
+   For long pieces, write a short production guide (shared helpers, the camera rig, the palette, the rules, how to check work) and build acts in parallel, one file per act, each act painting its whole frame as a pure function of time. Do not redesign: if something in the storyboard does not work, change the storyboard first and say why.
 6. After each frame: `npx hyperframes check .`, then fix every error. Common causes: a wipe panel left covering the frame (many contrast errors at once); intentional overlaps need `data-layout-allow-overlap` / `data-layout-allow-occlusion`; opaque scene backgrounds making push/zoom transitions show blank (paint backgrounds on the root or the world).
 
 GSAP pitfalls that lint will not catch:
@@ -62,6 +69,7 @@ GSAP pitfalls that lint will not catch:
    # contact sheet of the whole film, 4 fps
    ffmpeg -v error -y -i out/draft.mp4 -vf "fps=4,scale=320:-2,tile=8x8" out/sheet.png
    ```
+   Review at three zoom levels: **sheet** (first/middle/last of every frame: the shape of the piece), **strip** (every frame of a key moment: takes, stamps, transitions, ~0.4–0.6s), **crop** (full-resolution detail: faces, text, contacts, glows). Read timing like a viewer: step through a sheet at 0.1–0.15s intervals and ask at each frame where the eye is and whether the current read has landed; count the frames each read gets.
 3. Look at every image. Compare each still against its frame check. Typical faults:
    - Text overlapping a device or another word; text clipped at a safe margin.
    - A word still mid-entrance at its check time (entrance too slow or late).
@@ -69,6 +77,9 @@ GSAP pitfalls that lint will not catch:
    - A transition midpoint that shows a blank frame or a flash of the old scene.
    - Fallback font (wrong letterforms), wrong colour, logo distorted or under minimum size.
    - Glass that looks like a flat tinted box (nothing moving behind it).
+   - Twinning: two things entering or moving identically at the same moment.
+   - A read that gets only a few frames, or shares frames with another read.
+   - Text that labels what the picture already shows.
    - Dead frames: a contact sheet row where nothing changes for more than one phrase without an intended hold.
 4. Fix, re-render, re-check. Two or three rounds is normal.
 5. Hand over: the file path, duration, resolution, the stills you checked, and what you could not verify (audio feel, motion smoothness at full frame rate).

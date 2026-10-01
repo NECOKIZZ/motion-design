@@ -50,6 +50,33 @@ From the Kickoff project's reference analysis (two launch videos by one creator;
 - Transitions: diagonal two-tone wipe ~0.25s; circle iris ~0.17s; dark → light blur-dissolve ~0.25s; collapse-into-logo match cut ~0.3s.
 - Layout: product UI on one side, words on the other, alternating sides; UI ~25–35% of frame width; lots of empty space; reflow when new content arrives.
 
-## 3. Your references
+## 3. "I'm Upping My P(doom)" music video (Claude Opus 5.5, 156s)
+
+Source: github.com/JohnHeibel/PDoomVideo, and the author's follow-up starter kit github.com/JohnHeibel/ClaudeAnimationBase, whose guide was written from "an analysis of what the model did and didn't do well". Every frame is code: p5.js + p5.brush watercolour painted in headless Chrome, frames rendered in parallel, encoded with ffmpeg. Studied 2026-10-01 from the repos (storyboard, animation guide, code).
+
+**What it did right that this skill now captures** (details in `13-reads-events-and-acting.md`):
+- *A concept with a twist:* "a stage show that goes off the rails", opening and closing on the same painted curtain; the last line reveals the apocalypse was a play.
+- *Rule for every shot:* something happens: a character does something, something breaks, transforms, chases or falls.
+- *Text-light:* jokes told with pictures and acting; a handful of sound-effect words in the whole film; no labels, no captions repeating the lyric.
+- *Sets, not cards:* each chapter happens in one place the camera moves through; the four choruses return to the same stage and escalate.
+- *A diegetic prop:* the P(doom) meter is a thermometer on stage that the character pumps each chorus (8 → 34 → 61 → 86 → 99.9), cracks, and finally pops like a balloon.
+- *A cast with acting:* a hero (Clawd) that grows across the film, a human foil, guest characters who return for the curtain call; mood changes are acted (squint, squash-stretch take, emote pop) never snapped.
+- *Motivated transitions:* brush wipes only at chapter breaks; inside chapters the action carries the cut (a chomp to black, a fall, a zoom through an eye, a heart bubble popping, a bomb flash, crashing through a floor, a door slam).
+- *Palette arc:* warm cream → sky → space violet and gold → steel and jazz blue → data-centre teal → alarm red → back to warm theatre crimson.
+- *Literalised lines:* every lyric became a physical gag (training loss "drop" = sledding down the loss curve; "sharp left turn" = a go-kart hairpin that flings the foil off).
+- *A real medium:* hand-painted watercolour with boiling linework (seeded jitter re-rolled 12×/s), paper grain and vignette.
+
+**Numbers**
+- Shots 1.4–4s, one focal action each; lead character ~40% of frame height in dance shots; 88 BPM, every hit on a beat.
+- Character size guide: medium shot unit u ≈ 20–28 (character 8u tall); close-up 40–70; tiny (< 12) only in establishing shots.
+- Render budget: ≤ 2.5s per frame, never more than ~4s.
+
+**Process worth copying**
+- Two generations: a first pass, then a storyboard rewritten with a style direction ("P5 brushstrokes, make each scene visually interesting, make every scene transition into the next"), then the final build.
+- A written production guide (`ANIMATION_GUIDE.md`) briefed parallel subagents: one chapter per file, every shot a pure function of time, a shared character API (pose, face, hats, emotes, dances), shared helpers they must not edit, and how to check work.
+- Review with contact sheets at chosen times, strips of every frame around a hit, and crops of faces; for each shot check the first and last frames and every 0.1s around hits.
+- The author notes that the reasoning level tracks how extravagant and detail-oriented the result is; their test videos used the highest setting.
+
+## 4. Your references
 
 (Add the user's reference videos here as they are analysed: what each is, the numbers, the techniques worth borrowing.)

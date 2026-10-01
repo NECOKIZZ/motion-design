@@ -23,7 +23,7 @@ The output of this skill is a **storyboard file** (`STORYBOARD.md`, format in `r
 | 2 | **Terrain** | The product's visual world: objects, actions, materials, sounds, signature transitions, and the generic props to avoid. | `02-terrain.md` |
 | 3 | **Concept** | Five candidate concepts (two of them unlikely), one chosen. The **spine** (one device threading every beat), 1–2 **signature moments**, the rhythm shape. | `03-concept.md` |
 | 4 | **Look** | Brand tokens, light/dark, material treatment (flat, glass, chrome, paper, neon), type roles, one accent. | `08-materials-and-light.md`, `07-type-in-motion.md` |
-| 5 | **Beat sheet** | Every beat specified: music position, on-screen words verbatim, layout zones, depth layers, element-by-element motion (verb, from → to, ease, duration, offset), camera, breath, transition out, do-not, frame check. | `11-storyboard-format.md` + `04`–`10` |
+| 5 | **Beat sheet** | Every beat specified: its event and its reads (what the viewer must understand, when), music position, on-screen words verbatim, layout zones, depth layers, element-by-element motion (verb, from → to, ease, duration, offset), camera, breath, transition out, do-not, frame check. | `11-storyboard-format.md` + `04`–`10`, `13` |
 | 6 | **Self-review** | The storyboard checked against the critique list before anyone sees it. | `12-build-and-review.md` §1 |
 | 7 | **Build and verify** (if asked) | Composition built from the storyboard; frames extracted at every frame check; fixed until they match. | `12-build-and-review.md` §2–3 |
 
@@ -39,6 +39,7 @@ The output of this skill is a **storyboard file** (`STORYBOARD.md`, format in `r
 | Music, beats, phrases, holds | `references/09-rhythm-and-music.md` |
 | Showing a product or app UI working | `references/10-product-ui.md` |
 | What HyperFrames can and cannot do, and the name of each building block | `references/hyperframes-map.md` |
+| Reads (timing for the viewer), an event in every frame, show-don't-write, sets and diegetic props, characters and acting, choosing a medium | `references/13-reads-events-and-acting.md` |
 | Measured numbers from reference work | `references/measured-references.md` |
 | Fill-in templates | `templates/brief.md`, `templates/storyboard.md` |
 | A complete worked storyboard | `examples/aviomax-30s.md` |
@@ -52,6 +53,13 @@ Load references as the stage needs them; you do not need all of them for a 6-sec
 - Every beat has a *why* traced to the message. A beat whose why you cannot write gets cut.
 - Show the product doing the thing (state changes on real-looking UI), never a screenshot with a caption.
 - Every prop comes from the terrain. If a prop could appear unchanged in another product's video, replace it.
+- Every frame has an **event**: something is different between its first and last frame. Cause, then reaction. Whatever is set up pays off.
+- **Show it, don't write it.** Never label what the picture already shows; words carry only the message, proof numbers, the brand and the CTA.
+- **Sets, not cards; props, not overlays.** Acts happen in places the camera moves through; data lives in the world as objects that can be acted on and escalate.
+- The ending **rhymes** with the opening.
+
+**Timing (model the viewer)**
+- List each frame's **reads** (what the viewer must understand, in order, with start and end). One read at a time; each gets time to be found, understood and registered. Fast actions, slow meanings. The reads set the frame's length, never the other way round.
 
 **Motion**
 - Each element gets a verb, a start state, an end state, an ease and a duration. "Animates in" is not a spec.
@@ -59,6 +67,7 @@ Load references as the stage needs them; you do not need all of them for a 6-sec
 - Order of motion is order of importance. The first thing that moves is what the viewer reads first.
 - Entrances use `.out` eases, exits `.in`, moves between positions `.inOut`. Exits are faster than entrances.
 - Vary on purpose: at most two tweens in a beat share an ease; the slowest beat is about 3× slower than the fastest; entrances come from different directions and use different properties.
+- Avoid twinning: no two arms, cards or characters move identically at the same moment; offset timing and amount.
 - Ambient motion on every hold (drift, parallax, light travel) so nothing freezes, but it must be quieter than the action.
 
 **Transitions**
