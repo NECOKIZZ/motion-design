@@ -1,5 +1,6 @@
 # Motion profile: per-clip motion events, still share and ease shape from frame differences.
 # Usage: python3 motion-profile.py clip1.mp4 clip2.mp4 ...   (needs ffmpeg, ffprobe, numpy)
+# Also prints quiet runs: stretches of 1s or more where only ambience moves (frame difference < 0.6).
 import subprocess,sys,numpy as np,json
 def frames(f,w=160):
     p=subprocess.run(['ffprobe','-v','error','-select_streams','v','-show_entries','stream=width,height,r_frame_rate','-of','json',f],capture_output=True,text=True)
@@ -30,4 +31,13 @@ for f in sys.argv[1:]:
       p25=round(float(np.percentile(durs,25)),2) if durs else None,p75=round(float(np.percentile(durs,75)),2) if durs else None,
       peak_pos_med=round(float(np.median(pks)),2) if pks else None, early_peak_share=round(float(np.mean([p<0.35 for p in pks])),2) if pks else None,
       still_share=round(float(still),2),hard_cuts=len(cuts))
+    q=[];i=0
+    while i<len(d):
+        if d[i]<0.6:
+            j=i
+            while j<len(d) and d[j]<0.6: j+=1
+            if (j-i)/fps>=1.0: q.append(f"{i/fps:.1f}-{j/fps:.1f}s ({(j-i)/fps:.1f}s)")
+            i=j
+        else: i+=1
+    out[f]['quiet_runs']=q
 for k,v in out.items(): print(k,v)

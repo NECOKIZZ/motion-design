@@ -87,9 +87,9 @@ One `## Frame N — Name` per beat (a beat is one idea; often one musical phrase
 | P3.2 | "Verified sellers" | SIDE SNAP | x −160, skew 8°, blur 8 → sharp | 0.2s | power4.out | lands with the stamp |
 | P3.4 | "Delivered" chip | RISE | y +80, opacity 0 → 0, 1 | 0.45s | power3.out | below the first chip, smaller |
 | P3.5 | phone | SHINE | band x −300 → 900 | 0.8s | power2.inOut | soft-light; glint top-right at +0.6s |
-| P3.6–7 | — | BREATHE | camera drift scale 1 → 1.025 continues | — | none | nothing new enters |
+| P3.6–7 | — | BREATHE | camera push scale 1 → 1.06 continues, gathering speed into the cut | — | power1.in | nothing new enters; 1s |
 
-**Camera:** `.world` drifts x 0 → −24px, scale 1 → 1.025 across the whole frame (none).
+**Camera:** `.world` pushes x 0 → −30px, scale 1 → 1.06 across the whole frame (power1.in).
 **Audio cue:** stamp thud on P3.2; soft whoosh into the cut.
 **Transition out:** see seam map, cut 3 (Bubble morph, primary).
 **Do not:** no shopping-cart icon; no fade on the chips; phone never smaller than 55% height.
@@ -120,7 +120,7 @@ One `## Frame N — Name` per beat (a beat is one idea; often one musical phrase
 ## 4. Quality bar for a finished storyboard
 
 - Every element on screen has a verb, values, a duration and an ease.
-- Every frame has an event, reads that fit its length, a breath and a frame check.
+- Every frame has an event, reads that fit its length, a breath of 1.5s or less and a frame check.
 - The seam map has one primary, one or two accents, and the boldest transition on the hero moment.
 - The message is on screen by the end of the second frame.
 - Each feature has its proof moment, depicted as a state change.

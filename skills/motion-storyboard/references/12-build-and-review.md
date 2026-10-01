@@ -22,7 +22,8 @@ Read the prompt as a critic, then once more as the builder: could you build ever
 - [ ] Entrances `.out`, exits `.in`, moves `.inOut`?
 - [ ] No more than two tweens per frame share an ease? Durations vary (slowest ≈ 3× fastest)?
 - [ ] Neighbouring words/chips enter differently?
-- [ ] Each frame has a breath, and ambient motion is quieter than action?
+- [ ] Each frame has a breath of 1.5s or less, with the camera travelling through it? Decorative ambience quieter than action?
+- [ ] One scene per phrase (two only for the hero and the drop)? Does any frame have time left after its last read? Shorten it.
 - [ ] First motion of each frame within 0.1–0.3s, not at 0?
 
 **Transitions**
@@ -46,7 +47,7 @@ Read the prompt as a critic, then once more as the builder: could you build ever
 **Music**
 - [ ] Every scene change on a phrase start; impacts arrive 1–2 frames early?
 - [ ] The hero moment on the drop; a held frame before or after it?
-- [ ] End card holds ≥ 1.5s?
+- [ ] End card holds 1.5–2s?
 
 ## §2 Build from the storyboard (builder instructions)
 
@@ -87,7 +88,7 @@ GSAP pitfalls that lint will not catch:
    - Twinning: two things entering or moving identically at the same moment.
    - A read that gets only a few frames, or shares frames with another read.
    - Text that labels what the picture already shows.
-   - Dead frames: a contact sheet row where nothing changes for more than one phrase without an intended hold.
+   - Dead frames: any stretch over 1.5s where only ambience moves. Measure it: `python3 recipes/motion-profile.py out/draft.mp4` prints the still share and every quiet run of 1s or more. Aim for no quiet run over 1.5s and fix the longest runs first. The still share is secondary: slow travelling pushes register as near-still, so a well-paced film can still read about 40%.
 4. Fix, re-render, re-check. Two or three rounds is normal.
 5. Hand over: the file path, duration, resolution, the stills you checked, and what you could not verify (audio feel, motion smoothness at full frame rate).
 

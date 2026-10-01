@@ -70,17 +70,23 @@ Unless the user asks otherwise, design in the **house look** (`references/14-hou
 - **Sets, not cards; props, not overlays.** Acts happen in places the camera moves through; data lives in the world as objects that can be acted on and escalate.
 - The ending **rhymes** with the opening.
 
+**Pace (default)**
+- One idea per musical phrase (about 4s at 120 BPM; cuts may also land on a bar, 2s). Only the hero moment and the drop get more (up to 6–8s).
+- No hold longer than 1.5s. The message line and the end card may hold up to 2s. If a frame's reads end early, shorten the frame; never fill it with a hold.
+- A 30–40s film is the default for a promo with 3–4 proofs. If a storyboard reaches 60s, check whether its acts really have 8s of reads each.
+- Measure the draft with `recipes/motion-profile.py`: no quiet run (only ambience moving) longer than 1.5s. The still share is a secondary signal, because slow pushes count as near-still.
+
 **Timing (model the viewer)**
 - List each frame's **reads** (what the viewer must understand, in order, with start and end). One read at a time; each gets time to be found, understood and registered. Fast actions, slow meanings. The reads set the frame's length, never the other way round.
 
 **Motion**
 - Each element gets a verb, a start state, an end state, an ease and a duration. "Animates in" is not a spec.
-- Every beat has build → breathe → resolve. Write where the breath is; a breath is what makes the next hit land.
+- Every beat has build → breathe → resolve. Write where the breath is; a breath is what makes the next hit land. A breath is short: 0.5–1s, never more than 1.5s, and the camera keeps travelling through it.
 - Order of motion is order of importance. The first thing that moves is what the viewer reads first.
 - Entrances use `.out` eases, exits `.in`, moves between positions `.inOut`. Exits are faster than entrances.
 - Vary on purpose: at most two tweens in a beat share an ease; the slowest beat is about 3× slower than the fastest; entrances come from different directions and use different properties.
 - Avoid twinning: no two arms, cards or characters move identically at the same moment; offset timing and amount.
-- Ambient motion on every hold (drift, parallax, light travel) so nothing freezes, but it must be quieter than the action.
+- Ambient motion alone does not keep a hold alive. On any hold over about 1s the camera travels (a push of 1 → 1.05–1.1, a truck across the set, a rack focus) at a speed the viewer can see, and the next object is already on its way in. Decorative ambience (curtains, grain, blobs) stays quieter than the action.
 
 **Transitions**
 - A transition carries meaning (continue, next point, new section, reveal). Pick it for what it says.

@@ -34,6 +34,7 @@ Rules:
 
 Pace by medium (measured, see `measured-references.md`):
 - **Social promo / launch clip:** entrances 0.13–0.3s, transitions 0.17–0.35s, cuts every 2–3s.
+- **House-look promo (the default):** entrances 0.3–0.7s, transitions 0.3–0.45s, a scene every 4s (6s for the hero), holds ≤ 1.5s, no quiet run over 1.5s. Measured: the same film felt stalled at 60s (8s scenes, holds up to 5.5s) and right at 38s.
 - **Website / UI showcase:** element motion 0.4–1.4s, long holds (35–60% of the time nothing moves).
 - **Brand film:** 0.6–2s moves, few cuts.
 
@@ -91,7 +92,7 @@ Zoom gives continuity between levels: from a whole to a detail (zoom in to a UI 
 
 - The first thing to move is the most important. Nothing else should move at the same moment unless it supports it.
 - One focal action at a time; secondary motion is quieter (smaller, slower, lower contrast).
-- Every beat has three phases: **build** (0–30%: elements arrive), **breathe** (30–70%: held, alive with one ambient motion), **resolve** (70–100%: the decisive end or the transition).
+- Every beat has three phases: **build** (0–40%: elements arrive, one per pulse), **breathe** (a short hold, 0.5–1.5s, while the camera keeps travelling), **resolve** (the decisive end or the transition). If the breath would run longer than 1.5s, the beat is too long: cut time, not reads.
 - First visible motion within 0.1–0.3s of a beat starting; never at exactly 0 (it reads as a jump cut).
 
 ## 14. Motion verbs
@@ -131,11 +132,15 @@ Exits: 60–70% of the entrance duration, `.in` ease, or no exit at all because 
 
 ## 16. Ambient motion (the "never still" layer)
 
-During every hold, something moves quietly. Choose a different one per scene:
-- Camera drift: scale 1 → 1.02–1.04 or x ±20–30px over the beat, `none` or `sine.inOut`.
+During every hold, something moves. Two layers:
+
+**The camera keeps travelling** (required on any hold over ~1s): a push of scale 1 → 1.05–1.1 over the scene (`power1.in` or `power2.in`, so it gathers speed into the cut), a truck across the set, a rack focus, or a lean into the next subject. It must be visible: a 1.02 drift over 4s reads as stopped.
+
+**Decorative ambience** underneath, a different one per scene:
+- Camera drift: scale 1 → 1.02–1.04 or x ±20–30px over the beat, `none` or `sine.inOut` (only under a travelling move, never instead of one).
 - Parallax layers drifting at different rates.
 - Light travel: a shine sweep or a slowly rotating rim light.
 - Background gradient blobs drifting (transforms only).
 - Idle bob on a hero object: y ±6px, rotation ±1°, `sine.inOut`, finite yoyo repeats.
 
-Ambient motion must be at least 5× slower and quieter than action motion. If you notice it, it is too strong.
+Decorative ambience must be at least 5× slower and quieter than action motion; if you notice it, it is too strong. The travelling camera is not ambience: it is the motion of the hold, and the viewer should feel it.

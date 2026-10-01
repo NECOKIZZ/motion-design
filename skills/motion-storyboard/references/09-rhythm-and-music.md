@@ -15,7 +15,7 @@ No music supplied: ask whether to proceed with a placeholder. Never use a refere
 
 Music is grouped: 4 beats make a bar; 2 or 4 bars make a phrase (often 8 pulses). Strong hits (strength ≈ 1) usually mark phrase starts.
 
-- **Scene changes land on phrase starts.**
+- **Scene changes land on phrase starts** (or on a bar, half a phrase, when the scene is short). Default: one scene per phrase, about 4s at 120 BPM; two phrases only for the hero and the drop.
 - **Inside a phrase, pulses 0–5 act, 6–7 breathe:** one new thing per pulse, then a breath where only ambience moves. Then the next phrase hits. (Measured on fast promo references: 210 BPM, phrase every 8 pulses ≈ 2.29s; the breath is about 0.85s.)
 - **Flams** (two hits ~0.1s apart): main impact on the first, a secondary settle (badge, shadow, shake decay) on the second.
 - **Follow the build:** when the track gets denser toward the end, put the demo climax and end card there and cut faster.
@@ -52,7 +52,7 @@ Never time an element by a hand-typed number that is not derived from the grid.
 | Bass drop | the hero moment, the boldest transition, flash |
 | Riser / build | slow push-in, accumulating elements, tension |
 | Breakdown / quiet | the held frame, the one line that must be read |
-| Final hit | logo lock; then hold the end card ≥1.5s while music resolves |
+| Final hit | logo lock; then hold the end card 1.5–2s while music resolves (the CTA press about 1s after the wordmark) |
 
 Impacts *arrive* on the beat: start the tween so its landing frame is the beat (or 1–2 frames before). For a 0.2s slam, the tween starts ~0.17s early.
 
