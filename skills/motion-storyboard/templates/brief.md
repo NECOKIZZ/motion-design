@@ -1,10 +1,11 @@
-# Video brief
+# Video brief (input to the prompt writer)
 
-Fill what you know; leave the rest blank and Claude will propose defaults.
+Fill what you know; leave the rest blank and Claude will propose defaults. Claude turns this into
+`<slug>-video-prompt.md`, which you then give to a fresh Opus session to build the video.
 
 ```
-Make a [length]-second [16:9 | 9:16 | 1:1] motion design video with HyperFrames for [product].
-Use the motion-storyboard skill: brief → terrain → concept → storyboard, then build.
+Write the video prompt for a [length]-second [16:9 | 9:16 | 1:1] motion design video for [product].
+Use the motion-storyboard skill. Show me the concept before the full storyboard.
 
 Product (one sentence):
 Audience (who, where they watch, what they already believe):
@@ -30,5 +31,5 @@ Brand
 Music: [assets/music.mp3, genre]  (licensed? yes/no)
 Reference videos (craft to borrow, not content to copy): [links or files]
 
-Stop after: [the concept | the storyboard | the finished video]
+Music BPM if known: [  ]  (otherwise the prompt assumes one and the builder re-measures)
 ```

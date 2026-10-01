@@ -1,31 +1,38 @@
 ---
 name: motion-storyboard
-description: Direct a motion design video before building it. Turns a product brief into a beat-by-beat storyboard that Claude can build in HyperFrames without guessing — message and features, the product's visual terrain (football → ball, pitch, scoreboard; privacy → redaction blocks, hashes), a concept with a spine, then every beat specified with music position, layout, verbs, eases, durations, depth layers, camera, transitions, materials (glass, gradients, shine, glints) and a frame check. Use whenever someone asks for a promo, launch video, explainer, social clip, motion graphic or HyperFrames video, asks to write or improve a storyboard or video prompt, or hands over a brief like "make a 30-second video for X". Brand-agnostic; supply the brand per project.
+description: Write the prompt for a motion design video. Turns a rough idea or product brief into one self-contained Markdown prompt file, storyboard first, that the user hands to Claude (Opus) in a separate session to build the video in HyperFrames. The prompt carries the message and features, the product's visual terrain (football → ball, pitch, scoreboard; privacy → redaction blocks, hashes), a concept with a spine, the look, a motion system, a seam map of transitions, and every frame specified (event, reads, words, layout, depth, motion with eases and durations, camera, materials like glass, gradients, shine and glints, transition out, frame check), plus the build rules and verification steps. Use whenever someone wants a video prompt, storyboard or brief for a promo, launch video, explainer, social clip or motion graphic, or says "make a video for X" in a session meant for writing the prompt. Brand-agnostic; the brand is supplied per project.
 ---
 
-# Motion storyboard
+# Motion storyboard: the video prompt writer
 
-You are the director, not the animator. The animator (you, later, in HyperFrames) builds exactly what the storyboard says, so every decision that matters is made here, on paper, where changing it costs seconds. A vague storyboard ("logo slams in, push transition out") forces the build to improvise, and improvised motion is generic motion.
+You are the director and the writer. Your output is **a prompt file**, not a video. The user takes the file to a fresh Claude Code session (Opus, with HyperFrames) and that session builds the video from it. So:
 
-The output of this skill is a **storyboard file** (`STORYBOARD.md`, format in `references/11-storyboard-format.md`) detailed enough that a fresh session could build the video from it alone.
+- **The file must stand alone.** The builder has never seen this conversation and does not have this skill. Everything it needs (the story, the look, every frame, the transition specs, the build rules, how to verify) is in the file.
+- **Every creative decision is made in the file.** A vague prompt ("logo slams in, push transition out") forces the builder to improvise, and improvised motion is generic. The builder should only have to execute.
+- **Storyboard first.** The storyboard is the heart of the file; the build instructions wrap around it.
+
+Output file: `<slug>-video-prompt.md`, following `templates/video-prompt.md`. A complete example: `examples/aviomax-30s-prompt.md`.
 
 ## When the request arrives
 
-1. Read the brief. If it lacks the product, the audience, the length or the aspect, ask once, in one message. Anything else gets a sensible default that you state.
-2. Run the seven stages below in order. Show the user the result of stage 3 (concept) and stage 5 (storyboard) before building anything over 15 seconds.
-3. If the user also wants the video built, hand the approved storyboard to the HyperFrames build loop (`references/12-build-and-review.md`).
+1. Read what the user gave you. If it lacks the product, the audience, the length or the aspect, ask once, in one message. Everything else gets a sensible default that you state.
+2. Run the stages below. Show the user the concept (stage 3) before writing the full storyboard; it is cheap to change there.
+3. Write the prompt file, run the self-review, fix, then give the user the file and a short summary table (frame · time · event · transition out).
+4. If the user's music file is available to you, run `npx hyperframes beats` on it and write real times. If not, write music positions with an assumed BPM; the prompt tells the builder to re-derive the times from the measured grid.
+5. Do not build the video unless the user explicitly asks you to in this session.
 
-## The seven stages
+## The stages
 
-| # | Stage | Output | Reference |
+| # | Stage | Goes into the prompt as | Reference |
 |---|---|---|---|
-| 1 | **Brief → message and features** | One message written as a claim. 2–4 features, each with the single *proof moment* that shows it working. | `01-brief-and-features.md` |
-| 2 | **Terrain** | The product's visual world: objects, actions, materials, sounds, signature transitions, and the generic props to avoid. | `02-terrain.md` |
-| 3 | **Concept** | Five candidate concepts (two of them unlikely), one chosen. The **spine** (one device threading every beat), 1–2 **signature moments**, the rhythm shape. | `03-concept.md` |
-| 4 | **Look** | Brand tokens, light/dark, material treatment (flat, glass, chrome, paper, neon), type roles, one accent. | `08-materials-and-light.md`, `07-type-in-motion.md` |
-| 5 | **Beat sheet** | Every beat specified: its event and its reads (what the viewer must understand, when), music position, on-screen words verbatim, layout zones, depth layers, element-by-element motion (verb, from → to, ease, duration, offset), camera, breath, transition out, do-not, frame check. | `11-storyboard-format.md` + `04`–`10`, `13` |
-| 6 | **Self-review** | The storyboard checked against the critique list before anyone sees it. | `12-build-and-review.md` §1 |
-| 7 | **Build and verify** (if asked) | Composition built from the storyboard; frames extracted at every frame check; fixed until they match. | `12-build-and-review.md` §2–3 |
+| 1 | **Brief → message and features** | §3 Brief: the message as a claim; 2–4 features, each with its *proof moment* | `01-brief-and-features.md` |
+| 2 | **Terrain** | §2 and the props, devices and transitions used in every frame | `02-terrain.md` |
+| 3 | **Concept** (show the user) | §2: the idea, the spine, signature moments, rhythm shape, bans | `03-concept.md` |
+| 4 | **Look** | §4: palette, type, medium/material, background layer, light events | `07-type-in-motion.md`, `08-materials-and-light.md`, `13` §8 |
+| 5 | **Motion system and seam map** | §5 and §6 | `04-motion-language.md`, `05-transitions.md`, `06-camera-and-depth.md`, `09-rhythm-and-music.md` |
+| 6 | **Storyboard** | §7: every frame, fully specified | `11-storyboard-format.md`, `10-product-ui.md`, `13-reads-events-and-acting.md` |
+| 7 | **Build rules and verification** | §8 and §9, adapted to the project | `hyperframes-map.md`, `12-build-and-review.md` |
+| 8 | **Self-review** | fixes before handing over | `12-build-and-review.md` §1 |
 
 ## Reference map
 
@@ -41,12 +48,13 @@ The output of this skill is a **storyboard file** (`STORYBOARD.md`, format in `r
 | What HyperFrames can and cannot do, and the name of each building block | `references/hyperframes-map.md` |
 | Reads (timing for the viewer), an event in every frame, show-don't-write, sets and diegetic props, characters and acting, choosing a medium | `references/13-reads-events-and-acting.md` |
 | Measured numbers from reference work | `references/measured-references.md` |
-| Fill-in templates | `templates/brief.md`, `templates/storyboard.md` |
-| A complete worked storyboard | `examples/aviomax-30s.md` |
+| The prompt file template (the output) | `templates/video-prompt.md` |
+| Intake questions for a new video | `templates/brief.md` |
+| A complete worked prompt | `examples/aviomax-30s-prompt.md` |
 
 Load references as the stage needs them; you do not need all of them for a 6-second logo sting.
 
-## Rules that hold for every storyboard
+## Rules every prompt's storyboard follows
 
 **Story**
 - The message is a claim ("Sell to all of Nigeria in one link"), not a topic ("About AvioMax"). It lands on screen by the second beat.
@@ -81,11 +89,10 @@ Load references as the stage needs them; you do not need all of them for a 6-sec
 - Two focal points per frame, three depth layers, one accent colour, content anchored to edges or a grid, not floating centred by default.
 - Video scale: headlines 96–220px at 1080p, body 32–44px, nothing under 24px without a reason.
 
-**HyperFrames (non-negotiable at build)**
+**HyperFrames (write these into §8 of every prompt)**
 - One paused GSAP timeline on `window.__timelines`; deterministic (no `Math.random`, `Date.now`, `repeat: -1`); `fromTo` with explicit start states; transforms, opacity, filter, clip-path, colour only (never width/height/top/left); ambient loops live on the timeline. Details in `references/hyperframes-map.md`.
 
 ## What to hand the user
 
-- After stage 3: the message, the terrain table, the five concepts in three lines each, your pick and why.
-- After stage 5: the storyboard file path, plus a summary table (beat · time · on screen · transition out · why).
-- After stage 7: the video path, the frames you checked, and anything you could not verify (audio feel, font fallback).
+- After stage 3: the message, the terrain table, the five concepts in three lines each, your pick and why. Wait for a reaction.
+- At the end: the prompt file, a summary table (frame · time · event · transition out), the assumptions the builder will need to check (BPM, missing assets), and one line on how to use it: *"Open Claude Code in the folder with your assets and say: Build the video in `<slug>-video-prompt.md`."*

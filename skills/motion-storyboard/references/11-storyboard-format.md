@@ -1,10 +1,10 @@
 # 11 · The storyboard format
 
-This is the file the build reads. Its test: **could a fresh session, with no other context, build the video from it without making a single creative decision?** If a field would make the builder guess, it is underspecified.
+This is the storyboard section (§7) of the prompt file, plus the decisions it depends on (§2, §4–§6). Its test: **could a fresh session, with no other context and without this skill, build the video from the prompt without making a single creative decision?** If a field would make the builder guess, it is underspecified.
 
-The file is `STORYBOARD.md` in the project root. It is compatible with HyperFrames' storyboard parser (frontmatter + `## Frame N — Title` sections with `- key: value` bullets); everything extra is kept as per-frame data. Template: `templates/storyboard.md`. Full example: `examples/aviomax-30s.md`.
+The whole prompt file follows `templates/video-prompt.md`; a full example is `examples/aviomax-30s-prompt.md`. The sections below describe the content of each part; in the prompt file the global decisions go in §2–§6 and the frames in §7 as `### Frame N — Name` blocks. (The frame format also parses as a HyperFrames `STORYBOARD.md` if the builder wants to save one.)
 
-## 1. Frontmatter
+## 1. Header facts (prompt §0–§3)
 
 ```yaml
 ---

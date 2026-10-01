@@ -1,20 +1,32 @@
----
-format: 1920x1080
-duration: 30s
-fps: 30
-message: "Sell to all of Nigeria in one link."
-endline: "Shop smart. Sell big."
-arc: Pain → Turn → Proof (buyers) → Signature (one link) → Proof (sellers, peak) → Trust → Sign-off
-audience: Nigerian small business owners selling on Instagram, TikTok and WhatsApp; shoppers burned by fake sellers
-music: assets/music.mp3 (Afrobeats instrumental; assumed 108 BPM, pulse 0.556s, phrase = 8 pulses = 4.44s; replace with `npx hyperframes beats` output)
-mode: collaborative
----
+# AvioMax · 30s motion design video · build prompt
 
-# AvioMax 30s storyboard v1 (worked example)
+<!--
+  Worked example of the motion-storyboard skill's output. Hand this whole file to Claude Code
+  (Opus) in a project folder holding the assets below and say:
+  "Build the video in aviomax-30s-prompt.md."
+  It is self-contained: the builder needs HyperFrames, not the motion-storyboard skill.
+-->
 
-> This is a worked example of the format (v2: events and reads added per frame), written from the brief in the README. Times assume 108 BPM until the real beat grid is measured; the build re-derives every time from the grid with `at(phrase, pulse)`.
+## 0. Your job
 
-## Concept
+Build this video in HyperFrames exactly as storyboarded below. The creative decisions are made: do not redesign, add scenes, add text or swap transitions. If something in the storyboard cannot work, change the smallest thing that fixes it and list the change in your hand-off.
+
+Deliverable: `renders/aviomax-30s.mp4`, 1920×1080, 30 fps, 30s, with the music.
+
+## 1. Before writing anything
+
+1. Read the HyperFrames skills: `hyperframes`, `hyperframes-core`, `hyperframes-animation` (install with `npx hyperframes skills update` if missing). They are the authority on how to build; this file is the authority on what to build.
+2. Check these assets exist: `assets/fonts/Poppins-Bold.ttf`, `assets/fonts/Poppins-Medium.ttf`, `assets/logo.svg`, `assets/home.png`, `assets/vendor-dashboard.png`, `assets/music.mp3`. If one is missing, stop and say which.
+3. Music first: put the track in the composition as `<audio id="music" data-timeline-role="music" src="assets/music.mp3">`, run `npx hyperframes beats .`, and read the beat grid. The storyboard gives times as music positions `P<phrase>.<pulse>` (phrase = 8 pulses) with the seconds they resolve to at an **assumed 108 BPM**. Re-derive every time from the measured grid with a helper:
+   ```js
+   const BEATS = [/* beat times from the beat file */];
+   const at = (phrase, pulse = 0, nudge = -0.033) => BEATS[phrase * 8 + pulse] + nudge; // land 1 frame early
+   ```
+   If the measured tempo differs, keep the phrase structure and let the seconds move; if the track is too short or too long for 7 phrases, tell me before building.
+
+## 2. The video in one paragraph
+
+Message: **"Sell to all of Nigeria in one link."** End line: **"Shop smart. Sell big."**
 
 **"One link, everywhere."** The seller's AvioMax store link is a red thread. It appears when the logo lands, carries the camera from scene to scene, gets pasted into three chats at once, comes back as orders and money, and finally ties itself into the logo. Red only ever appears on things AvioMax causes (colour rule), so the eye learns that red = AvioMax working.
 
@@ -22,7 +34,7 @@ mode: collaborative
 - **Signature moments:** (1) the link pasted into Instagram, TikTok and WhatsApp in one move; three "New order" pings answer. (2) A ₦10,000 sale splits on screen: ₦9,400 flies into the seller's wallet, a thin ₦600 sliver marked "6%" peels away.
 - **Rhythm:** `hook-hook-TURN-proof-SIGNATURE-PEAK-trust-hold-SIGNOFF`; peak at P4 (17.8s) where the track builds.
 
-## Terrain
+### Terrain (where every prop and transition comes from)
 
 | Object | Native motion | Device | Transition | Proves |
 |---|---|---|---|---|
@@ -37,7 +49,15 @@ Signature props: the red link line, the three-chat paste, the naira split.
 Avoid: shopping-cart icon, floating credit cards, 3D coins, "SALE" tags, generic rising graph.
 Native transition: the link-line wipe.
 
-## Look
+## 3. Brief and assets
+
+- Product: AvioMax, a Nigerian online marketplace where verified sellers open stores and buyers shop safely, with Paystack payments and 6% commission for vendors.
+- Audience: Nigerian small business owners selling on Instagram, TikTok and WhatsApp; shoppers burned by fake sellers.
+- Arc: Pain → Turn → Proof (buyers) → Signature (one link) → Proof (sellers, peak) → Trust → Sign-off.
+- CTA: aviomax.store
+- Assets: as listed in §1.2. Fonts only via local `@font-face`; the logo is never distorted or recoloured; screens are recreated faithfully in HTML where they must move.
+
+## 4. Look
 
 - **Palette:** charcoal `#2D2D2D` (dark scenes) · white `#FFFFFF` (light scenes and text on dark) · accent red `#CC0000` (only on what AvioMax causes). Allowed tints: `#1F1F1F`, `#3A3A3A`, `#8A0000`, `#FF4D4D` (glow only). No blue, green or purple anywhere, including platform icons (draw IG/TikTok/WhatsApp marks as white or charcoal outlines).
 - **Type:** Poppins Bold (`assets/fonts/Poppins-Bold.ttf`) for hero 200–240px and headlines 120–150px; Poppins Medium (`assets/fonts/Poppins-Medium.ttf`) for labels 44–56px and UI 28–36px. No monospace.
@@ -45,7 +65,7 @@ Native transition: the link-line wipe.
 - **Background layer:** dark scenes = charcoal + two slow radial blobs (`#3A3A3A`, `#8A0000` at 35%) + grain 14% overlay; light scenes = white + faint 2px charcoal dot grid at 8% + grain 6%.
 - **Logo:** `assets/logo.svg`, min height 120px, clear space = its own height; never recolour (white version only on red).
 
-## Motion system
+## 5. Motion system
 
 - **Energy:** high. Entrances 0.15–0.3s; transitions 0.25–0.45s; UI moves 0.4–0.6s.
 - **Entrance vocabulary:** scale slam, side snap, drop, rise, stamp, spring pop, mask rise, fly in on arc, count up.
@@ -54,7 +74,7 @@ Native transition: the link-line wipe.
 - **Camera rig:** `.world` > `.bg` (0.3×) · `.mid` (1×) · `.fg` (1.4×).
 - **Direction:** forward = leftward (new content enters from the right; the link line travels right → left).
 
-## Beat grid (assumed 108 BPM; replace with measured)
+### Beat grid (assumed; replace with the measured grid)
 
 | Phrase | Start | Section |
 |---|---|---|
@@ -68,7 +88,7 @@ Native transition: the link-line wipe.
 
 Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 
-## Seam map
+## 6. Seam map (every transition, specified once; frames refer here)
 
 | Cut | Time | From → to | Transition | Role | Carried by |
 |---|---|---|---|---|---|
@@ -79,19 +99,22 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 | 5 | P5.0 22.22s | Sellers → Trust | Link-line wipe, 0.35s | primary | the link line leaving the wallet |
 | 6 | P6.0 26.67s | Trust → End | Collapse into logo + red flood | hero | the three trust cards and the link line |
 
-## Bans
+Each cut's full spec is in the "Transition out" line of the frame it leaves. Velocity matching on every cut: the outgoing side accelerates (`.in`), the incoming decelerates (`.out`), peak speed on the cut, landing on the phrase start.
+
+### Bans
 
 - No slideshow: every cut is carried by the link line, the full stop or a bubble.
 - No screensaver: blobs and drift never compete with action.
 - No fades between scenes; no shopping-cart icon; no blue/green/purple; never distort or recolour the logo; no em dashes; never more than 3 words of message at once.
 
-## Frame 1 — Hook: the old way
+## 7. Storyboard
+
+### Frame 1 — Hook: the old way
 
 - time: P0.0–P1.0 (0.00–4.44s, 4.44s)
 - role: hook (pain)
 - why: Sellers recognise the pain before they hear the product.
 - transition_in: cold open
-- status: outline
 
 **Event:** two complaints pile up, then get shoved aside by the answer.
 **Reads:**
@@ -120,13 +143,12 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - @2.0s: "Overpriced?" and "Low reach?" sharp, no overlap, left/right balance.
 - @3.4s: "Better way." centred, sharp, red; the other two dimmed and pushed apart.
 
-## Frame 2 — Turn: AvioMax and the message
+### Frame 2 — Turn: AvioMax and the message
 
 - time: P1.0–P2.0 (4.44–8.89s)
 - role: turn (product appears) + message
 - why: Names the answer and states the claim by the end of frame 2.
 - transition_in: cut 1 (iris from the full stop)
-- status: outline
 
 **Event:** the red full stop becomes the brand; the brand draws its link.
 **Reads:**
@@ -159,13 +181,12 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - @5.6s: logo sharp at ≥220px, glow subtle, "AVIOMAX" fully risen.
 - @7.9s: "One link." and "All of Nigeria." readable, link line drawn, nothing overlapping the logo.
 
-## Frame 3 — Proof: buyers shop verified sellers
+### Frame 3 — Proof: buyers shop verified sellers
 
 - time: P2.0–P3.0 (8.89–13.33s)
 - role: proof (feature: verified sellers)
 - why: Shoppers' first doubt is "is this seller real?"; we show a seller get verified.
 - transition_in: cut 2
-- status: outline
 
 **Event:** a grey seller tag gets stamped "Verified" (cause: the scroll stops on it; reaction: the card lifts and turns red).
 **Reads:**
@@ -196,13 +217,12 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - @10.4s: phone flat and sharp; "Verified" stamp on card 3; heading fully in; no overlap.
 - @12.4s: both chips visible; left column aligned on one x; only drift moving.
 
-## Frame 4 — Signature: one link, three chats
+### Frame 4 — Signature: one link, three chats
 
 - time: P3.0–P4.0 (13.33–17.78s)
 - role: signature moment 1 (sell on social)
 - why: The core promise made visible: one link reaches every place buyers already are.
 - transition_in: cut 3
-- status: outline
 
 **Event:** one link splits into three chats and comes back as three orders.
 **Reads:**
@@ -233,13 +253,12 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - @14.6s: three panels readable, link bubble red in all three, "One link." in.
 - @16.6s: three "New order" bubbles visible; "Every chat." in; nothing clipped at the right edge.
 
-## Frame 5 — Peak: sellers keep 94%
+### Frame 5 — Peak: sellers keep 94%
 
 - time: P4.0–P5.0 (17.78–22.22s)
 - role: proof (feature: 6% commission) + signature moment 2 (peak, on the drop)
 - why: Sellers' second doubt is cost; the split shows exactly what they keep.
 - transition_in: cut 4 (bubble morph)
-- status: outline
 
 **Event:** a ₦10,000 sale splits; the seller's wallet takes ₦9,400.
 **Reads:**
@@ -272,13 +291,12 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - @19.0s: note split visible: "₦9,400" and "₦600" both readable.
 - @21.2s: wallet shows ₦54,400; "You keep more." readable; "6%" label on the sliver.
 
-## Frame 6 — Trust: verified, secure, protected
+### Frame 6 — Trust: verified, secure, protected
 
 - time: P5.0–P6.0 (22.22–26.67s)
 - role: proof (trust: Paystack, buyer protection) + held frame
 - why: Removes the last objection (safety) and gives the viewer a breath before the sign-off.
 - transition_in: cut 5
-- status: outline
 
 **Event:** three safety promises lock into place, and a light passes over them.
 **Reads:**
@@ -309,13 +327,12 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - @24.0s: three cards in, glass visibly frosting the ghost type behind, labels readable (contrast ≥ 4.5:1).
 - @25.2s: sweep mid-way across card 2, one glint visible.
 
-## Frame 7 — Sign-off
+### Frame 7 — Sign-off
 
 - time: P6.0–end (26.67–30.00s)
 - role: sign-off + CTA
 - why: Leaves the brand, the line and where to go.
 - transition_in: cut 6 (collapse + red flood)
-- status: outline
 
 **Event:** everything collapses into the logo and the world turns red.
 **Reads:**
@@ -345,6 +362,28 @@ Pulse k of phrase p = p × 4.444 + k × 0.556 s.
 - @27.6s: logo sharp, "Shop smart." in.
 - @29.5s: all four elements in, URL pill readable, nothing clipped.
 
-## Total
+**Total:** 4.44 × 6 + 3.33 = 30.0s. Seven frames; scene changes on P1–P6; peak on P4 (drop); held frame P5.6–7.
 
-4.44 × 6 + 3.33 = 30.0s. Seven frames; scene changes on P1–P6; peak on P4 (drop); held frame P5.6–7.
+## 8. Rules for the build (non-negotiable)
+
+- One paused GSAP timeline registered on `window.__timelines`; nothing autoplays.
+- Deterministic: no `Math.random`, `Date.now`, `performance.now`, no `repeat: -1`. Seed any variation from indices (shake offsets, glint sizes).
+- `fromTo` with explicit start states; `immediateRender: false` on any `fromTo` that is not the element's first appearance.
+- Animate only transforms (x, y, scale, rotation, skew), opacity, filter, clip-path and colours. Never width, height, top or left.
+- Never two concurrent transform tweens on one element: entrance on the element, drift on the `.world` wrapper.
+- Ambient loops live on the timeline with finite repeats.
+- The transition is the exit: no fading elements out before a transition (Frame 7 may fade at the very end).
+- Vendor GSAP and the fonts into `assets/`; no CDN dependencies.
+- Glass (Frame 6): `backdrop-filter: blur(28px) saturate(160%)` with the values hard-coded in `-webkit-backdrop-filter`; something with edges (the ghost type) must drift behind it or it reads as a flat box. Shine band: a skewed white gradient inside the card's `overflow: hidden`, moved by `x`. Glint: two crossed thin radial-gradient bars plus a soft core, scale 0 → 1 → 0 with a small rotation, ~0.5s life.
+- No em dashes; never more than 3 words of message on screen; no blue, green or purple anywhere (platform marks drawn as white or charcoal outlines).
+
+## 9. Verify, then hand off
+
+1. `npx hyperframes check .` and fix every error. A wall of contrast errors usually means a wipe panel left covering the frame; intentional overlaps (the rim light, the stamp over the card) get `data-layout-allow-overlap` / `data-layout-allow-occlusion`.
+2. Render a draft: `npx hyperframes render -o renders/draft.mp4`.
+3. Extract a still at every **Frame check** time and compare it with its check:
+   `ffmpeg -v error -ss <t> -i renders/draft.mp4 -frames:v 1 renders/check-<t>.png`
+   Then a strip of every frame across each of the six cuts (`-ss <T-0.2> -t 0.4 -vf "fps=30,scale=480:-2,tile=6x2"`) and a contact sheet of the whole film (`-vf "fps=4,scale=320:-2,tile=8x8"`).
+4. Look for: overlaps and clipping, a word still mid-entrance at its check time, two things moving at once where one should lead, identical simultaneous entrances, blank or flashing transition midpoints, fallback fonts, off-palette colours, glass that looks like a flat box, any read that gets only a few frames.
+5. Fix, re-render, re-check (2–3 rounds is normal). Then render `renders/aviomax-30s.mp4`.
+6. Hand off: the file path, duration, resolution, the stills you checked, every deviation from this storyboard and why, and what you could not verify (audio feel, motion at full speed).

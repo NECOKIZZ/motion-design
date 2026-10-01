@@ -1,8 +1,15 @@
-# 12 · Self-review, build and verify
+# 12 · Self-review, and what the prompt tells the builder
 
-## §1 Self-review the storyboard (before showing it)
+§1 is for you, before handing the prompt over. §2–§4 are what the prompt's build-rules and verification sections (§8–§9 in `templates/video-prompt.md`) must tell the builder; adapt them to the project and copy them in.
 
-Read the storyboard as a critic. Fix every "no" before presenting.
+## §1 Self-review the prompt (before handing it over)
+
+Read the prompt as a critic, then once more as the builder: could you build every frame from it without asking anything? Fix every "no" before presenting.
+
+**Stands alone**
+- [ ] Could a fresh Opus session without this skill build it? No references to this skill's files, no "as discussed", every term explained or specified with numbers.
+- [ ] Every asset listed with its path; the BPM assumption and how to re-derive times stated?
+- [ ] Build rules (§8) and verification steps (§9) present and adapted to this project (its bans, its materials, its safe zones)?
 
 **Story**
 - [ ] Is the message a claim, and is it on screen by the end of frame 2?
@@ -41,7 +48,7 @@ Read the storyboard as a critic. Fix every "no" before presenting.
 - [ ] The hero moment on the drop; a held frame before or after it?
 - [ ] End card holds ≥ 1.5s?
 
-## §2 Build from the storyboard
+## §2 Build from the storyboard (builder instructions)
 
 1. Read the HyperFrames skills first (`hyperframes`, `hyperframes-core`, `hyperframes-animation`), then build. `references/hyperframes-map.md` lists the building block for each storyboard term.
 2. Project: `npx hyperframes init <dir> --non-interactive --resolution landscape|portrait|square`. Vendor fonts and GSAP into `assets/` (CDN loads can fail behind proxies).
@@ -57,7 +64,7 @@ GSAP pitfalls that lint will not catch:
 - Ambient loops on the timeline, never bare `gsap.to`; finite repeats only.
 - Move with `x`/`y`, never `left`/`top`.
 
-## §3 Render, look, fix (2–3 rounds)
+## §3 Render, look, fix (builder instructions, 2–3 rounds)
 
 1. Render a draft: `npx hyperframes render -o out/draft.mp4`.
 2. Extract the frame-check stills and transition midpoints:
@@ -86,4 +93,4 @@ GSAP pitfalls that lint will not catch:
 
 ## §4 Updating the storyboard after the build
 
-When the build is final, the code is the truth. Update `STORYBOARD.md` times and any changed decisions so the storyboard matches the video, and note the changes at the top under `## Changes after build`.
+When the build is final, the code is the truth. Update the prompt file's times and any changed decisions so the storyboard matches the video, and note the changes at the top under `## Changes after build`.

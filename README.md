@@ -1,6 +1,8 @@
 # motion-storyboard
 
-A Claude skill that directs motion design videos before they are built. Give it a product brief and it produces a beat-by-beat storyboard precise enough for Claude to build in [HyperFrames](https://hyperframes.heygen.com) without guessing: the message, the features and their proof moments, the product's visual *terrain*, a concept with a spine, and every beat specified with music position, layout, motion verbs, eases, durations, camera, transitions, materials (glass, gradients, chrome, shine, glints) and a frame check to verify the render against.
+A Claude skill that **writes the prompt** for a motion design video. You give it a rough idea or a product brief; it gives you back one self-contained Markdown file, storyboard first, that you hand to Claude (Opus) in a separate Claude Code session to build the video in [HyperFrames](https://hyperframes.heygen.com).
+
+The prompt file carries everything the builder needs and nothing it has to invent: the message and features, the product's visual *terrain*, a concept with a spine, the look, a motion system, a seam map of transitions, every frame specified (event, reads, words, layout, depth, motion with eases and durations, camera, materials such as glass, gradients, shine and glints, transition out, frame check), plus the build rules and the render-and-verify loop. The builder does not need this skill installed.
 
 It is brand-agnostic: you supply the brand per project.
 
@@ -25,15 +27,23 @@ ln -s ~/motion-design/skills/motion-storyboard ~/.claude/skills/motion-storyboar
 ```
 Or per project: copy `skills/motion-storyboard` into the project's `.claude/skills/`.
 
-HyperFrames' own skills are needed for the build step: `npx hyperframes skills update`.
+claude.ai: zip the `skills/motion-storyboard` folder and upload it as a custom skill in your skills settings; then ask for a video prompt in any chat.
+
+The skill is only needed where you **write** prompts. The session that **builds** the video needs HyperFrames (`npx hyperframes skills update`), not this skill.
 
 ## Use
 
-Ask for a video the usual way, or fill `skills/motion-storyboard/templates/brief.md`:
+**Step 1: write the prompt (this skill).** In a Claude session that has the skill, describe the video, or fill `skills/motion-storyboard/templates/brief.md`:
 
-> Make a 30-second motion graphic video with HyperFrames for AvioMax, a Nigerian online marketplace where verified sellers open stores and buyers shop safely, with Paystack payments and 6% commission. Audience: Nigerian shoppers and small sellers on Instagram, TikTok and WhatsApp. End line: "Shop smart. Sell big." Brand: Poppins Bold/Medium, charcoal #2D2D2D, white, accent #CC0000, no blue/green/purple. Music: assets/music.mp3. Stop after the storyboard.
+> Write the video prompt for a 30-second 16:9 motion design video for AvioMax, a Nigerian online marketplace where verified sellers open stores and buyers shop safely, with Paystack payments and 6% commission. Audience: Nigerian shoppers and small sellers on Instagram, TikTok and WhatsApp. End line: "Shop smart. Sell big." Brand: Poppins Bold/Medium, charcoal #2D2D2D, white, accent #CC0000, no blue/green/purple. Assets: assets/logo.svg, assets/home.png, assets/vendor-dashboard.png, assets/music.mp3.
 
-Claude runs seven stages: brief → terrain → concept (shown to you) → look → beat sheet (shown to you) → self-review → build and verify (if asked). See `examples/aviomax-30s.md` for a complete storyboard.
+Claude works out the message, the terrain and five concepts, shows you its pick, then writes `aviomax-video-prompt.md`. The finished example is `skills/motion-storyboard/examples/aviomax-30s-prompt.md`.
+
+**Step 2: build the video (any Opus session with HyperFrames).** Open Claude Code in the folder that holds the assets, add the prompt file, and say:
+
+> Build the video in aviomax-video-prompt.md.
+
+The builder reads HyperFrames' skills, measures the music's beats, builds frame by frame, renders, checks a still at every frame check, fixes, and hands you the MP4 with a list of anything it changed.
 
 ## Contents
 
@@ -51,13 +61,15 @@ skills/motion-storyboard/
     08-materials-and-light.md     gradients, glass, shine, chrome, glints, rim light, glow
     09-rhythm-and-music.md        beat grid, phrases, what lands where
     10-product-ui.md              UI state machines, devices, cursor/tap patterns
-    11-storyboard-format.md       the STORYBOARD.md spec
-    12-build-and-review.md        self-review checklist, build loop, render-and-inspect
+    11-storyboard-format.md       how each frame of the storyboard is specified
+    12-build-and-review.md        self-review of the prompt; build and verify steps the prompt gives the builder
     13-reads-events-and-acting.md timing by reads, an event per frame, show-don't-write, sets, acting, medium
     hyperframes-map.md            capabilities, hard limits, term → building block
     measured-references.md        numbers measured from reference videos
-  templates/                      brief.md, storyboard.md
-  examples/aviomax-30s.md         full worked storyboard
+  templates/
+    video-prompt.md               the output: the prompt file's sections
+    brief.md                      intake for a new video
+  examples/aviomax-30s-prompt.md  a complete prompt, ready to hand to a builder
   recipes/
     materials.html                tested glass / gradient / chrome / shine / glint composition
     materials-render.jpg          frames from its render
