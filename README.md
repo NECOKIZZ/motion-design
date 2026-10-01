@@ -12,6 +12,7 @@ A prompt like "logo slams in, push transition out" leaves every decision to the 
 - a transition grammar (meaning, primary vs accent, velocity matching, object-carried transitions) with build numbers;
 - a terrain method that turns a product's world into props and transitions (football → ball, pitch lines, scoreboard flips; privacy → redaction bars, hashes, frosted glass; prediction markets → YES/NO, probability bars);
 - tested HyperFrames recipes for glass, mesh gradients, chrome text, shine sweeps, rim lights and glints;
+- lessons from the P(doom) music video made with Claude: time every frame by what the viewer must understand (reads), make something happen in every frame, show instead of write, sets instead of cards;
 - a map of every storyboard term to the HyperFrames rule, blueprint or registry item that builds it.
 
 ## Install
@@ -52,6 +53,7 @@ skills/motion-storyboard/
     10-product-ui.md              UI state machines, devices, cursor/tap patterns
     11-storyboard-format.md       the STORYBOARD.md spec
     12-build-and-review.md        self-review checklist, build loop, render-and-inspect
+    13-reads-events-and-acting.md timing by reads, an event per frame, show-don't-write, sets, acting, medium
     hyperframes-map.md            capabilities, hard limits, term → building block
     measured-references.md        numbers measured from reference videos
   templates/                      brief.md, storyboard.md
