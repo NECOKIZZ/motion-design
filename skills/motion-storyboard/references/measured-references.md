@@ -77,6 +77,21 @@ Source: github.com/JohnHeibel/PDoomVideo, and the author's follow-up starter kit
 - Review with contact sheets at chosen times, strips of every frame around a hit, and crops of faces; for each shot check the first and last frames and every 0.1s around hits.
 - The author notes that the reasoning level tracks how extravagant and detail-oriented the result is; their test videos used the highest setting.
 
-## 4. Your references
+## 4. House-look promo pacing: one film at 60s and at 38s
+
+The same 3D/glass football promo (house look, 120 BPM), built at two paces and measured with `recipes/motion-profile.py` plus a quiet-run pass (frame difference < 0.6 on 160×90 grey frames, runs ≥ 1s).
+
+| | 60s cut (8s scenes) | 38s cut (4s scenes) |
+|---|---|---|
+| Scene length | 8s each | 4s each; 6s for the match and the hero |
+| Quiet runs ≥ 1s | 5, longest 5.5s (a pool card filling, then a slow push) | 3, longest 2.0s |
+| Viewer verdict | "slow, stalls in particular scenes" | right pace |
+
+**Take from it**
+- Scenes sized to whole phrases by default (8s) left 3–5s holds wherever the reads ended early. One phrase per idea fixes it.
+- A 1.02–1.03 drift over a 3–5s hold reads as stopped. Holds need a visible travelling push (1.05–1.1) that gathers speed into the cut.
+- The still-share number stays near 40% even when the pace feels right, because slow pushes register as near-still. Judge by the quiet runs (none over ~1.5–2s), not the share alone.
+
+## 5. Your references
 
 (Add the user's reference videos here as they are analysed: what each is, the numbers, the techniques worth borrowing.)

@@ -21,7 +21,7 @@ Rules:
 - **Each read needs: time to find it, time to understand it, a beat to register.** Small, distant, fast or subtle things need longer than big, central, obvious ones. As a floor: a big obvious event 0.5s; a UI change 0.8s; a short line of words 0.3s/word + 0.5s; a number to remember 1.5s+.
 - **Fast actions, slow meanings.** The motion can be very quick if it's anticipated; what it means needs held time after. Move fast through what doesn't matter, spend time on what does. That contrast is rhythm; one constant speed (fast or slow) is flat.
 - **Lead the eye.** The viewer looks at what moves, is bright, is big, or is being looked at. Before an important read, get the eye there (the camera moves to it, it lights up or moves first, a character looks at it) and give the eye time to travel.
-- **Let the reads set the length.** If a frame's reads don't fit its duration, lengthen the frame or cut a read. Never squeeze. In music-synced work, that may mean a frame spans two phrases instead of one.
+- **Let the reads set the length, both ways.** If a frame's reads don't fit its duration, lengthen the frame or cut a read; never squeeze. If they end early, shorten the frame; never pad it with a hold. In music-synced work, a frame is usually one phrase; it spans two only when its reads truly need it.
 - **The last read of the film needs time to land** before the video ends.
 
 At review, count frames per read (30 frames = 1s). A read that gets a handful of frames, or shares its frames with another read, will be missed.

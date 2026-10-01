@@ -50,6 +50,7 @@ Deliverable: `renders/[slug].mp4`, [W]×[H], [fps] fps, [length]s, with the musi
 - Energy and default durations:
 - Entrance vocabulary (name → from → to, duration, ease):
 - Ease palette: 
+- Pace: scene length (default one phrase, ~4s), the longest hold (≤ 1.5s), the travelling camera move that carries each hold
 - Ambient rule per scene:
 - Camera rig: `.world` > `.bg` (×) · `.mid` (1×) · `.fg` (×); entrances on elements, camera moves on `.world` only
 - Direction rule:

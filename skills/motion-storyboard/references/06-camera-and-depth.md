@@ -18,7 +18,8 @@ Rule from HyperFrames: never put an entrance tween and a camera tween on the sam
 
 | Move | Spec | Feels | Use |
 |---|---|---|---|
-| Drift | scale 1 → 1.02–1.04, or x ±20–30px, over the whole beat, `none`/`sine.inOut` | alive, never frozen | every hold |
+| Travelling push | scale 1 → 1.05–1.1 over the scene, `power1.in`/`power2.in` | momentum, always going somewhere | every hold over ~1s (the default) |
+| Drift | scale 1 → 1.02–1.04, or x ±20–30px, over the whole beat, `none`/`sine.inOut` | alive, but reads as still over 2s+ | under a travelling move, or holds under 1s |
 | Push in | scale 1 → 1.15–1.3 over 1–2s, `power2.inOut` | focus, importance | landing on a hero element |
 | Punch in | scale 1 → 1.2–1.4 in 0.15–0.25s, `expo.out`, on a beat | impact | emphasis on a word or number |
 | Pull back | scale 1.5–3 → 1 over 0.5–1s, `expo.out` | reveal, context | one → many, detail → whole |

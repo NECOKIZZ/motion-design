@@ -51,7 +51,8 @@ The dark open with the sculpture rising; an object falling into it with a ripple
 ## Where to push further next time
 
 The user approved the look. What they want better is **smoothness, transitions, music sync and movement**. When designing in this look:
-- Make moves snap and settle, then hold; avoid floaty in-and-out easing on everything.
+- Make moves snap and settle, then hold briefly (≤ 1.5s); avoid floaty in-and-out easing on everything.
+- Pace: one scene per phrase (about 4s), holds ≤ 1.5s, and a travelling camera push through every hold. The look stays calm through its type and light, not through long pauses: a 60s cut with 8s scenes and 5s holds felt stalled; the same film at 38s felt right.
 - Keep one continuous camera feel, so 3D and UI hand off through a move rather than a hide-and-show.
 - Carry every cut on an object.
 - Choose music with real structure (stops, hits, drops) and land the big moments on it.
