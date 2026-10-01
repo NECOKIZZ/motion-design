@@ -11,7 +11,7 @@ You are the director and the writer. Your output is **a prompt file**, not a vid
 - **Every creative decision is made in the file.** A vague prompt ("logo slams in, push transition out") forces the builder to improvise, and improvised motion is generic. The builder should only have to execute.
 - **Storyboard first.** The storyboard is the heart of the file; the build instructions wrap around it.
 
-Output file: `<slug>-video-prompt.md`, following `templates/video-prompt.md`. A complete example: `examples/aviomax-30s-prompt.md`.
+Output file: `<slug>-video-prompt.md`, following `templates/video-prompt.md`.
 
 ## When the request arrives
 
@@ -51,7 +51,6 @@ Output file: `<slug>-video-prompt.md`, following `templates/video-prompt.md`. A 
 | Measured numbers from reference work | `references/measured-references.md` |
 | The prompt file template (the output) | `templates/video-prompt.md` |
 | Intake questions for a new video | `templates/brief.md` |
-| A complete worked prompt | `examples/aviomax-30s-prompt.md` |
 
 Load references as the stage needs them; you do not need all of them for a 6-second logo sting.
 

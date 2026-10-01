@@ -4,8 +4,6 @@ This is the look the user loves. Make it the default for every video unless the 
 
 The brand changes the colours, fonts and logo; the look stays. Take the brand's signature colour as the **accent**, and its colour for money, success or "go" as the **signal**. If the brand has no such colour, choose a bright one that sits far from the accent and glows on black.
 
-Reference film: Kickoff v2 (`build/kickoff-v2/`), 42s, 1920×1080, 60 fps.
-
 ## The feeling
 
 Quiet, expensive, futuristic. A dark stage where light is precious, so every glow means something. Calm typography, confident motion, and real depth. It should feel like a premium tech launch, never like an ad shouting at you.
@@ -21,7 +19,7 @@ Quiet, expensive, futuristic. A dark stage where light is precious, so every glo
 Real 3D is a big part of why this look feels premium. Reach for it before flat graphics wherever it can carry meaning:
 - **The logo in 3D.** Extrude the mark so it has thickness. It turns in from the side and locks into place on a strong beat. Any separate part of the mark (a dot, a ball, an accent) can fly on its own and dock back into the logo; that docking is the lock.
 - **The logo face stays flat and exactly the logo colour.** No shine, gradient or gleam on the face, because it must read as the real mark. All the depth and light live on the extruded sides, in dark glossy metal that catches the accent light.
-- **A signature 3D sculpture** built from the product's own idea (for Kickoff: fine concentric metal rings, a "closeness field"). It opens the film rising out of the dark, returns at the end, and can become a set the camera moves over, with objects placed on it.
+- **A signature 3D sculpture** built from the product's own idea (for example, fine concentric metal rings for a product about closeness). It opens the film rising out of the dark, returns at the end, and can become a set the camera moves over, with objects placed on it.
 - **Glossy metal in the accent colour**, lit by an accent key light, a cool white rim light and an environment reflection, so edges catch moving highlights.
 - **Living 3D**: slow waves, gentle wobble, a ripple when something lands. It is never frozen and never busy.
 - **3D objects carry the story.** Things land in the 3D world, become the transitions, and match-cut into the UI (a card collapses into the ball, the ball reappears in 3D).

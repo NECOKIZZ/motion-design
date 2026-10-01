@@ -127,6 +127,4 @@ Write a seam map before the beat sheet, one row per cut:
 | 5 | 22.22s | Sellers → Trust | Link-line wipe | primary | the line leaving the wallet |
 | 6 | 26.67s | Trust → End | Collapse into logo + red flood | hero | the trust cards and the line |
 
-(From `examples/aviomax-30s-prompt.md`.)
-
 Check: one primary used most; boldest on the hero moment; direction rule kept; every cut on a strong beat; no two consecutive accents of the same kind.
