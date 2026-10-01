@@ -1,0 +1,78 @@
+# 12 · Self-review, build and verify
+
+## §1 Self-review the storyboard (before showing it)
+
+Read the storyboard as a critic. Fix every "no" before presenting.
+
+**Story**
+- [ ] Is the message a claim, and is it on screen by the end of frame 2?
+- [ ] Delete every proof frame: does the rest still state the value? Delete the value frames: does it collapse into a feature tour? (It should.)
+- [ ] Does every feature have a proof moment shown as a state change?
+- [ ] Would the video read as this product with the logo covered?
+
+**Motion**
+- [ ] Every element: verb, from → to values, duration, ease?
+- [ ] Entrances `.out`, exits `.in`, moves `.inOut`?
+- [ ] No more than two tweens per frame share an ease? Durations vary (slowest ≈ 3× fastest)?
+- [ ] Neighbouring words/chips enter differently?
+- [ ] Each frame has a breath, and ambient motion is quieter than action?
+- [ ] First motion of each frame within 0.1–0.3s, not at 0?
+
+**Transitions**
+- [ ] One primary for most cuts, accents for topic changes, boldest on the hero moment?
+- [ ] Each transition carried by an object, with direction, timing, eases, and the new scene's first frame described?
+- [ ] No fade-outs before transitions? No plain crossfades between scenes?
+- [ ] Velocity matched (out `.in`, in `.out`, peak at the cut)?
+
+**Frame**
+- [ ] ≤ 3 words of message on screen at once, held ≥ 0.3s/word + 0.5s?
+- [ ] Two focal points, three depth layers, one accent per frame?
+- [ ] Text sizes at video scale; nothing under 24px without a reason?
+- [ ] Materials have a light event; glass has moving content behind it?
+
+**Music**
+- [ ] Every scene change on a phrase start; impacts arrive 1–2 frames early?
+- [ ] The hero moment on the drop; a held frame before or after it?
+- [ ] End card holds ≥ 1.5s?
+
+## §2 Build from the storyboard
+
+1. Read the HyperFrames skills first (`hyperframes`, `hyperframes-core`, `hyperframes-animation`), then build. `references/hyperframes-map.md` lists the building block for each storyboard term.
+2. Project: `npx hyperframes init <dir> --non-interactive --resolution landscape|portrait|square`. Vendor fonts and GSAP into `assets/` (CDN loads can fail behind proxies).
+3. Music first: add the audio, run `npx hyperframes beats .`, put the beat times in a constant, write the `at(phrase, pulse)` helper. Every time in the code comes from the helper.
+4. One sub-composition per frame (or one file with scene wrappers for short pieces); one paused timeline; global camera rig and background layer built once.
+5. Build frame by frame in storyboard order. Do not redesign: if something in the storyboard does not work, change the storyboard first and say why.
+6. After each frame: `npx hyperframes check .`, then fix every error. Common causes: a wipe panel left covering the frame (many contrast errors at once); intentional overlaps need `data-layout-allow-overlap` / `data-layout-allow-occlusion`; opaque scene backgrounds making push/zoom transitions show blank (paint backgrounds on the root or the world).
+
+GSAP pitfalls that lint will not catch:
+- `fromTo` everywhere; `immediateRender: false` on any `fromTo` that is not the element's first appearance (otherwise its "from" state is applied at build time and corrupts earlier frames).
+- Never two concurrent transform tweens on one element (entrance + camera drift): split across a wrapper and a child.
+- Ambient loops on the timeline, never bare `gsap.to`; finite repeats only.
+- Move with `x`/`y`, never `left`/`top`.
+
+## §3 Render, look, fix (2–3 rounds)
+
+1. Render a draft: `npx hyperframes render -o out/draft.mp4`.
+2. Extract the frame-check stills and transition midpoints:
+   ```bash
+   # one still per frame-check timestamp
+   for t in 3.1 6.2 10.2 11.6; do ffmpeg -v error -y -ss $t -i out/draft.mp4 -frames:v 1 out/check-$t.png; done
+   # transition close-up: 12 frames across a cut at T
+   ffmpeg -v error -y -ss $(echo "T-0.2"|bc) -t 0.4 -i out/draft.mp4 -vf "fps=30,scale=480:-2,tile=6x2" out/cut.png
+   # contact sheet of the whole film, 4 fps
+   ffmpeg -v error -y -i out/draft.mp4 -vf "fps=4,scale=320:-2,tile=8x8" out/sheet.png
+   ```
+3. Look at every image. Compare each still against its frame check. Typical faults:
+   - Text overlapping a device or another word; text clipped at a safe margin.
+   - A word still mid-entrance at its check time (entrance too slow or late).
+   - Two things moving at once where one should lead.
+   - A transition midpoint that shows a blank frame or a flash of the old scene.
+   - Fallback font (wrong letterforms), wrong colour, logo distorted or under minimum size.
+   - Glass that looks like a flat tinted box (nothing moving behind it).
+   - Dead frames: a contact sheet row where nothing changes for more than one phrase without an intended hold.
+4. Fix, re-render, re-check. Two or three rounds is normal.
+5. Hand over: the file path, duration, resolution, the stills you checked, and what you could not verify (audio feel, motion smoothness at full frame rate).
+
+## §4 Updating the storyboard after the build
+
+When the build is final, the code is the truth. Update `STORYBOARD.md` times and any changed decisions so the storyboard matches the video, and note the changes at the top under `## Changes after build`.

@@ -1,0 +1,95 @@
+<!doctype html>
+<!--
+  materials.html: tested HyperFrames recipes for mesh gradient + grain, glass card,
+  chrome text, shine sweep, conic rim light and glints (5s, 1920x1080).
+  Rendered and frame-checked with hyperframes@latest on 2026-10-01 (see materials-render.jpg).
+  To run: drop into a HyperFrames project as index.html, put gsap.min.js and a bold font
+  (here "Clash", clash-700.woff2) in assets/, then `npx hyperframes render -o out.mp4`.
+  Lesson from the test: the glass only read as glass once the ghost type and ring were
+  drifting behind it; over soft blobs alone it looked like a tinted rectangle.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<script src="assets/gsap.min.js"></script>
+<style>
+@font-face { font-family: "Clash"; src: url("assets/clash-700.woff2") format("woff2"); font-weight: 700; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:1920px; height:1080px; overflow:hidden; background:#0b0a14; }
+#root { position:relative; width:1920px; height:1080px; overflow:hidden; font-family:"Clash", sans-serif; background:#0b0a14; }
+
+/* 1. MESH GRADIENT: big radial blobs moved by transforms, blurred as a group */
+.mesh { position:absolute; inset:-200px; filter:blur(90px) saturate(130%); }
+.blob { position:absolute; transform-origin:center; border-radius:50%; will-change:transform; }
+.b1 { width:1300px; height:1300px; left:0px; top:0px;  background:radial-gradient(circle, rgba(255,72,120,1) 0%, rgba(255,72,120,0) 70%); }
+.b2 { width:1300px; height:1300px; left:900px; top:-150px; background:radial-gradient(circle, rgba(108,92,255,1) 0%, rgba(108,92,255,0) 70%); }
+.b3 { width:1200px; height:1200px; left:500px; top:500px; background:radial-gradient(circle, rgba(255,170,60,1) 0%, rgba(255,170,60,0) 70%); }
+/* grain kills banding */
+.grain { position:absolute; inset:0; opacity:.14; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='4' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+
+/* 2. GLASS CARD */
+.card { position:absolute; left:560px; top:260px; width:800px; height:520px; border-radius:48px; overflow:hidden;
+  background:linear-gradient(135deg, rgba(40,20,70,.30), rgba(20,10,40,.45));
+  -webkit-backdrop-filter: blur(28px) saturate(170%); backdrop-filter: blur(28px) saturate(170%);
+  border:2px solid rgba(255,255,255,.28); border-top-color:rgba(255,255,255,.6); border-left-color:rgba(255,255,255,.45);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.55), inset 0 -20px 40px rgba(255,255,255,.05), 0 40px 80px rgba(10,0,30,.45); }
+.card h1 { position:absolute; left:72px; top:120px; font-size:140px; line-height:.95; letter-spacing:-.03em;
+  /* 3. CHROME TEXT: metallic gradient clipped to glyphs, moved via background-position */
+  background:linear-gradient(100deg,#ffffff 0%,#d9d6ff 30%,#7a74b8 46%,#ffffff 52%,#bdb8ee 70%,#ffffff 100%);
+  background-size:250% 100%; background-position:100% 0; -webkit-background-clip:text; background-clip:text; color:transparent; }
+.card p { position:absolute; left:76px; top:420px; font-size:34px; color:rgba(255,255,255,.85); letter-spacing:.02em; }
+/* 4. SHINE SWEEP: a skewed white band translated across, clipped by card overflow */
+.shine { position:absolute; top:-20%; left:0; width:260px; height:140%; transform:translateX(-400px) skewX(-20deg);
+  background:linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.45) 50%, rgba(255,255,255,0) 100%); mix-blend-mode:soft-light; }
+/* 5. CONIC RIM LIGHT: a rotating conic layer, masked to a 3px ring */
+.rim { position:absolute; left:556px; top:256px; width:808px; height:528px; border-radius:52px; padding:4px;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; overflow:hidden; }
+.rim i { position:absolute; left:50%; top:50%; width:1400px; height:1400px; margin:-700px 0 0 -700px;
+  background:conic-gradient(from 0deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0) 300deg, rgba(255,255,255,1) 345deg, rgba(255,255,255,0) 360deg); }
+/* 6. GLINT: four-point star = two thin gradient bars + a soft core */
+.glint { position:absolute; width:160px; height:160px; transform:scale(0) rotate(0deg); }
+.glint::before, .glint::after { content:""; position:absolute; left:50%; top:50%; }
+.glint::before { width:160px; height:6px; margin:-3px 0 0 -80px; border-radius:6px; background:radial-gradient(ellipse at center, #fff 0%, rgba(255,255,255,.9) 20%, rgba(255,255,255,0) 70%); }
+.glint::after { width:6px; height:160px; margin:-80px 0 0 -3px; border-radius:6px; background:radial-gradient(ellipse at center, #fff 0%, rgba(255,255,255,.9) 20%, rgba(255,255,255,0) 70%); }
+.glint b { position:absolute; left:50%; top:50%; width:36px; height:36px; margin:-18px; border-radius:50%; background:radial-gradient(circle,#fff 0%,rgba(255,255,255,.6) 35%,rgba(255,255,255,0) 70%); }
+</style>
+</head>
+<body>
+<div id="root" data-layout-allow-overflow data-layout-allow-occlusion data-composition-id="main" data-start="0" data-duration="5" data-width="1920" data-height="1080">
+  <div class="mesh"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+  <div class="grain"></div>
+  <div id="ghost" style="position:absolute;left:-100px;top:330px;font-size:420px;line-height:1;color:#fff;opacity:.9;white-space:nowrap;letter-spacing:-.04em">SHINE SHINE</div>
+  <div id="ring" style="position:absolute;left:1180px;top:560px;width:420px;height:420px;border-radius:50%;border:44px solid #ffd27a"></div>
+  <div class="card" id="card"><h1 id="chrome">Glass &amp;<br>Glint</h1><p>backdrop blur · rim light · sweep</p><div class="shine" id="shine"></div></div>
+  <div class="rim" id="rim"><i id="rimlight"></i></div>
+  <div class="glint" id="g1" style="left:1270px; top:200px"><b></b></div>
+  <div class="glint" id="g2" style="left:600px; top:420px"><b></b></div>
+</div>
+<script>
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+  // ambient mesh drift (transforms only, finite)
+  tl.fromTo("#ghost",{x:0},{x:-520,duration:5,ease:"none"},0);
+  tl.fromTo("#ring",{x:0,y:0},{x:-260,y:-120,duration:5,ease:"sine.inOut"},0);
+  tl.fromTo(".b1", {x:0,y:0}, {x:260,y:120,duration:5,ease:"sine.inOut"}, 0);
+  tl.fromTo(".b2", {x:0,y:0}, {x:-220,y:180,duration:5,ease:"sine.inOut"}, 0);
+  tl.fromTo(".b3", {x:0,y:0,scale:1}, {x:180,y:-160,scale:1.25,duration:5,ease:"sine.inOut"}, 0);
+  // card entrance: rise + de-blur + slight tilt settle
+  tl.fromTo("#card,#rim", {y:120, opacity:0, rotationX:18, transformPerspective:1400}, {y:0, opacity:1, rotationX:0, duration:0.9, ease:"expo.out"}, 0.2);
+  // chrome text: metal highlight travels once
+  tl.fromTo("#chrome", {backgroundPosition:"100% 0"}, {backgroundPosition:"0% 0", duration:1.6, ease:"power2.inOut"}, 0.6);
+  // shine sweep across the card
+  tl.fromTo("#shine", {x:-400}, {x:1100, duration:0.9, ease:"power2.inOut"}, 1.6);
+  // rim light orbit: one and a half turns
+  tl.fromTo("#rimlight", {rotation:0}, {rotation:540, duration:4.2, ease:"none"}, 0.6);
+  // glints: pop at the shine's contact points, rotate a little, die fast
+  tl.fromTo("#g1", {scale:0, rotation:-30}, {scale:1, rotation:15, duration:0.22, ease:"power3.out"}, 2.05);
+  tl.to("#g1", {scale:0, rotation:45, duration:0.35, ease:"power2.in"}, 2.27);
+  tl.fromTo("#g2", {scale:0, rotation:-30}, {scale:0.7, rotation:15, duration:0.2, ease:"power3.out"}, 1.75);
+  tl.to("#g2", {scale:0, rotation:45, duration:0.3, ease:"power2.in"}, 1.95);
+  window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

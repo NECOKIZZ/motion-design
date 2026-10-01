@@ -1,0 +1,121 @@
+# 11 · The storyboard format
+
+This is the file the build reads. Its test: **could a fresh session, with no other context, build the video from it without making a single creative decision?** If a field would make the builder guess, it is underspecified.
+
+The file is `STORYBOARD.md` in the project root. It is compatible with HyperFrames' storyboard parser (frontmatter + `## Frame N — Title` sections with `- key: value` bullets); everything extra is kept as per-frame data. Template: `templates/storyboard.md`. Full example: `examples/aviomax-30s.md`.
+
+## 1. Frontmatter
+
+```yaml
+---
+format: 1920x1080          # or 1080x1920, 1080x1080
+duration: 30s
+fps: 30
+message: "Sell to all of Nigeria in one link."
+endline: "Shop smart. Sell big."
+arc: Pain → Turn → Proof ×3 → Sign-off
+audience: Nigerian small sellers on IG/TikTok/WhatsApp; shoppers wary of fake sellers
+music: assets/music.mp3 (Afrobeats, 108 BPM, phrase = 8 pulses = 4.44s)
+mode: collaborative
+---
+```
+
+## 2. Global sections (above the first frame)
+
+Write these before any frame. Frames refer to them by name instead of repeating.
+
+### Concept
+One paragraph: the idea, the spine, the signature moments, the rhythm shape. (From `03-concept.md`.)
+
+### Terrain
+The terrain table, signature props, props to avoid. (From `02-terrain.md`.)
+
+### Look
+- Palette by role with hex: background(s), text, accent, plus allowed tints. One accent.
+- Type roles: font file, weight, sizes for hero / headline / label / meta.
+- Material treatment and light rules (from `08-materials-and-light.md`).
+- Background layer recipe (gradient, grain, ghost type, grid), shared or per scene.
+- Logo rules: minimum size, clear space, never recoloured or distorted.
+
+### Motion system
+- Energy level and default durations (e.g. high: entrances 0.15–0.3s, transitions 0.2–0.35s).
+- Entrance vocabulary to draw from (names from `04-motion-language.md` §15).
+- Ease palette: 3–5 named eases and what each is for.
+- Ambient rule (what keeps holds alive, per scene).
+- Camera rig and parallax factors.
+- Direction rule for travel.
+
+### Beat grid
+BPM, pulse length, phrase length, the table of phrase start times, where the drop/build is. All frame times derive from this.
+
+### Seam map
+Table of every transition (from `05-transitions.md` §5).
+
+### Bans
+Project "do nots", including slideshow and screensaver.
+
+## 3. Per-frame sections
+
+One `## Frame N — Name` per beat (a beat is one idea; often one musical phrase, sometimes two).
+
+```markdown
+## Frame 3 — Buyers: verified sellers
+
+- time: P3.0–P4.0 (8.89–13.33s, 4.44s)
+- role: proof (feature 1)
+- why: Shoppers doubt seller honesty; seeing a seller get verified is the proof.
+- transition_in: Bubble morph from Frame 2 (see seam map, cut 2)
+- status: outline
+
+**On screen (verbatim):** "Verified sellers" · "Delivered"
+**Layout:** phone mockup right third (62% height, centre x 1290); words left third, top-aligned at y 340; ghost type "SAFE" bottom-left.
+**Depth:** BG charcoal mesh (red/charcoal blobs, grain) 0.3× · MG phone + chips 1× · FG two small red glints + blurred parcel corner 1.4×.
+**Material/light:** flat UI inside the phone; the phone frame has a glass rim light idling 1 turn / 4s; one shine sweep across the phone at P3.5.
+
+**Motion (in order of appearance):**
+| At | Element | Verb | From → to | Dur | Ease | Notes |
+|---|---|---|---|---|---|---|
+| P3.0 | phone | TILT-FLATTEN | rotationY −35°, x +120 → 0°, 0 | 0.6s | expo.out | arrives from the expanding bubble |
+| P3.1 | home feed | SCROLL | y 0 → −420 | 1.8s | power2.inOut | product cards pass; pauses on card 3 |
+| P3.2 | card 3 seller tag | STAMP | grey "Seller" → red check "Verified" | 0.25s | back.out(2.5) | 6px shake on phone |
+| P3.2 | "Verified sellers" | SIDE SNAP | x −160, skew 8°, blur 8 → sharp | 0.2s | power4.out | lands with the stamp |
+| P3.4 | "Delivered" chip | RISE | y +80, opacity 0 → 0, 1 | 0.45s | power3.out | below the first chip, smaller |
+| P3.5 | phone | SHINE | band x −300 → 900 | 0.8s | power2.inOut | soft-light; glint top-right at +0.6s |
+| P3.6–7 | — | BREATHE | camera drift scale 1 → 1.025 continues | — | none | nothing new enters |
+
+**Camera:** `.world` drifts x 0 → −24px, scale 1 → 1.025 across the whole frame (none).
+**Audio cue:** stamp thud on P3.2; soft whoosh into the cut.
+**Transition out:** see seam map, cut 3 (Bubble morph, primary).
+**Do not:** no shopping-cart icon; no fade on the chips; phone never smaller than 55% height.
+**Frame check:**
+- @P3.3 (10.2s): phone flat and sharp, "Verified" stamp visible on card 3, "Verified sellers" fully in, no overlap with the phone.
+- @P3.6 (11.6s): both chips visible, left column aligned on one x, only drift moving.
+```
+
+### Field rules
+
+| Field | Rule |
+|---|---|
+| time | Music positions + resolved seconds + duration. Durations sum to the total (state it). |
+| role / why | Role in the arc; why traces to the message. No why → cut the frame. |
+| On screen | Every word verbatim, in quotes. ≤ 3 words of message at once. |
+| Layout | Zones and coordinates or thirds; sizes as % of frame or px. Two focal points. |
+| Depth | BG / MG / FG with parallax factors. |
+| Material/light | Treatment + the light event and its time. |
+| Motion table | Every element that moves: time (music position), verb, from → to with values, duration, ease, notes. Order = order of importance. Include the breath as a row. |
+| Camera | The `.world` move for the frame. |
+| Audio cue | SFX and music events. |
+| Transition out | Reference the seam map; the full spec lives there once. |
+| Do not | At least one per frame that could go generic. |
+| Frame check | 1–3 timestamps with what a still frame must show. These become the review frames. |
+
+## 4. Quality bar for a finished storyboard
+
+- Every element on screen has a verb, values, a duration and an ease.
+- Every frame has a breath and a frame check.
+- The seam map has one primary, one or two accents, and the boldest transition on the hero moment.
+- The message is on screen by the end of the second frame.
+- Each feature has its proof moment, depicted as a state change.
+- All props trace to the terrain; nothing from the generic-avoid list appears.
+- Total duration adds up; every scene change is on a phrase start.
+- A fresh reader could build it without asking anything.
