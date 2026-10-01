@@ -37,7 +37,7 @@ The skill is only needed where you **write** prompts. The session that **builds*
 
 > Write the video prompt for a 30-second 16:9 motion design video for AvioMax, a Nigerian online marketplace where verified sellers open stores and buyers shop safely, with Paystack payments and 6% commission. Audience: Nigerian shoppers and small sellers on Instagram, TikTok and WhatsApp. End line: "Shop smart. Sell big." Brand: Poppins Bold/Medium, charcoal #2D2D2D, white, accent #CC0000, no blue/green/purple. Assets: assets/logo.svg, assets/home.png, assets/vendor-dashboard.png, assets/music.mp3.
 
-Claude works out the message, the terrain and five concepts, shows you its pick, then writes `aviomax-video-prompt.md`. The finished example is `skills/motion-storyboard/examples/aviomax-30s-prompt.md`.
+Claude works out the message, the terrain and five concepts, shows you its pick, then writes `aviomax-video-prompt.md`.
 
 **Step 2: build the video (any Opus session with HyperFrames).** Open Claude Code in the folder that holds the assets, add the prompt file, and say:
 
@@ -70,7 +70,6 @@ skills/motion-storyboard/
   templates/
     video-prompt.md               the output: the prompt file's sections
     brief.md                      intake for a new video
-  examples/aviomax-30s-prompt.md  a complete prompt, ready to hand to a builder
   recipes/
     materials.html                tested glass / gradient / chrome / shine / glint composition
     materials-render.jpg          frames from its render
