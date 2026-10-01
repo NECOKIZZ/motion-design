@@ -310,7 +310,7 @@ function ballDrop(t, t0, y0, yRest, g, bounces) {
 
 function renderAt(t) {
   // which acts are live
-  const a1 = t < 8.15, a3 = t >= 15.85 && t < 24.15, a5 = t >= 33.4 && t < 40.0, a8 = t >= 51.9;
+  const a1 = t < 8.15, a3 = t >= 15.97 && t < 24.15, a5 = t >= 33.4 && t < 40.0, a8 = t >= 51.9;
   disc.visible = a1; grid.visible = a3; chips.visible = a5; logo.visible = a8;
   ball.visible = false; ballShadow.visible = false;
   if (!(a1 || a3 || a5 || a8)) { renderer.clear(); return; }

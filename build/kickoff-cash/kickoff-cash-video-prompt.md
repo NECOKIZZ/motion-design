@@ -148,4 +148,4 @@ Deliverable: `renders/kickoff-cash.mp4`, 1920×1080, 30 fps, 60s, with the music
 
 ## Changes after build
 
-- None to the storyboard structure. Coordinates and camera values above were tuned from the first snapshots (grid framed lower under a scrim so the headline reads; full-time tile label turns dark when lit; back player cards made opaque).
+- None to the storyboard structure. Tuned from the snapshots and the draft: grid framed lower under a scrim so the headline reads; the full-time tile label turns dark when lit; back player cards made opaque; score pins offset; the Palmer clip plays at 0.75× to fill its act; shards carry the stamped, greyed ticket; the 3D grid appears only under the flash.

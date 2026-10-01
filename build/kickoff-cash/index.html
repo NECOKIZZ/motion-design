@@ -90,11 +90,11 @@ html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0b0b0
 .tk .score em { font-style: normal; margin: 0 10px; color: rgba(247,245,240,.4); font-weight: 500; }
 .tk .foot { position: absolute; left: 44px; right: 44px; bottom: 40px; border-top: 1px solid rgba(255,255,255,.14); padding-top: 24px; }
 .tk .foot .v { font-family: "Clash Display"; font-weight: 600; font-size: 34px; }
-#stamp { position: absolute; left: 150px; top: 250px; width: 230px; height: 230px; border-radius: 50%;
+#stamp, .stampc { position: absolute; left: 150px; top: 250px; width: 230px; height: 230px; border-radius: 50%;
   border: 6px solid #ff4d6d; color: #ff4d6d; display: flex; flex-direction: column; align-items: center; justify-content: center;
   box-shadow: 0 0 40px rgba(255,77,109,.35), inset 0 0 30px rgba(255,77,109,.25); background: rgba(40,8,16,.35); }
-#stamp .l1 { font-family: "Inter"; font-weight: 600; font-size: 22px; letter-spacing: .2em; }
-#stamp .l2 { font-family: "Clash Display"; font-weight: 700; font-size: 64px; letter-spacing: .02em; margin-top: 4px; }
+#stamp .l1, .stampc .l1 { font-family: "Inter"; font-weight: 600; font-size: 22px; letter-spacing: .2em; }
+#stamp .l2, .stampc .l2 { font-family: "Clash Display"; font-weight: 700; font-size: 64px; letter-spacing: .02em; margin-top: 4px; }
 #cracks { position: absolute; inset: 0; width: 500px; height: 600px; }
 
 /* ---------- act 2: broadcast panel ---------- */
@@ -315,7 +315,7 @@ html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0b0b0
         <div id="pB2" class="pcard glass pback" style="left:0; top:0; background:linear-gradient(160deg, rgba(40,34,80,.9), rgba(18,16,30,.95))"><div class="art" style="background:linear-gradient(160deg,#2a2160,#120f2a)"></div><div class="nm" style="font-size:52px">Erling Haaland</div><div class="cl">Man City</div><div class="ln"><span class="meta">Line</span><b>8.5</b></div></div>
         <div id="pB1" class="pcard glass pback" style="left:0; top:0; background:linear-gradient(160deg, rgba(60,30,40,.9), rgba(22,14,18,.95))"><div class="art" style="background:linear-gradient(160deg,#3a1d1d,#140c0c)"></div><div class="nm" style="font-size:52px">Bruno Fernandes</div><div class="cl">Man United</div><div class="ln"><span class="meta">Line</span><b>7.5</b></div></div>
         <div id="pMain" class="pcard glass" style="background:linear-gradient(160deg, rgba(34,32,48,.94), rgba(16,16,22,.97))" style="left:0; top:0">
-          <div class="vid"><video id="vPalmer" src="assets/palmer.mp4" data-start="40" data-duration="6.0" data-track-index="6" muted playsinline></video></div>
+          <div class="vid"><video id="vPalmer" src="assets/palmer.mp4" data-start="40" data-duration="8.0" data-playback-rate="0.75" data-track-index="6" muted playsinline></video></div>
           <div class="nm">Cole Palmer</div><div class="cl">Chelsea</div>
           <div class="ln"><span class="meta">Fantasy points</span><b>Line 9.5</b></div>
           <div class="shine" id="pShine"></div>
@@ -400,7 +400,8 @@ html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0b0b0
     s.className = "tk glass dark shard";
     s.id = "sh" + k;
     s.style.cssText = "clip-path: polygon(" + p + "); opacity:0;";
-    s.innerHTML = $("#tkIn").outerHTML.replace('id="tkIn"', "").replace('id="tkScore"', "");
+    s.innerHTML = $("#tkIn").outerHTML.replace('id="tkIn"', 'style="filter:grayscale(1) brightness(.6)"').replace('id="tkScore"', "")
+      + $("#stamp").outerHTML.replace('id="stamp" style="opacity:0"', 'class="stampc" style="transform:rotate(-14deg)"');
     shardsEl.appendChild(s);
   });
   // confetti (deterministic angles)
