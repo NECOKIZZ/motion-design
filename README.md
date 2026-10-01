@@ -64,6 +64,7 @@ skills/motion-storyboard/
     11-storyboard-format.md       how each frame of the storyboard is specified
     12-build-and-review.md        self-review of the prompt; build and verify steps the prompt gives the builder
     13-reads-events-and-acting.md timing by reads, an event per frame, show-don't-write, sets, acting, medium
+    14-house-look.md              the default look: dark premium, neon, glass, glints, real 3D
     hyperframes-map.md            capabilities, hard limits, term → building block
     measured-references.md        numbers measured from reference videos
   templates/

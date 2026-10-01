@@ -28,7 +28,7 @@ Output file: `<slug>-video-prompt.md`, following `templates/video-prompt.md`. A 
 | 1 | **Brief → message and features** | §3 Brief: the message as a claim; 2–4 features, each with its *proof moment* | `01-brief-and-features.md` |
 | 2 | **Terrain** | §2 and the props, devices and transitions used in every frame | `02-terrain.md` |
 | 3 | **Concept** (show the user) | §2: the idea, the spine, signature moments, rhythm shape, bans | `03-concept.md` |
-| 4 | **Look** | §4: palette, type, medium/material, background layer, light events | `07-type-in-motion.md`, `08-materials-and-light.md`, `13` §8 |
+| 4 | **Look** (default: the house look, with the brand's colours) | §4: palette, type, medium/material, 3D, background layer, light events | `14-house-look.md`, `07-type-in-motion.md`, `08-materials-and-light.md`, `13` §8 |
 | 5 | **Motion system and seam map** | §5 and §6 | `04-motion-language.md`, `05-transitions.md`, `06-camera-and-depth.md`, `09-rhythm-and-music.md` |
 | 6 | **Storyboard** | §7: every frame, fully specified | `11-storyboard-format.md`, `10-product-ui.md`, `13-reads-events-and-acting.md` |
 | 7 | **Build rules and verification** | §8 and §9, adapted to the project | `hyperframes-map.md`, `12-build-and-review.md` |
@@ -42,6 +42,7 @@ Output file: `<slug>-video-prompt.md`, following `templates/video-prompt.md`. A 
 | Scene-to-scene transitions: meaning, catalogue with numbers, velocity matching, match cuts | `references/05-transitions.md` |
 | Camera, parallax, zoom, 3D, depth of field | `references/06-camera-and-depth.md` |
 | Kinetic type: entrances, masks, reading time, word limits | `references/07-type-in-motion.md` |
+| The default look: dark premium, neon signal, dark glass, glints, real 3D | `references/14-house-look.md` |
 | Glass, gradients, chrome, shine sweeps, glints, rim light, grain, bloom | `references/08-materials-and-light.md` (tested recipes in `recipes/materials.html`) |
 | Music, beats, phrases, holds | `references/09-rhythm-and-music.md` |
 | Showing a product or app UI working | `references/10-product-ui.md` |
@@ -53,6 +54,10 @@ Output file: `<slug>-video-prompt.md`, following `templates/video-prompt.md`. A 
 | A complete worked prompt | `examples/aviomax-30s-prompt.md` |
 
 Load references as the stage needs them; you do not need all of them for a 6-second logo sting.
+
+## Default look
+
+Unless the user asks otherwise, design in the **house look** (`references/14-house-look.md`): a near-black stage with accent light curtains, dark glass UI, glints, a neon signal colour reserved for the payoff, and **real 3D as a priority** (the extruded logo with a flat face, a signature 3D sculpture from the product's idea, 3D objects carrying the transitions). Swap in the brand's colours, fonts and logo; keep the look. Describe it fully in the prompt's §4, because the builder has never seen it.
 
 ## Rules every prompt's storyboard follows
 

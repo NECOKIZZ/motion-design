@@ -40,7 +40,8 @@ Deliverable: `renders/[slug].mp4`, [W]×[H], [fps] fps, [length]s, with the musi
 
 - Palette: bg `#` · text `#` · accent `#` (only on [rule]) · allowed tints · banned colours
 - Type: hero ( px) · headline ( px) · label ( px)
-- Medium / material: [flat | glass | chrome | paper | painted], with its rules
+- Medium / material: [default: the house look, dark premium with dark glass, neon signal and glints (describe it in full; see references/14-house-look.md)]
+- 3D: [the extruded logo (flat face, metal sides), the signature 3D object or sculpture and how it is lit and moves; where 3D carries a transition]
 - Background layer: 
 - Light events (shine sweeps, glints, rim light): 
 

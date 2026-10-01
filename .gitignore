@@ -2,3 +2,11 @@ node_modules/
 out/
 *.mp4
 .DS_Store
+build/*/snaps*/
+build/*/renders/
+build/*/assets/bgm/*.log
+build/*/.hyperframes/
+ref/
+renders/
+build/*/ref/
+build/*/audio/gen.log
