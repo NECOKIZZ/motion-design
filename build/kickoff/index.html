@@ -220,9 +220,12 @@ body { font-family: "Inter", sans-serif; color: #111210; }
       </div>
     </div>
     <div id="hero-glints"></div>
-    <div class="ring" id="wipe5" style="left:300px;top:-414px;width:2000px;height:2000px;border:3px solid rgba(255,255,255,0.95);box-shadow:0 0 22px rgba(123,98,246,0.9), inset 0 0 22px rgba(123,98,246,0.6);"></div>
+
   </div>
 
+  <div class="layer" id="wipe-layer" style="pointer-events:none;">
+    <svg class="abs" id="wipe5" width="1920" height="1080" viewBox="0 0 1920 1080" style="left:0;top:0;overflow:visible;filter:drop-shadow(0 0 10px rgba(123,98,246,0.95)) drop-shadow(0 0 24px rgba(123,98,246,0.6));"><circle id="wipe5-c" cx="1300" cy="586" r="0" fill="none" stroke="#FFFFFF" stroke-width="4"/></svg>
+  </div>
   <div id="grain"></div>
   <div id="fade"></div>
 </div>
@@ -474,6 +477,8 @@ body { font-family: "Inter", sans-serif; color: #111210; }
   init("#s1-line", { scaleX: 0.366, opacity: 0 }, 0);
   init(["#s1-head .w", "#s2-name .w", "#s2-l1 .w", "#s2-l2 .w", "#s3-h1 .w", "#s3-h2 .w", "#s5-h .w", "#s7-l1 .w", "#s7-l2 .w", "#s7-wait .w"], { yPercent: 112 }, 0);
   init(".gw-face", { backgroundPosition: "100% 0%" }, 0);
+  init("#s2-k3d", { rotationY: -70, rotationX: 12, z: -300, filter: "blur(8px)" }, 0);
+  init("#s7-k3d", { rotationY: 60, z: -400, filter: "blur(8px)", opacity: 0 }, 0);
   init(s2Shine, { x: -160 }, 0); init(s7Shine, { x: -140 }, 0); init(s5Shine, { y: 480 }, 0);
 
   // shared background drift (blobs)
@@ -544,7 +549,7 @@ body { font-family: "Inter", sans-serif; color: #111210; }
   ft(0, nameLetters, { yPercent: 112 }, { yPercent: 0, duration: 0.6, ease: "expo.out", stagger: 0.04 }, P(1, 2));
   exitUp(nameLetters, P(1, 4));
   ft(0, "#s2-logo", { x: 0, scale: 1 }, { x: -280, scale: 0.73, duration: 0.5, ease: "power3.inOut" }, P(1, 4));
-  maskRise(s2L1.words, P(1, 4) + 0.1);
+  maskRise(s2L1.words, P(1, 4) + 0.22);
   maskRise(s2L2.words, P(1, 5));
   glowWord(s2L2, P(1, 5) + 0.05);
   const CAM2END = C2 - 0.5;
@@ -695,8 +700,9 @@ body { font-family: "Inter", sans-serif; color: #111210; }
   show(W5, "#s6");
   ft(0, "#s6", { clipPath: "circle(0px at 1300px 586px)" }, { clipPath: "circle(2000px at 1300px 586px)", duration: 0.55, ease: "power2.in" }, W5);
   hide(C5 + 0.3, "#s5");
-  init("#wipe5", { scale: 0, opacity: 0 }, 0);
-  ft(0, "#wipe5", { scale: 0, opacity: 1 }, { scale: 1, opacity: 1, duration: 0.55, ease: "power2.in" }, W5);
+  init("#wipe5", { opacity: 0 }, 0);
+  tl.set("#wipe5", { opacity: 1 }, W5);
+  ft(0, "#wipe5-c", { attr: { r: 0 } }, { attr: { r: 2000 }, duration: 0.55, ease: "power2.in" }, W5);
   ft(0, "#wipe5", { opacity: 1 }, { opacity: 0, duration: 0.15, ease: "power2.out" }, W5 + 0.55);
 
   // ═════ FRAME 6 · trust (C5 → C6) ═════
