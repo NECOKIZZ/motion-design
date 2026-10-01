@@ -19,9 +19,9 @@ A prompt like "logo slams in, push transition out" leaves every decision to the 
 
 Claude Code (personal skills):
 ```bash
-git clone <this repo> ~/motion-storyboard-skill
+git clone https://github.com/NECOKIZZ/motion-design ~/motion-design
 mkdir -p ~/.claude/skills
-ln -s ~/motion-storyboard-skill/skills/motion-storyboard ~/.claude/skills/motion-storyboard
+ln -s ~/motion-design/skills/motion-storyboard ~/.claude/skills/motion-storyboard
 ```
 Or per project: copy `skills/motion-storyboard` into the project's `.claude/skills/`.
 
