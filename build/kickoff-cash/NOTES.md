@@ -29,7 +29,7 @@ The video stalls for too long in particular scenes. It should keep moving: even 
 - Ambient motion (curtain drift, slow card sway, 1.03× zooms) was kept deliberately quieter than the action, as the skill says. Over a 2–5s hold it reads as stopped, not alive.
 - Inside the pool and perps acts, things fill and settle in place. Nothing travels across the frame and the camera doesn't move into anything.
 
-### For the next pass (not applied)
+### For the next pass (applied in v2, see below)
 
 - **Tempo:** 1.5× would put the film at about 40s. Or keep 60s and fit more events in: one phrase (4s) per idea instead of two, and two-phrase acts only for the hero (grid) and the drop.
 - **Hold length:** cap any hold at about 1–1.5s, and only straight after a key read lands (the message, the payout).
@@ -43,3 +43,10 @@ The video stalls for too long in particular scenes. It should keep moving: even 
 - **Before building:** the skill should check a storyboard's still share against the reference it is matching, not only against UI-motion references.
 
 Pending: compare against the reference video the user mentioned (not yet received) and record its numbers here.
+
+## v2 applied (38s)
+
+- Pace: 60s → 38s (about 1.6× overall). One idea per phrase or bar; two-phrase-length acts only for the match and the hero grid.
+- Holds capped at about 1.5s, and every act has a continuous push so nothing stops moving.
+- The story now matches the footage: the call is 2-2, Agüero strikes at 93:20 for 3-2, and the 2-2 call is close and still pays.
+- Re-measure the v2 render with `recipes/motion-profile.py` and compare its still share against the 41% recorded above.

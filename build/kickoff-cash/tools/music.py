@@ -2,7 +2,7 @@
 # P0-1 intro (pad, heartbeat), P2-3 groove in, P4-5 turn (bass+claps), P6-7 build + riser,
 # stop at 31.5s, DROP at 32s, P8-9 full, P10-12 groove, P13 logo hit at 54s, tail to 60s.
 import numpy as np, wave
-SR=44100; BPM=120; PULSE=60/BPM; DUR=60.0
+SR=44100; BPM=120; PULSE=60/BPM; DUR=38.0
 N=int(SR*DUR); L=np.zeros(N); R=np.zeros(N)
 rng=np.random.default_rng(7)
 def t_(d): return np.arange(int(SR*d))/SR
@@ -46,43 +46,6 @@ def pad_chord(ch,d,bright):
     s=lp(lp(s,a),a)
     e=np.minimum(1,t/0.8)*np.minimum(1,(d-t)/0.6)
     return s*e
-print('pads'); 
-for p in range(15):
-    ch=prog[p%4]
-    bright={0:0.0,1:0.1,2:0.25,3:0.3,4:0.45,5:0.5,6:0.55,7:0.65,8:1.0,9:1.0,10:0.7,11:0.7,12:0.6,13:0.9,14:0.5}[p]
-    g={0:0.35,1:0.45}.get(p,0.38)
-    if p==7: pass
-    s=pad_chord(ch,4.6 if p<14 else 4.0,bright)
-    add(s,p*4,g,-0.2); add(np.roll(s,300),p*4,g,0.2)
-# bass: root note pattern from P4, 8ths, sidechain feel
-print('bass')
-for p in list(range(4,8))+list(range(8,13))+[13]:
-    root=prog[p%4][0]-24
-    for k in range(8 if p!=13 else 4):
-        st=p*4+k*PULSE+PULSE*0.5
-        if p==7 and k>=7: continue
-        t=t_(PULSE*0.45); f=note(root+(12 if k%4==3 else 0))
-        s=np.tanh(2.2*(np.sin(2*np.pi*f*t)+0.3*saw(f,t)))*np.minimum(1,t/0.005)*np.exp(-t*3)
-        add(s,st,0.22)
-# drums
-print('drums')
-for b in range(int(DUR/PULSE)):
-    tb=b*PULSE; p=int(tb//4); k=b%8
-    if 31.5<=tb<32: continue
-    if p>=14: continue
-    if p in (0,1):
-        if k in (0,) : add(kick(0.45),tb,0.6)
-        if p==1 and k==6: add(kick(0.35),tb,0.6)
-        continue
-    if p==7 and k>=4:  # build: kick doubles
-        add(kick(0.9),tb,0.8); add(kick(0.6),tb+PULSE/2,0.6); continue
-    if p==13 and k>=2: continue  # space for logo lock
-    add(kick(1.0),tb,0.85)
-    add(hat(0.16),tb+PULSE/2,1.0,0.3)
-    if p>=8 and p<=12: add(hat(0.08,90),tb+PULSE/4,1.0,-0.3); add(hat(0.08,90),tb+3*PULSE/4,1.0,-0.3)
-    if p>=4 and k%2==1: add(clap(0.42),tb,1.0,0.05)
-# riser P6.4 -> 31.5
-print('fx')
 def riser(d):
     t=t_(d); n=rng.standard_normal(len(t)); out=np.zeros(len(t))
     # sweeping bandpass via two lowpasses with rising cutoff, chunked
@@ -92,29 +55,60 @@ def riser(d):
         for j in range(i,min(len(t),i+ch)):
             acc1+=a*(n[j]-acc1); acc2+=a*0.5*(acc1-acc2); out[j]=acc1-acc2
     return out*(t/d)**1.5
-r=riser(5.5); add(r,26.0,0.9)
 def impact(g=1.0):
     t=t_(2.5); s=np.sin(2*np.pi*(38+60*np.exp(-t*6))*t)*np.exp(-t*1.6)
     n=rng.standard_normal(len(t)); n=lp(n,0.08)*np.exp(-t*2.5)*1.5
     return np.tanh((s+n)*1.5)*g
-add(impact(1.0),32.0,0.9)
-add(impact(0.6),1.5,0.55)   # ball lands
-add(impact(0.8),54.0,0.85)  # logo lock
-add(impact(0.5),16.0,0.6)   # hero turn
 def whoosh(d=0.6):
     t=t_(d); n=rng.standard_normal(len(t)); y=lp(n,0.12)-lp(n,0.02)
     e=np.sin(np.pi*t/d)**2
     return y*e*1.6
-for tw in (7.75,15.75,23.75,39.75,47.75,51.75):
-    add(whoosh(),tw-0.1,0.5)
 def tick(): 
     t=t_(0.06); return np.sin(2*np.pi*2400*t)*np.exp(-t*90)*0.5
-for tt in (10.0,13.6,15.0):
-    add(tick(),tt,0.7); add(tick(),tt+0.06,0.5)
 def chime(f0=1046.5):
     t=t_(1.6); s=sum(np.sin(2*np.pi*f0*m*t)*np.exp(-t*(3+m)) / m for m in (1,2.01,3.02,4.2))
     return s*0.35
-add(chime(1046.5),33.0,0.5); add(chime(1318.5),33.12,0.4); add(chime(1568),57.0,0.45)
+print('pads')
+# 38s cut: P0 intro, 4-10 match groove, 10 hero hit, 16-19.5 build, stop, DROP 20, groove to 32, logo hit 34
+NPH=10
+for p in range(NPH):
+    ch=prog[p%4]
+    bright=[0.05,0.3,0.45,0.55,0.65,1.0,0.8,0.75,0.6,0.5][p]
+    d=4.6 if p<NPH-1 else 2.0
+    s_=pad_chord(ch,d,bright)
+    add(s_,p*4,0.4,-0.2); add(np.roll(s_,300),p*4,0.4,0.2)
+print('bass')
+for b in range(int(DUR/PULSE)):
+    tb=b*PULSE
+    if not (10<=tb<19.5 or 20<=tb<32): continue
+    p=int(tb//4); root=prog[p%4][0]-24
+    t=t_(PULSE*0.45); f=note(root+(12 if b%4==3 else 0))
+    s_=np.tanh(2.2*(np.sin(2*np.pi*f*t)+0.3*saw(f,t)))*np.minimum(1,t/0.005)*np.exp(-t*3)
+    add(s_,tb+PULSE*0.5,0.22)
+print('drums')
+for b in range(int(DUR/PULSE)):
+    tb=b*PULSE; k=b%8
+    if 19.5<=tb<20 or tb>=32: continue
+    if tb<4:
+        if b in (2,6): add(kick(0.45),tb,0.6)
+        continue
+    if 18<=tb<19.5:
+        add(kick(0.9),tb,0.8); add(kick(0.6),tb+PULSE/2,0.6); continue
+    add(kick(1.0),tb,0.85)
+    add(hat(0.16),tb+PULSE/2,1.0,0.3)
+    if 20<=tb<32: add(hat(0.08,90),tb+PULSE/4,1.0,-0.3); add(hat(0.08,90),tb+3*PULSE/4,1.0,-0.3)
+    if tb>=10 and k%2==1: add(clap(0.42),tb,1.0,0.05)
+print('fx')
+add(riser(4.0),15.5,0.9)
+add(impact(1.0),20.0,0.9)
+add(impact(0.6),1.05,0.55)
+add(impact(0.8),34.0,0.85)
+add(impact(0.6),10.0,0.65)
+for tw in (3.75,9.85,15.85,23.75,27.75,31.75):
+    add(whoosh(),tw-0.1,0.5)
+for tt in (6.0,7.0):
+    add(tick(),tt,0.7); add(tick(),tt+0.06,0.5)
+add(chime(1046.5),21.0,0.5); add(chime(1318.5),21.12,0.4); add(chime(1568),36.15,0.45)
 mix=np.stack([L,R],1)
 # master: fade out last 1.5s, soft clip, normalise
 fade=np.ones(N); fi=int(1.6*SR); fade[-fi:]=np.linspace(1,0,fi)**1.5

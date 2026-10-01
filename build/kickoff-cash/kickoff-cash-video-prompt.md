@@ -149,3 +149,26 @@ Deliverable: `renders/kickoff-cash.mp4`, 1920×1080, 30 fps, 60s, with the music
 ## Changes after build
 
 - None to the storyboard structure. Tuned from the snapshots and the draft: grid framed lower under a scrim so the headline reads; the full-time tile label turns dark when lit; back player cards made opaque; score pins offset; the Palmer clip plays at 0.75× to fill its act; shards carry the stamped, greyed ticket; the 3D grid appears only under the flash.
+
+## Changes after build · v2 (38s faster cut)
+
+Applied after review ("too slow, stalls"; see NOTES.md). The look, the props and the order of the acts are unchanged. **The code is the truth for v2 timings.**
+
+**Story fix: the real Agüero moment.** The footage is a 3-2 winner, not 2-0. The ticket now calls **2-2**. The scorebug reads HOME 2 - 2 AWAY at 90+3'. On the goal the home digit flips to 3 and the clock flips to **93:20**, then FT. The yes/no stamp marks the 2-2 call LOST. In the grid the full-time tile is **3-2** and your **2-2** tile is right next to it. Pool rows: 3-2 Exact 52% · 2-2 You 31% · 3-1 Close 17% · 0-3 Far 0%. Payoff label: "Your 2-2 call pays".
+
+**New timing** (120 BPM; cuts land on bars of 2s):
+
+| Act | v1 | v2 | Key beats (v2) |
+|---|---|---|---|
+| 1 Call | 0–8 | 0–4 | ball lands 1.05 · ticket 1.4 · caption 2.25 · kick and whip 3.45–4.0 |
+| 2 Match | 8–16 | 4–10 | bug 4.4 · winner 6.0 (3-2, 93:20) · FT 7.0 · LOST 7.3 · camera leans into the ticket · cracks 9.25 · shatter 9.86 |
+| 3 Grid (hero) | 16–24 | 10–16 | tiles rise 10.0 · 3-2 ignites 10.95 · wave 11.25 · ball on 2-2 12.45 · caption 12.6 · legend 13.3 · zoom through 15.55 |
+| 4 Pool | 24–32 | 16–20 | counter 16.15 · rows 16.45–16.8 · fills 17.0–17.45 · push in from 17.6 · iris 19.62 |
+| 5 Payoff (drop) | 32–40 | 20–24 | +$1,284 20.05 · burst 21.2 · chips every 0.15s from 21.0 · caption 21.9 |
+| 6 Perps | 40–48 | 24–28 | caption 24.5 · panel 25.0 · pin 25.55 · result run 25.9–26.9 · +$86 27.1 |
+| 7 Leaderboard | 48–52 | 28–32 | climb 29.35 |
+| 8 Lockup | 52–60 | 32–38 | ball docks 34.0 · wordmark 34.35 · CTA press 36.12 · fade 37.2 |
+
+**Motion through holds:** every act now carries a continuous camera move: the panel scales 0.97 → 1.04, the ticket push, the pool push 1 → 1.1, payoff, perps and leaderboard scenes 1 → 1.05–1.06, and the faster 3D cameras. Holds are capped at about 1.5s.
+
+**Music:** regenerated at 38s (`tools/music.py`). Hero hit at 10, riser 15.5–19.5, stop, drop at 20, logo hit at 34.
