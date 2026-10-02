@@ -58,7 +58,8 @@ Declare the rhythm before the beats, as a pattern of quick hits (lowercase), big
 
 Rules:
 - One peak, placed around 60–75% of the runtime, on the strongest music section.
-- At least one deliberate held frame where a line lands, but no hold runs past 1.5s (2s for the message), and the camera keeps travelling through it.
+- At least one deliberate held frame where a line lands, but no hold runs past what reading needs (1.5s at most, 2s for the message), and something meaningful keeps changing through it.
+- Energy is not flat: a fast cold open, a calmer demo, a staccato proof run, a build that accelerates into the peak (`15-pace-and-flow.md` §7).
 - The end card holds 1.5–2s (2–3s for a URL the viewer must read).
 - Size the film by its reads, not a round number: a promo with 3–4 proofs is usually 30–40s.
 

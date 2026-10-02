@@ -42,6 +42,7 @@ The terrain table, signature props, props to avoid. (From `02-terrain.md`.)
 - Entrance vocabulary to draw from (names from `04-motion-language.md` §15).
 - Ease palette: 3–5 named eases and what each is for.
 - Ambient rule (what keeps holds alive, per scene).
+- Pace rule: scene unit (bar / phrase), arrival grid (one per pulse), entrance speed for information vs hero moves, the hold budget for static frames (`15-pace-and-flow.md`).
 - Camera rig and parallax factors.
 - Direction rule for travel.
 
@@ -56,7 +57,7 @@ Project "do nots", including slideshow and screensaver.
 
 ## 3. Per-frame sections
 
-One `## Frame N — Name` per beat (a beat is one idea; often one musical phrase, sometimes two).
+One `## Frame N — Name` per beat (a beat is one idea; usually one bar, a phrase for a demo or the hero).
 
 ```markdown
 ## Frame 3 — Buyers: verified sellers
@@ -110,7 +111,7 @@ One `## Frame N — Name` per beat (a beat is one idea; often one musical phrase
 | Layout | Zones and coordinates or thirds; sizes as % of frame or px. Two focal points. |
 | Depth | BG / MG / FG with parallax factors. |
 | Material/light | Treatment + the light event and its time. |
-| Motion table | Every element that moves: time (music position), verb, from → to with values, duration, ease, notes. Order = order of importance. Include the breath as a row. |
+| Motion table | Every element that moves: time (music position), verb, from → to with values, duration, ease, notes. Order = order of importance. Arrivals on pulses. Include the breath as a row, with what is still changing during it (or why a still breath is short enough). |
 | Camera | The `.world` move for the frame. |
 | Audio cue | SFX and music events. |
 | Transition out | Reference the seam map; the full spec lives there once. |
@@ -125,5 +126,5 @@ One `## Frame N — Name` per beat (a beat is one idea; often one musical phrase
 - The message is on screen by the end of the second frame.
 - Each feature has its proof moment, depicted as a state change.
 - All props trace to the terrain; nothing from the generic-avoid list appears.
-- Total duration adds up; every scene change is on a phrase start.
+- Total duration adds up; every scene change is on a bar start; no frame runs on after its last read.
 - A fresh reader could build it without asking anything.

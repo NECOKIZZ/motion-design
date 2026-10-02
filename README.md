@@ -15,6 +15,7 @@ A prompt like "logo slams in, push transition out" leaves every decision to the 
 - a terrain method that turns a product's world into props and transitions (football → ball, pitch lines, scoreboard flips; privacy → redaction bars, hashes, frosted glass; prediction markets → YES/NO, probability bars);
 - tested HyperFrames recipes for glass, mesh gradients, chrome text, shine sweeps, rim lights and glints;
 - lessons from the P(doom) music video made with Claude: time every frame by what the viewer must understand (reads), make something happen in every frame, show instead of write, sets instead of cards;
+- a pacing guide measured from two films for the same product, side by side: scenes sized in bars by their reads, arrivals on the pulse, static frames held only as long as reading takes, fast for information and slow only for weight and builds;
 - a map of every storyboard term to the HyperFrames rule, blueprint or registry item that builds it.
 
 ## Install

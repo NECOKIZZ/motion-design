@@ -5,7 +5,7 @@ Text in a motion video is read once, at speed, while things move. Everything her
 ## 1. How much text, for how long
 
 - At most 2–3 words of a message on screen at once; one line is best, two lines is the limit.
-- Reading time: hold a phrase at least **0.3s per word + 0.5s** after it is fully in (a 3-word line holds ≥ 1.4s). A number or URL the viewer must remember holds ≥ 1.5s, ideally 2s+.
+- Reading time: a phrase needs about **0.3s per word + 0.5s** in total. Count it from the first word if words arrive one per pulse (the viewer reads as they land, so "Beat · the · pack." needs only ~0.5s after "pack."); count it after the line is fully in if it appears at once. A number or URL the viewer must remember gets ≥ 1.5s, ideally 2s+.
 - Plain language. No em dashes, no semicolons, no jargon the audience would not use.
 - One idea per phrase. Split long sentences into beats.
 
