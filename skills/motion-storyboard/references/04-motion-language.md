@@ -34,7 +34,7 @@ Rules:
 
 Pace by medium (measured, see `measured-references.md`):
 - **Social promo / launch clip:** entrances 0.13–0.3s, transitions 0.17–0.35s, cuts every 2–3s.
-- **House-look promo (the default):** entrances 0.3–0.7s, transitions 0.3–0.45s, a scene every 4s (6s for the hero), holds ≤ 1.5s, no quiet run over 1.5s. Measured: the same film felt stalled at 60s (8s scenes, holds up to 5.5s) and right at 38s.
+- **House-look promo (the default):** information entrances 0.15–0.35s, hero and 3D moves 0.4–0.8s, transitions 0.2–0.4s, a scene per bar for one idea (about 2s; a phrase for a demo or the hero), arrivals on pulses, holds sized to reading (`15-pace-and-flow.md`). Measured: the same film felt stalled at 60s (8s scenes) and still laggy at 38s (4s+ scenes, 2s still holds) next to a 30s cut with one-bar scenes.
 - **Website / UI showcase:** element motion 0.4–1.4s, long holds (35–60% of the time nothing moves).
 - **Brand film:** 0.6–2s moves, few cuts.
 
@@ -92,7 +92,7 @@ Zoom gives continuity between levels: from a whole to a detail (zoom in to a UI 
 
 - The first thing to move is the most important. Nothing else should move at the same moment unless it supports it.
 - One focal action at a time; secondary motion is quieter (smaller, slower, lower contrast).
-- Every beat has three phases: **build** (0–40%: elements arrive, one per pulse), **breathe** (a short hold, 0.5–1.5s, while the camera keeps travelling), **resolve** (the decisive end or the transition). If the breath would run longer than 1.5s, the beat is too long: cut time, not reads.
+- Every beat has three phases: **build** (elements arrive, one per pulse), **breathe** (a short hold sized to what is left to read: 0.4–1.5s), **resolve** (the decisive end or the transition). If nothing meaningful moves and the breath runs past what reading needs, the beat is too long: cut time, not reads.
 - First visible motion within 0.1–0.3s of a beat starting; never at exactly 0 (it reads as a jump cut).
 
 ## 14. Motion verbs
@@ -117,16 +117,16 @@ Defaults for 1920×1080; scale offsets for other sizes.
 | **Scale slam** | scale 1.6–2.2, opacity 0, blur 12px | scale 1, sharp | 0.15–0.25s | `expo.out`, + 6–10px frame shake |
 | **Side snap** | x ±120–200px, opacity 0, blur 8px, skewX ∓8° | x 0, skew 0 | 0.15–0.25s | `power4.out` |
 | **Drop** | y −160px, opacity 0 | y 0 | 0.3s | `back.out(1.6)` |
-| **Rise** | y +60–100px, opacity 0 (often inside a mask) | y 0 | 0.4–0.6s | `power3.out` / `expo.out` |
+| **Rise** | y +60–100px, opacity 0 (often inside a mask) | y 0 | 0.25–0.5s | `power3.out` / `expo.out` |
 | **Blur resolve** | blur 12–16px, scale 1.06, opacity 0 | sharp | 0.13–0.2s | `power3.out` |
-| **Mask rise** | text y 105% inside overflow-hidden line | y 0 | 0.5–0.7s, 0.06s per line | `expo.out` |
+| **Mask rise** | text y 105% inside overflow-hidden line | y 0 | 0.2–0.5s, 0.06s per line | `expo.out` |
 | **Spring pop** | scale 0, opacity 0 | scale 1 | 0.3–0.45s | `back.out(1.7–2.5)` |
 | **Stamp** | scale 2.5, rotation −25°, opacity 0 | scale 1, rotation −8° | 0.25s | `back.out(2.5)` + shake |
 | **Flip in** | rotationX −90° (perspective 1200) | 0° | 0.4s | `back.out(1.2)` |
 | **Type on** | characters revealed one by one | — | 0.03–0.05s per char | `steps` |
 | **Draw on** | SVG stroke-dashoffset = length | 0 | 0.5–1s | `power2.inOut` |
 | **Fly in on arc** | off-frame corner, rotation ±12° | rest, tilt ±2° | 0.4s | x `power3.out`, y `power2.out` |
-| **Count up** | 0 | value | 0.8–1.5s | `power2.out` (snap to integers) |
+| **Count up** | 0 | value | 0.5–1.2s (longer only for the payoff number) | `power2.out` (snap to integers) |
 
 Exits: 60–70% of the entrance duration, `.in` ease, or no exit at all because the transition covers it.
 
@@ -134,7 +134,7 @@ Exits: 60–70% of the entrance duration, `.in` ease, or no exit at all because 
 
 During every hold, something moves. Two layers:
 
-**The camera keeps travelling** (required on any hold over ~1s): a push of scale 1 → 1.05–1.1 over the scene (`power1.in` or `power2.in`, so it gathers speed into the cut), a truck across the set, a rack focus, or a lean into the next subject. It must be visible: a 1.02 drift over 4s reads as stopped.
+**The camera keeps travelling** (on any hold over ~1s where no content is still changing; otherwise shorten the hold): a push of scale 1 → 1.05–1.1 over the scene (`power1.in` or `power2.in`, so it gathers speed into the cut), a truck across the set, a rack focus, or a lean into the next subject. It must be visible: a 1.02 drift over 4s reads as stopped.
 
 **Decorative ambience** underneath, a different one per scene:
 - Camera drift: scale 1 → 1.02–1.04 or x ±20–30px over the beat, `none` or `sine.inOut` (only under a travelling move, never instead of one).

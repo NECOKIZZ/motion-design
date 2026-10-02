@@ -11,9 +11,12 @@ Add a section per new reference: what it is, how it was measured, the numbers, w
 ffmpeg -i ref.mp4 -vf "fps=20/DURATION,scale=360:-2,tile=5x4" sheet.jpg
 # close-up of one moment at 10–30 fps
 ffmpeg -ss 7.4 -t 2.4 -i ref.mp4 -vf "fps=10,scale=300:-2,tile=6x4" closeup.jpg
+# timestamped 10fps strip of a 3s stretch, to read when each element arrives (times relative to -ss)
+ffmpeg -ss 9 -t 3 -i ref.mp4 -vf "fps=10,scale=256:-2,drawtext=text='%{pts\:hms}':x=4:y=4:fontsize=14:fontcolor=red,tile=10x3" -frames:v 1 strip.jpg
 # beats of its music (put the audio in a HyperFrames project as the music track)
 npx hyperframes beats .
 ```
+Whole-frame motion numbers miss small arrivals (a word, a chip) and can't tell an on-beat film from an off-beat one. For pace and sync, read the strips by eye and write down the arrival times.
 Per-frame motion energy (mean absolute difference between consecutive grey frames) gives motion event durations, the share of time the frame is still, and where in each move the speed peaks (early peak = ease-out, middle = ease-in-out). A Python script that does this is in `recipes/motion-profile.py`.
 
 ## 1. Zajno: motion.zajno.com (UI/web motion principles)
@@ -85,13 +88,38 @@ The same 3D/glass football promo (house look, 120 BPM), built at two paces and m
 |---|---|---|
 | Scene length | 8s each | 4s each; 6s for the match and the hero |
 | Quiet runs ≥ 1s | 5, longest 5.5s (a pool card filling, then a slow push) | 3, longest 2.0s |
-| Viewer verdict | "slow, stalls in particular scenes" | right pace |
+| Viewer verdict | "slow, stalls in particular scenes" | right pace on its own; laggy next to a 30s flat cut (§5) |
 
 **Take from it**
-- Scenes sized to whole phrases by default (8s) left 3–5s holds wherever the reads ended early. One phrase per idea fixes it.
+- Scenes sized to whole phrases by default (8s) left 3–5s holds wherever the reads ended early. One phrase per idea improved it; §5 shows one bar per idea goes further.
 - A 1.02–1.03 drift over a 3–5s hold reads as stopped. Holds need a visible travelling push (1.05–1.1) that gathers speed into the cut.
 - The still-share number stays near 40% even when the pace feels right, because slow pushes register as near-still. Judge by the quiet runs (none over ~1.5–2s), not the share alone.
 
-## 5. Your references
+## 5. Flat UI launch film vs the 38s house-look film (same product, side by side)
+
+Another designer's 30s launch film for the same football prediction market. Flat UI on solid colour fields (black, purple, cream), serif headlines, almost no camera moves. Placed next to the 38s cut from §4, viewers judged it better for pacing, beat sync, speed and movement, though the 3D film looked richer. Measured from 10fps timestamped strips plus beat tracking, 2026-10-02. Its copy came to us as a 480p WhatsApp re-encode, so small timings are ±0.1s.
+
+| | Flat 30s film | House-look 38s film |
+|---|---|---|
+| Tempo | ~128 BPM (pulse 0.47s, bar 1.88s) | 120 BPM (pulse 0.5s, bar 2s) |
+| Scenes | 14; 12 of them one bar (1.6–2s); the demo and the end card two bars | 6; 4–10s each |
+| Arrivals inside a scene | one per pulse: countdown 3·2·1·ball; YES/NO flip per pulse; "Beat"·"the"·"pack." per pulse; three checklist lines per pulse; end card mark·wordmark·tagline·pill·CTA per pulse | sparse and uneven, e.g. ball 0.8s, card 1.4s, headline 2.4s, then nothing new until the 4s cut |
+| Information entrances | masked rise ~0.2s, blur-in 0.1–0.2s, card 0.2–0.3s, grid cells staggered over ~0.4s, count-up ~0.5s | card slide ~0.6s, words ~0.4s; 3D set assembles over the first ~0.8s before any read |
+| Exits | 0.1–0.2s or hard cut | mostly carried by transitions |
+| Longest still holds | ~1–1.5s, only on dense UI just after it lands (5×5 grid, leaderboard); ~0.6s after a word-by-word line | 1.3s on one card + one line (opening); 2.0s after "Close still pays" (3D grid static); 1.8s on the pool card with only a glint moving; quiet music passage matched with a static card |
+| What keeps longer moments alive | typing (AI prompt), count-ups, a crest orbit, a scrolling crest ticker and confetti on the end card | live footage (works); decoration (glints, curtain drift) elsewhere (doesn't) |
+| Continuity | one score card stays for 4 bars and changes state on beats (fill → pick + chip → score ticks 1-0, 2-0 → near cell turns green "still paid"); a header with a match clock ticking 14' → FT across every scene; background colour flips per section | each scene a new set; transitions carried by objects (ball, iris, zoom) |
+| Transitions | 0.1–0.25s: iris from the logo dot, wipe-up, chart bars rising as panels, hard cuts on the downbeat, a slide, light → dark cut, a zoom through the last headline with a flash into the end card | 0.3–0.6s, mostly carried by 3D objects |
+
+**Take from it** (written up as judgment in `15-pace-and-flow.md`)
+- The bar, not the phrase, is the default scene for one idea. Phrase-sized scenes with one or two reads are where the lag lived.
+- Sync arrivals to pulses, not just cuts to phrases. The 38s film's cuts were on the grid, yet it felt loose because nothing between cuts was.
+- When items arrive one per pulse the viewer reads during the build, so the hold after can be short.
+- A static frame is fine for as long as the viewer is reading, and no longer. Dense frames earn ~1.5s; a single line earns well under a second.
+- Fast for information, slow only for weight and builds. The flat film's single slow moment is a green glow swelling under the last claim, and then it accelerates into the zoom-through.
+- Flow without camera moves comes from continuity: a persistent object changing state, persistent chrome, colour flips per section.
+- Learn the craft, not the content: the house look stays the default. Borrow the pace, not the flat style or the copy.
+
+## 6. Your references
 
 (Add the user's reference videos here as they are analysed: what each is, the numbers, the techniques worth borrowing.)

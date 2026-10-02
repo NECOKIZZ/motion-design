@@ -22,8 +22,9 @@ Read the prompt as a critic, then once more as the builder: could you build ever
 - [ ] Entrances `.out`, exits `.in`, moves `.inOut`?
 - [ ] No more than two tweens per frame share an ease? Durations vary (slowest ≈ 3× fastest)?
 - [ ] Neighbouring words/chips enter differently?
-- [ ] Each frame has a breath of 1.5s or less, with the camera travelling through it? Decorative ambience quieter than action?
-- [ ] One scene per phrase (two only for the hero and the drop)? Does any frame have time left after its last read? Shorten it.
+- [ ] Each frame's breath sized to what is left to read (≤ 1.5s), and past ~1s something meaningful still changing? Decorative ambience quieter than action?
+- [ ] Scenes sized in bars by their reads (one idea ≈ one bar; a phrase only for a demo, the hero, the end card)? Does any frame have time left after its last read? Shorten it.
+- [ ] New elements arrive on pulses, one per pulse, not all at once? Information enters in ≤ 0.35s? No item from the smells-of-lag list (`15-pace-and-flow.md` §8)?
 - [ ] First motion of each frame within 0.1–0.3s, not at 0?
 
 **Transitions**
@@ -45,9 +46,9 @@ Read the prompt as a critic, then once more as the builder: could you build ever
 - [ ] Materials have a light event; glass has moving content behind it?
 
 **Music**
-- [ ] Every scene change on a phrase start; impacts arrive 1–2 frames early?
+- [ ] Every scene change on a bar start (section changes on phrase starts); arrivals on pulses; impacts arrive 1–2 frames early?
 - [ ] The hero moment on the drop; a held frame before or after it?
-- [ ] End card holds 1.5–2s?
+- [ ] End card built one piece per pulse, then 1.5–2s with something real still moving?
 
 ## §2 Build from the storyboard (builder instructions)
 
@@ -89,6 +90,7 @@ GSAP pitfalls that lint will not catch:
    - A read that gets only a few frames, or shares frames with another read.
    - Text that labels what the picture already shows.
    - Dead frames: any stretch over 1.5s where only ambience moves. Measure it: `python3 recipes/motion-profile.py out/draft.mp4` prints the still share and every quiet run of 1s or more. Aim for no quiet run over 1.5s and fix the longest runs first. The still share is secondary: slow travelling pushes register as near-still, so a well-paced film can still read about 40%.
+   - Waiting and off-beat arrivals. Quiet runs miss them, because small elements barely move a whole-frame average. Make a timestamped 10fps strip of each scene (`ffmpeg -ss <start> -t 3 -i out/draft.mp4 -vf "fps=10,scale=256:-2,drawtext=text='%{pts\:hms}':x=4:y=4:fontsize=14:fontcolor=red,tile=10x3" -frames:v 1 strip.jpg`; times are relative to `<start>`). Write down when each new element arrives and when the last read lands. Arrivals should sit on pulses, and the cut should follow the last read by about a breath (0.4–1.5s, by how much there is to read), not by seconds of a static frame.
 4. Fix, re-render, re-check. Two or three rounds is normal.
 5. Hand over: the file path, duration, resolution, the stills you checked, and what you could not verify (audio feel, motion smoothness at full frame rate).
 

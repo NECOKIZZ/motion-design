@@ -52,7 +52,7 @@ The dark open with the sculpture rising; an object falling into it with a ripple
 
 The user approved the look. What they want better is **smoothness, transitions, music sync and movement**. When designing in this look:
 - Make moves snap and settle, then hold briefly (≤ 1.5s); avoid floaty in-and-out easing on everything.
-- Pace: one scene per phrase (about 4s), holds ≤ 1.5s, and a travelling camera push through every hold. The look stays calm through its type and light, not through long pauses: a 60s cut with 8s scenes and 5s holds felt stalled; the same film at 38s felt right.
+- Pace: a scene per bar for one idea (a phrase for a demo or the hero), arrivals on pulses, holds sized to reading (`15-pace-and-flow.md`). The look stays calm through its type and light, not through long pauses. The same film felt stalled at 60s and still laggy at 38s next to a flat 30s cut that moved bar by bar; 3D and glass may move up to about 1.5× slower than flat UI, not 3×.
 - Keep one continuous camera feel, so 3D and UI hand off through a move rather than a hide-and-show.
 - Carry every cut on an object.
 - Choose music with real structure (stops, hits, drops) and land the big moments on it.

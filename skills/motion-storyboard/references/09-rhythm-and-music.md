@@ -15,11 +15,11 @@ No music supplied: ask whether to proceed with a placeholder. Never use a refere
 
 Music is grouped: 4 beats make a bar; 2 or 4 bars make a phrase (often 8 pulses). Strong hits (strength ≈ 1) usually mark phrase starts.
 
-- **Scene changes land on phrase starts** (or on a bar, half a phrase, when the scene is short). Default: one scene per phrase, about 4s at 120 BPM; two phrases only for the hero and the drop.
-- **Inside a phrase, pulses 0–5 act, 6–7 breathe:** one new thing per pulse, then a breath where only ambience moves. Then the next phrase hits. (Measured on fast promo references: 210 BPM, phrase every 8 pulses ≈ 2.29s; the breath is about 0.85s.)
+- **Scene changes land on bar starts; section changes on phrase starts.** Size each scene in bars by its reads: one idea is usually one bar (about 2s at 120–130 BPM), a demo with several state changes or the end card a phrase. (Measured: a 128 BPM launch film ran 14 one-bar scenes in 30s and felt on point; the same product's 38s film with phrase-or-longer scenes felt laggy. `measured-references.md` §5.)
+- **Arrivals land on pulses:** one new thing per pulse (a word, a row, a flip, a chip), then a short breath, then the next bar hits. Pulse-level sync is what makes a film feel on beat; cutting on phrases alone only makes it feel edited. (Fast promo references: 210 BPM, phrase every 8 pulses ≈ 2.29s, breath about 0.85s.)
 - **Flams** (two hits ~0.1s apart): main impact on the first, a secondary settle (badge, shadow, shake decay) on the second.
 - **Follow the build:** when the track gets denser toward the end, put the demo climax and end card there and cut faster.
-- **The drop** is the hero moment's slot. Hold back (fewer, smaller moves) in the 1–2 bars before it.
+- **The drop** is the hero moment's slot. In the 1–2 bars before it, build: fewer new elements, but something growing and accelerating into the hit.
 
 ## 3. Address time by music, not seconds
 
@@ -45,14 +45,15 @@ Never time an element by a hand-typed number that is not derived from the grid.
 
 | Music event | Gets |
 |---|---|
-| Phrase start (strong) | scene change / transition cut point |
+| Phrase start (strong) | section change, the bolder transitions |
+| Bar start | scene change for a one-idea scene |
 | Downbeat inside phrase | a word slam, a card landing, a state change |
 | Offbeat / hi-hat | small secondary motion: chips, glints, a shadow settle |
 | Snare / clap | impact: stamp, shake, punch-in |
 | Bass drop | the hero moment, the boldest transition, flash |
-| Riser / build | slow push-in, accumulating elements, tension |
-| Breakdown / quiet | the held frame, the one line that must be read |
-| Final hit | logo lock; then hold the end card 1.5–2s while music resolves (the CTA press about 1s after the wordmark) |
+| Riser / build | accumulating elements, a glow or scale growing, a push that accelerates into the drop; slow here must speed up, never stall |
+| Breakdown / quiet | fewer, smaller moves (one change per bar), the one line that must be read; never a still frame for the whole passage |
+| Final hit | logo lock; end-card pieces arrive one per pulse (mark, wordmark, tagline, CTA), then 1.5–2s with something real still moving (ticker, particles, CTA pulse) while the music resolves |
 
 Impacts *arrive* on the beat: start the tween so its landing frame is the beat (or 1–2 frames before). For a 0.2s slam, the tween starts ~0.17s early.
 

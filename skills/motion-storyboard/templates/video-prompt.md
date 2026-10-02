@@ -50,7 +50,7 @@ Deliverable: `renders/[slug].mp4`, [W]×[H], [fps] fps, [length]s, with the musi
 - Energy and default durations:
 - Entrance vocabulary (name → from → to, duration, ease):
 - Ease palette: 
-- Pace: scene length (default one phrase, ~4s), the longest hold (≤ 1.5s), the travelling camera move that carries each hold
+- Pace: scenes sized in bars by their reads (one idea ≈ one bar, a phrase for a demo or the hero); new elements arrive one per pulse; information enters in 0.15–0.35s, slow moves only for the hero and builds; a static frame holds only for reading time, then cuts; what keeps any hold over 1s alive (camera travel, typing, a count, a list filling)
 - Ambient rule per scene:
 - Camera rig: `.world` > `.bg` (×) · `.mid` (1×) · `.fg` (×); entrances on elements, camera moves on `.world` only
 - Direction rule:
@@ -109,6 +109,7 @@ Deliverable: `renders/[slug].mp4`, [W]×[H], [fps] fps, [length]s, with the musi
 3. Extract a still at every **Frame check** time and look at each one against its check:
    `ffmpeg -v error -ss <t> -i renders/draft.mp4 -frames:v 1 renders/check-<t>.png`
    Then a strip of every frame across each cut (`-ss <T-0.2> -t 0.4 -vf "fps=30,scale=480:-2,tile=6x2"`) and a contact sheet of the whole film (`-vf "fps=4,scale=320:-2,tile=8x8"`).
-4. Look for: overlaps and clipping, a word still mid-entrance at its check time, two things moving at once where one should lead, identical simultaneous entrances, blank or flashing transition midpoints, wrong fonts or colours, glass that looks like a flat box, any read that gets only a few frames.
-5. Fix, re-render, re-check (2–3 rounds is normal). Then render `renders/[slug].mp4`.
-6. Hand off: the file path, duration, resolution, the stills you checked, every deviation from this storyboard and why, and what you could not verify (audio feel, motion at full speed).
+4. Pace pass: on a 10fps strip with timestamps (`-vf "fps=10,scale=256:-2,drawtext=text='%{pts\:hms}':x=4:y=4:fontsize=14:fontcolor=red,tile=10x3"`), note when each new element arrives and when each frame's last read lands. Arrivals sit on pulses; after the last read, the frame cuts within its breath. A static frame that waits longer than reading needs gets shortened, and the times after it move up (keep cuts on bar starts).
+5. Look for: overlaps and clipping, a word still mid-entrance at its check time, two things moving at once where one should lead, identical simultaneous entrances, blank or flashing transition midpoints, wrong fonts or colours, glass that looks like a flat box, any read that gets only a few frames.
+6. Fix, re-render, re-check (2–3 rounds is normal). Then render `renders/[slug].mp4`.
+7. Hand off: the file path, duration, resolution, the stills you checked, every deviation from this storyboard and why, and what you could not verify (audio feel, motion at full speed).
