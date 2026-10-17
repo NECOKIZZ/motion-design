@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; color: #eeebff; font-family: Montserrat, sans-serif; }
+        #in-bg { position: absolute; inset: 0; background: #0a0b14; }
+        #in-glow { position: absolute; left: 90px; top: 380px; width: 900px; height: 900px; border-radius: 50%; background: rgba(155,123,255,0.2); filter: blur(110px); }
+
+        /* scene 1: the public ledger */
+        #ledger { position: absolute; left: 70px; top: 300px; width: 940px; }
+        #lg-head { font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 24px; letter-spacing: 0.14em; color: #9b7bff; margin-bottom: 26px; }
+        .row { position: relative; height: 92px; display: flex; align-items: center; gap: 18px; border-top: 2px solid rgba(238,235,255,0.1);
+          font-family: "JetBrains Mono", monospace; font-size: 29px; color: #d9d4f5; }
+        .row .k { font-size: 18px; color: #8d86b3; letter-spacing: 0.1em; }
+        .cell { position: relative; display: inline-block; padding: 4px 6px; border-radius: 6px; }
+        .amt { margin-left: auto; color: #fff; font-weight: 700; }
+        .hl { position: absolute; inset: -2px; border-radius: 8px; border: 3px solid #9b7bff; box-shadow: 0 0 18px rgba(155,123,255,0.6); opacity: 0; }
+        .bar { position: absolute; inset: 0; border-radius: 6px; background: #9b7bff; transform-origin: 0 50%; }
+
+        #h1 { position: absolute; left: 70px; right: 70px; top: 1240px; font-weight: 900; font-size: 116px; line-height: 1.02; letter-spacing: -0.045em; }
+        #h1 .w { display: inline-block; }
+        #h1 .v { color: #9b7bff; }
+        #forever { position: absolute; left: 74px; top: 1520px; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 34px; color: #b9b2e0; }
+        #forever b { color: #9b7bff; }
+
+        /* scene 2: the lockup */
+        #lock { position: absolute; left: 0; right: 0; top: 700px; height: 520px; }
+        #lk-mark { position: absolute; left: 50%; top: 0; width: 180px; height: 190px; margin-left: -90px; }
+        #lk-mark i { position: absolute; top: 0; width: 46px; height: 190px; border-radius: 10px; background: #eeebff; }
+        #lk-mark i.l { left: 0; } #lk-mark i.r { right: 0; }
+        #lk-mark b { position: absolute; left: -20px; right: -20px; top: 70px; height: 50px; border-radius: 10px; background: #9b7bff; box-shadow: 0 0 40px rgba(155,123,255,0.7); }
+        #lk-word { position: absolute; left: 0; right: 0; top: 220px; text-align: center; font-weight: 900; font-size: 190px; letter-spacing: -0.05em; line-height: 1; }
+        #lk-tag { position: absolute; left: 0; right: 0; top: 440px; text-align: center; font-weight: 700; font-size: 46px; letter-spacing: -0.015em; color: #d9d4f5; }
+        #lk-tag span { color: #9b7bff; }
+
+        /* scene 3: the broken link */
+        #link { position: absolute; inset: 0; }
+        #bubble { position: absolute; left: 90px; top: 640px; max-width: 760px; padding: 24px 30px; border-radius: 28px 28px 28px 8px; background: rgba(28,29,48,0.95);
+          box-shadow: 0 0 0 2px rgba(155,123,255,0.35); font-family: "JetBrains Mono", monospace; font-size: 32px; line-height: 1.35; color: #fff; }
+        #bubble .who { display: block; font-family: Montserrat, sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.1em; color: #9b7bff; margin-bottom: 6px; }
+        .node { position: absolute; top: 1010px; width: 240px; height: 240px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+          background: #15162a; box-shadow: 0 0 0 3px rgba(238,235,255,0.5); }
+        #n-you { left: 90px; } #n-them { right: 90px; }
+        .node b { font-weight: 900; font-size: 52px; letter-spacing: -0.03em; }
+        .node span { font-family: "JetBrains Mono", monospace; font-size: 22px; color: #b9b2e0; margin-top: 6px; }
+        .wire { position: absolute; top: 1126px; height: 8px; border-radius: 4px; background: #eeebff; }
+        #w-l { left: 330px; width: 210px; transform-origin: 0 50%; }
+        #w-r { left: 540px; width: 210px; transform-origin: 100% 50%; }
+        #w-cut { position: absolute; left: 470px; top: 1096px; width: 140px; height: 68px; border-radius: 10px; background: #9b7bff; box-shadow: 0 0 40px rgba(155,123,255,0.8); }
+        #nolink { position: absolute; left: 0; right: 0; top: 1340px; text-align: center; font-weight: 900; font-size: 84px; letter-spacing: -0.04em; }
+        #nolink span { color: #9b7bff; }
+
+        /* hand-off frame that becomes the phone screen */
+        #frame { position: absolute; left: 151px; top: 150px; width: 778px; height: 1728px; border-radius: 34px; border: 4px solid #9b7bff;
+          box-shadow: 0 0 60px rgba(155,123,255,0.5); }
+      </style>
+
+      <div id="root" data-composition-id="intro" data-width="1080" data-height="1920">
+        <div id="in-bg"></div>
+        <div id="in-glow"></div>
+
+        <div id="ledger">
+          <div id="lg-head">PUBLIC LEDGER · ANY CHAIN</div>
+          <div class="row" id="r0"><span class="k">FROM</span><span class="cell c-f">7xKX…9fQa<i class="bar"></i><i class="hl"></i></span><span class="k">TO</span><span class="cell c-t">3mPq…2LwZ<i class="bar"></i><i class="hl"></i></span><span class="cell amt c-a">250.00<i class="hl"></i></span></div>
+          <div class="row" id="r1"><span class="k">FROM</span><span class="cell c-f">0x8a3…41cE<i class="bar"></i><i class="hl"></i></span><span class="k">TO</span><span class="cell c-t">0xd19…7B02<i class="bar"></i><i class="hl"></i></span><span class="cell amt c-a">1,200.00<i class="hl"></i></span></div>
+          <div class="row" id="r2"><span class="k">FROM</span><span class="cell c-f">Gf4T…mN8s<i class="bar"></i><i class="hl"></i></span><span class="k">TO</span><span class="cell c-t">9qWe…Lk3D<i class="bar"></i><i class="hl"></i></span><span class="cell amt c-a">48.10<i class="hl"></i></span></div>
+          <div class="row" id="r3"><span class="k">FROM</span><span class="cell c-f">0x5be…0aF9<i class="bar"></i><i class="hl"></i></span><span class="k">TO</span><span class="cell c-t">0x77c…e3A1<i class="bar"></i><i class="hl"></i></span><span class="cell amt c-a">3,000.00<i class="hl"></i></span></div>
+          <div class="row" id="r4"><span class="k">FROM</span><span class="cell c-f">Bv2R…pZ7c<i class="bar"></i><i class="hl"></i></span><span class="k">TO</span><span class="cell c-t">Hx9a…Qe4M<i class="bar"></i><i class="hl"></i></span><span class="cell amt c-a">12.75<i class="hl"></i></span></div>
+          <div class="row" id="r5"><span class="k">FROM</span><span class="cell c-f">0x2f0…9dC4<i class="bar"></i><i class="hl"></i></span><span class="k">TO</span><span class="cell c-t">0xa6e…13B8<i class="bar"></i><i class="hl"></i></span><span class="cell amt c-a">640.00<i class="hl"></i></span></div>
+        </div>
+
+        <div id="h1"><span class="w">Every</span> <span class="w">payment</span> <span class="w">is</span> <span class="w v">public.</span></div>
+        <div id="forever">who paid · who got paid · how much · <b>forever</b></div>
+
+        <div id="lock">
+          <div id="lk-mark"><i class="l"></i><i class="r"></i><b></b></div>
+          <div id="lk-word">Hyde</div>
+          <div id="lk-tag">Private payments for <span>PayBox agents</span></div>
+        </div>
+
+        <div id="link">
+          <div id="bubble"><span class="who">YOU, TO YOUR AGENT</span>Send 1 USDC to 25tK…Y31c, privately.</div>
+          <div id="w-l" class="wire"></div>
+          <div id="w-r" class="wire"></div>
+          <div id="w-cut"></div>
+          <div id="n-you" class="node"><b>You</b><span>your wallet</span></div>
+          <div id="n-them" class="node"><b>Them</b><span>recipient</span></div>
+          <div id="nolink">No link <span>on-chain.</span></div>
+        </div>
+
+        <div id="frame"></div>
+      </div>
+
+      <script>
+        const tl = gsap.timeline({ paused: true });
+
+        // ---- scene 1: the public ledger fills, one row per tick ----
+        tl.fromTo("#lg-head", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 0.1);
+        [0, 1, 2, 3, 4, 5].forEach((i) => {
+          tl.fromTo("#r" + i, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.28, ease: "power3.out" }, 0.35 + i * 0.3);
+        });
+        tl.fromTo("#h1 .w", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "expo.out", stagger: 0.3 }, 0.7);
+        // who paid → who got paid → how much: the columns light up as she says them
+        tl.fromTo("#ledger .c-f .hl", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.04 }, 3.15);
+        tl.to("#ledger .c-f .hl", { opacity: 0, duration: 0.2 }, 3.85);
+        tl.fromTo("#ledger .c-t .hl", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.04 }, 3.85);
+        tl.to("#ledger .c-t .hl", { opacity: 0, duration: 0.2 }, 4.55);
+        tl.fromTo("#ledger .c-a .hl", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.04 }, 4.55);
+        tl.to("#ledger .c-a .hl", { opacity: 0, duration: 0.2 }, 5.6);
+        tl.fromTo("#forever", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 5.3);
+        tl.fromTo("#ledger", { y: 0 }, { y: -30, duration: 6, ease: "none" }, 0);
+
+        // ---- scene 2: redaction sweeps the senders and recipients, Hyde arrives ----
+        tl.fromTo("#ledger .bar", { scaleX: 0 }, { scaleX: 1, duration: 0.22, ease: "power3.out", stagger: 0.035 }, 6.1);
+        tl.to("#h1, #forever", { y: -60, opacity: 0, duration: 0.25, ease: "power2.in" }, 6.15);
+        tl.to("#ledger", { opacity: 0.16, filter: "blur(5px)", scale: 0.94, duration: 0.5, ease: "power2.out" }, 6.55);
+        tl.fromTo("#lk-mark i.l", { y: -260, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "expo.out" }, 6.5);
+        tl.fromTo("#lk-mark i.r", { y: 260, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "expo.out" }, 6.58);
+        tl.fromTo("#lk-mark b", { scaleX: 0 }, { scaleX: 1, duration: 0.28, ease: "power4.out" }, 6.85);
+        tl.fromTo("#lk-word", { y: 50, opacity: 0, scale: 1.12 }, { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "expo.out" }, 6.95);
+        tl.fromTo("#lk-tag", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 7.7);
+        tl.fromTo("#lock", { scale: 1 }, { scale: 1.04, duration: 2.4, ease: "none" }, 7.1);
+        tl.fromTo("#in-glow", { scale: 0.9, opacity: 0.6 }, { scale: 1.15, opacity: 1, duration: 3, ease: "sine.inOut" }, 6.5);
+
+        // ---- scene 3: you → them, and the link breaks ----
+        tl.to("#lock", { y: -560, scale: 0.42, duration: 0.5, ease: "power3.inOut" }, 9.55);
+        tl.to("#ledger", { opacity: 0, duration: 0.3 }, 9.55);
+        tl.fromTo("#n-you", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(1.8)" }, 9.85);
+        tl.fromTo("#bubble", { y: 30, opacity: 0, scale: 0.92 }, { y: 0, opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.6)" }, 10.15);
+        tl.fromTo("#n-them", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(1.8)" }, 10.75);
+        tl.fromTo("#w-l", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power2.out" }, 10.95);
+        tl.fromTo("#w-r", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power2.out" }, 11.1);
+        tl.fromTo("#w-cut", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.18, ease: "power4.out" }, 11.8);
+        tl.to("#w-l", { scaleX: 0.55, duration: 0.4, ease: "back.out(2)" }, 11.85);
+        tl.to("#w-r", { scaleX: 0.55, duration: 0.4, ease: "back.out(2)" }, 11.85);
+        tl.to("#n-you", { x: -24, duration: 0.4, ease: "back.out(2)" }, 11.85);
+        tl.to("#n-them", { x: 24, duration: 0.4, ease: "back.out(2)" }, 11.85);
+        tl.fromTo("#nolink", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "expo.out" }, 12.5);
+        tl.fromTo("#link", { scale: 1 }, { scale: 1.03, duration: 4.2, ease: "none" }, 9.85);
+
+        // ---- hand-off: everything clears and the frame becomes the phone screen ----
+        tl.to("#link, #lock", { opacity: 0, duration: 0.3, ease: "power2.in" }, 14.1);
+        tl.fromTo("#frame", { scale: 0.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "expo.inOut" }, 14.2);
+        tl.to("#in-bg, #in-glow", { opacity: 0, duration: 0.4, ease: "none" }, 14.5);
+        tl.to("#frame", { opacity: 0, duration: 0.2, ease: "none" }, 14.8);
+
+        window.__timelines["intro"] = tl;
+      </script>
+    </template>
+  </body>
+</html>
