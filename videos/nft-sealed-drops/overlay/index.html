@@ -82,7 +82,7 @@
       #nametag .t { font-family: "Mono"; font-size: 22px; letter-spacing: 0.2em; color: var(--sig); }
       #nametag .n { font-size: 46px; font-weight: 660; letter-spacing: -0.02em; margin-top: 6px; }
       #nametag .bar { height: 3px; width: 100%; margin-top: 12px; background: linear-gradient(90deg, var(--sig), rgba(108, 182, 203, 0)); transform-origin: left; }
-      #inked { left: 0; right: 0; top: 40px; text-align: center; font-family: "Ink"; font-size: 210px; color: var(--sig); text-shadow: 0 0 30px rgba(0,0,0,.5); }
+      #inked { left: 90px; top: 0; text-align: left; font-family: "Ink"; font-size: 180px; color: var(--sig); text-shadow: 0 0 30px rgba(0,0,0,.5); }
       #waxword { left: 600px; top: 790px; width: 0; height: 0; }
       #waxword b { position: absolute; transform: translate(-50%, -50%) rotate(-8deg); font-size: 64px; font-weight: 820; letter-spacing: 0.32em; color: var(--sig); text-shadow: 0 2px 0 rgba(0,0,0,.6), 0 0 22px rgba(108,182,203,.55); white-space: nowrap; }
       #nobody { left: 1480px; top: 560px; }
@@ -274,9 +274,9 @@
       tl.fromTo("#crash", { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 0.18, ease: "power3.out" }, tc - 0.05);
       crash.querySelectorAll(".ch").forEach((c, k) => {
         const r = ((k * 37) % 11) / 10, dir = k % 2 ? 1 : -1;
-        tl.to(c, { y: 760 + r * 260, rotation: dir * (30 + r * 90), x: dir * r * 60, duration: 0.75, ease: "power2.in" }, tc + 0.55 + r * 0.25);
+        tl.to(c, { y: 760 + r * 260, rotation: dir * (30 + r * 90), x: dir * r * 60, duration: 0.5, ease: "power2.in" }, tc + 0.4 + r * 0.15);
       });
-      tl.set("#crash", { opacity: 0 }, tc + 1.6);
+      tl.set("#crash", { opacity: 0 }, tc + 1.06);
 
       // transactions fail: FAILED drops with Maya and lands on the thud
       show("#fail1", vt("Transactions fail..."), { y: 12 });
