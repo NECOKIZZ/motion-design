@@ -15,7 +15,11 @@ import soundfile as sf
 from scipy.signal import butter, fftconvolve, sosfilt
 
 import voice
-from timeline import CUES, DURATION, END, START, VO
+from timeline import CUES, DURATION, END, START, VO, vo_speed
+
+
+def vt(text):
+    return next(t for t, _, x in VO if x == text)
 
 SR = 48000
 N = int(DURATION * SR) + SR
@@ -321,101 +325,130 @@ def music_bed():
     cl = decode(os.path.join(HERE, "music", "m_cloak_saintwave.mp3"), off, END["14"] - START["11a"] + 0.5)
     t = np.arange(len(cl)) / SR + START["11a"]
     g = np.interp(t, [START["11a"], START["11a"] + 2, C["OPEN"] - 0.2, C["OPEN"], END["13d"], C["END"] + 0.3, END["14"] - 1.2, END["14"]],
-                  [0.0, 0.85, 0.85, 1.0, 1.0, 1.0, 1.0, 0.0])
+                  [0.0, 1.0, 1.0, 1.1, 1.1, 1.1, 1.0, 0.0])
     m.add(START["11a"], cl * g[:, None], 0.85)
     return m.b
 
 
 # ─── effects cues ───────────────────────────────────────────────────────────
+def el(name, start=0.0, dur=None):
+    """An ElevenLabs sound effect from sfx_el/ (see tools/sfx_gen.py), or None."""
+    p = os.path.join(HERE, "sfx_el", name + ".mp3")
+    if not os.path.exists(p):
+        return None
+    x = decode(p)  # normalize the whole file first, so a trimmed slice keeps the file's level
+    x = x / (np.abs(x).max() + 1e-9) * 0.9
+    a = int(start * SR)
+    return x[a: a + int(dur * SR)] if dur else x[a:]
+
+
+def pick(name, fallback, start=0.0, dur=None):
+    x = el(name, start, dur)
+    return x if x is not None else fallback()
+
+
+def bed(name, sec, fallback):
+    """Loop a bed sound to `sec` seconds with a crossfade."""
+    x = el(name)
+    if x is None:
+        return fallback(sec)
+    n, xf = int(sec * SR), int(0.5 * SR)
+    out = x.copy()
+    while len(out) < n:
+        ramp = np.linspace(0, 1, xf)[:, None]
+        out = np.vstack([out[:-xf], out[-xf:] * (1 - ramp) + x[:xf] * ramp, x[xf:]])
+    return fade(out[:n], 0.3, 0.5)
+
+
+WHOOSH = ["whoosh_fast_1", "whoosh_fast_2", "whoosh_fast_3"]
+
+
 def effects():
     fx = Bus()
+    sw = lambda k, up=True: pick(WHOOSH[k % 3], lambda: whoosh(0.4, up))
     # open: a museum at night, one scratch of a record
     fx.add(0, room_tone(C["SCRATCH"] + 0.1, 300, 0.05) * np.linspace(0, 1, int((C["SCRATCH"] + 0.1) * SR))[:, None] ** 0.5)
-    fx.add(0.3, chime(523) * 0.5, 0.5)
-    fx.add(C["SCRATCH"] - 0.03, scratch(), 1.0)
-    fx.add(C["SCRATCH"] - 0.03, glitch_sfx(0.32, 2), 0.6)
+    fx.add(0.3, pick("chime", lambda: chime(523)), 0.25)
+    fx.add(C["SCRATCH"] - 0.05, pick("record_scratch", scratch), 0.9)
     # race
-    crowd = recorded("crowd_large", 3, END["8"] - START["3a"])
-    if crowd is None:
-        crowd = recorded("crowd_unfa", 2, END["8"] - START["3a"])
-    if crowd is None:
-        crowd = murmur(END["8"] - START["3a"], 4) * 1.4
+    span = END["8"] - START["3a"]
+    crowd = bed("stadium_murmur", span, lambda s: murmur(s, 4) * 1.4)
     tt = np.arange(len(crowd)) / SR + START["3a"]
-    cg = np.interp(tt, [START["3a"], C["PISTOL"], C["PISTOL"] + 0.3, START["6b"], START["7c"] + 0.5, START["8"]], [0.8, 0.9, 1.3, 1.0, 0.6, 0.0])
-    fx.add(START["3a"], crowd * cg[:, None], 0.6)
-    fx.add(START["3a"] - 0.06, whoosh(0.4), 0.7)
-    fx.add(START["3a"] - 0.06, glitch_sfx(0.22, 3), 0.4)
-    for s in ("3b", "3c", "4b", "5a", "5c", "6a", "6c", "7a", "7b", "7c"):
-        fx.add(START[s] - 0.2, whoosh(0.4, up=s[-1] in "ac"), 0.55)
-    fx.add(START["4a"] + 0.2, riser(C["PISTOL"] - START["4a"] - 0.2), 0.5)
-    fx.add(C["PISTOL"], pistol(), 1.1)
-    fx.add(C["PISTOL"], impact(1.8, 50), 0.6)
-    fx.add(START["4b"], flutter(1.6, 50, 4), 0.8)
-    fx.add(START["5a"], flutter(4.0, 30, 5), 0.6)
-    for k, cap in enumerate(("CAP_CRASH", "CAP_FAILED", "CAP_GAS")):
-        fx.add(C[cap], glitch_sfx(0.14, 10 + k), 0.55)
-    fx.add(C["TRIP"], whoosh(0.3, False, 0.6), 0.5)
-    fx.add(C["THUD"], thud(), 1.0)
-    fx.add(C["THUD"], flutter(1.2, 120, 6), 0.9)
-    fx.add(C["SERVO"] - 0.3, servo(1.0, 600, 1700), 0.9)
-    fx.add(C["SERVO"] - 0.05, glitch_sfx(0.3, 20), 0.6)
-    fx.add(START["6c"] - 0.1, whoosh(0.5, True, 1.4), 0.9)
-    fx.add(START["6c"], servo(1.1, 900, 1900), 0.7)
-    fx.add(C["GRAB"] + 0.4, servo(0.7, 500, 1200), 0.6)
-    fx.add(C["CAP_BOTS"], glitch_sfx(0.16, 21), 0.5)
-    fx.add(START["7b"] + 0.3, flutter(1.2, 90, 7), 0.9)
-    pl = recorded("airplane", 18, 3.2, 1.0)
-    fx.add(C["PLANE"] - 0.3, pl if pl is not None else plane(2.8), 0.9)
-    fx.add(START["8"], wind(END["8"] - START["8"] + 0.3), 2.2)
-    # smash cut to the auction house
-    fx.add(C["SMASH"] - 0.18, glitch_sfx(0.42, 30), 0.9)
-    fx.add(C["SMASH"], impact(1.6, 46), 0.5)
-    fx.add(C["SMASH"] + 0.05, gavel(0.6), 0.5)  # a gavel tap calls the room to order
-    fx.add(START["9a"], murmur(END["10e"] - START["9a"], 9) * np.linspace(0.6, 1.3, int((END["10e"] - START["9a"]) * SR))[:, None], 0.7)
-    fx.add(C["GAVEL"] - 0.01, gavel(1.3), 1.25)
-    fx.add(C["GAVEL"], impact(1.4, 55), 0.35)
-    fx.add(C["CAP_SNIPED"], glitch_sfx(0.16, 31), 0.45)
+    cg = np.interp(tt, [START["3a"], C["PISTOL"], C["PISTOL"] + 0.3, START["6b"], START["7c"] + 0.5, START["8"]], [0.8, 0.8, 1.0, 0.8, 0.5, 0.0])
+    fx.add(START["3a"], crowd * cg[:, None], 0.32)
+    fx.add(START["3a"] - 0.22, pick("whoosh_soft", lambda: whoosh(0.5)), 0.7)
+    for k, s_ in enumerate(("3b", "3c", "4b", "5a", "5c", "6a", "6b", "6c", "7a", "7b", "7c")):
+        fx.add(START[s_] - 0.3, sw(k), 0.6)
+    fx.add(START["4a"] + 0.15, pick("riser", lambda: riser(1.2), 0, C["PISTOL"] - START["4a"] - 0.1), 0.45)
+    fx.add(C["PISTOL"] - 0.02, pick("starter_pistol", pistol), 1.15)
+    fx.add(C["PISTOL"], pick("impact", lambda: impact(1.8, 50)), 0.45)
+    fx.add(C["PISTOL"] + 0.05, pick("crowd_roar", lambda: murmur(3, 2)), 0.75)
+    fx.add(START["4b"] - 0.1, pick("running_footsteps", lambda: flutter(1.6, 50, 4)), 0.8)
+    fx.add(START["4b"] + 0.1, pick("cash_flutter", lambda: flutter(1.6, 50, 4)), 0.55)
+    fx.add(vt("Gas spikes.") - 0.1, pick("counter_up", lambda: flutter(1.0, 80, 3), 0, 1.1), 0.55)
+    fx.add(vt("The site crashes.") + 0.5, pick("error_buzz", lambda: glitch_sfx(0.3, 9)), 0.5)
+    fx.add(C["TRIP"] - 0.05, pick("whoosh_soft", lambda: whoosh(0.3, False, 0.6)), 0.4)
+    fx.add(C["THUD"] - 0.03, pick("body_fall", thud), 1.1)
+    fx.add(C["THUD"], pick("cash_flutter", lambda: flutter(1.2, 120, 6)), 0.8)
+    fx.add(START["6b"] - 0.25, pick("servo_whine", lambda: servo(1.0, 600, 1700)), 0.85)
+    fx.add(START["6b"], pick("robot_footsteps", lambda: thud()), 0.8)
+    fx.add(vt("the bots are already done.") + 0.3, sw(1), 0.8)
+    fx.add(START["6c"] + 0.05, pick("target_lock", lambda: tick()), 0.6)
+    fx.add(START["6c"], pick("servo_whine", lambda: servo(1.1, 900, 1900), 0.3), 0.6)
+    for dt in (0.45, 0.75, 1.05):  # SNIPED stamps
+        fx.add(START["7a"] + dt, pick("stamp", thud), 0.75)
+    fx.add(START["7b"] + 0.3, pick("cash_flutter", lambda: flutter(1.2, 90, 7)), 0.8)
+    fx.add(C["PLANE"] - 0.3, pick("plane_flyby", lambda: plane(2.8)), 0.9)
+    fx.add(START["8"], bed("wind", END["8"] - START["8"] + 0.4, wind), 0.45)
+    # race → auction: a hard whip
+    fx.add(C["SMASH"] - 0.28, pick("whoosh_fast_3", lambda: whoosh(0.5)), 1.0)
+    fx.add(C["SMASH"], pick("impact", lambda: impact(1.6, 46)), 0.35)
+    fx.add(C["SMASH"] + 0.1, pick("gavel_tap", lambda: gavel(0.6)), 0.6)
+    room = END["10e"] - START["9a"]
+    fx.add(START["9a"], bed("auction_murmur", room, lambda s: murmur(s, 9)) * np.linspace(0.7, 1.2, int(room * SR))[:, None], 0.3)
+    for at_ in (vt("One thousand.") - 0.1, vt("One thousand and one.") - 0.05, START["9d"]):
+        fx.add(at_, pick("paddle_swish", lambda: whoosh(0.3)), 0.6)
+    fx.add(vt("Ten thousand!") - 0.15, pick("paddle_swish", lambda: whoosh(0.3)), 0.8)
+    fx.add(C["GAVEL"] - 0.03, pick("gavel_strike", lambda: gavel(1.3)), 1.25)
+    fx.add(C["GAVEL"], pick("impact", lambda: impact(1.4, 55)), 0.3)
+    fx.add(C["GAVEL"] + 0.25, pick("crowd_gasp", lambda: murmur(2, 3)), 0.5)
+    fx.add(vt("Cheeky boy.") + 0.85, pick("snort_laugh", lambda: murmur(1, 5)), 0.7)
     # into Cloak: hush, pad, clean hits
-    fx.add(C["TO_CLOAK"] - 0.22, glitch_sfx(0.5, 40), 0.85)
-    fx.add(C["TO_CLOAK"] - 0.2, whoosh(0.7, False, 0.7), 0.6)
-    fx.add(C["TO_CLOAK"], impact(2.8, 38), 0.55)
+    fx.add(C["TO_CLOAK"] - 0.45, pick("whoosh_soft", lambda: whoosh(0.7, False, 0.7)), 0.8)
+    fx.add(C["TO_CLOAK"], pick("impact", lambda: impact(2.8, 38)), 0.4)
     fx.add(C["TO_CLOAK"], room_tone(END["13d"] - C["TO_CLOAK"], 250, 0.035))
-    p = recorded("pen", 0, 3.0, 0.9)
-    fx.add(START["12a"] + 0.2, p if p is not None else pen(2.2), 0.8)
-    fx.add(START["12b"] + 0.15, flutter(0.5, 40, 8), 0.5)
-    fx.add(C["SEAL"] - 0.03, gavel(0.35) * 0.6, 0.6)
-    fx.add(C["SEAL"], chime(1318) * 0.5, 0.45)
+    fx.add(START["12a"] + 0.2, pick("pen_scratch", lambda: pen(2.2)), 0.8)
+    fx.add(START["12b"] + 0.15, pick("cash_flutter", lambda: flutter(0.5, 40, 8), 0, 0.8), 0.35)
+    fx.add(C["SEAL"] - 0.05, pick("wax_seal", lambda: gavel(0.35)), 0.9)
     for k in range(5):  # envelopes dropping into the glass box
-        fx.add(START["12c"] + 0.7 + k * 0.62, flutter(0.25, 40, 40 + k), 0.6)
-        fx.add(START["12c"] + 0.9 + k * 0.62, thud()[: SR // 6] * 0.15, 0.6)
-    fx.add(C["BOTS_FLASH"], glitch_sfx(0.42, 50), 0.8)
-    fx.add(C["BOTS_FLASH"], servo(0.42, 900, 1400), 0.4)
-    tk = recorded("tick", 1.0, END["12d"] - C["TIMER"] + 2.0)
-    for k in range(int((C["OPEN"] - C["TIMER"]) * 2) + 4):
-        tt_ = C["OPEN"] - 0.5 * (k + 1)
-        if tt_ > START["12c"] + 1.4:
-            fx.add(tt_, tick(), 0.6 + 0.3 * (k < 2))
-    fx.add(C["OPEN"] - 1.2, riser(1.2), 0.45)
-    fx.add(C["OPEN"], chime(880), 0.9)
-    fx.add(C["OPEN"], impact(2.2, 44), 0.45)
-    fx.add(C["OPEN"] + 0.3, flutter(2.0, 140, 9), 0.85)  # paper fan
-    fx.add(C["LINE"] - 0.1, whoosh(0.35, False, 1.2), 0.5)
-    fx.add(C["LINE"], chime(1046), 0.6)
-    ap = recorded("applause", 0, 4.0, 0.7)
-    fx.add(START["13b"] + 0.1, ap if ap is not None else murmur(3.0, 12) * 1.5, 0.45)
-    fx.add(START["13d"] + 0.4, flutter(0.8, 60, 13), 0.6)
-    fx.add(C["CAP_CLOAK"], glitch_sfx(0.14, 60), 0.3)
-    # end card and stinger
-    fx.add(C["END"] - 0.12, glitch_sfx(0.34, 70), 0.7)
-    fx.add(C["END"] + 0.1, impact(3.0, 40), 0.75)
-    fx.add(C["END"] + 0.15, chime(659), 0.6)
-    fx.add(C["END"] + 2.25, chime(1318) * 0.4, 0.4)
-    fx.add(C["STINGER"] - 0.05, glitch_sfx(0.25, 80), 0.7)
-    fx.add(C["STINGER"] + 0.05, room_tone(3.2, 200, 0.05))
-    fx.add(C["STINGER"] + 0.1, servo(0.9, 300, 700), 0.5)  # the door creaks open
-    fx.add(C["STINGER"] + 1.0, servo(0.5, 1200, 1900), 0.5)  # a grin
-    fx.add(C["STINGER"] + 1.9 - 0.02, lock_clunk(), 1.2)
-    fx.add(C["STINGER"] + 2.15, servo(1.0, 800, 1500, sad=True), 0.45)  # sad servo whir
+        fx.add(START["12c"] + 0.8 + k * 0.62, pick("envelope_drop", lambda: thud()[: SR // 6] * 0.2), 0.55)
+    fx.add(C["BOTS_FLASH"] - 0.02, pick("glitch", lambda: glitch_sfx(0.42, 50)), 0.6)
+    fx.add(C["BOTS_FLASH"], pick("sad_robot", lambda: servo(0.42, 900, 1400), 0, 0.5), 0.35)
+    fx.add(C["TIMER"] - 1.5, pick("clock_tick", lambda: tick(), 0, C["OPEN"] - C["TIMER"] + 1.5), 0.7)
+    fx.add(C["OPEN"] - 1.0, pick("riser", lambda: riser(1.0), 0, 1.0), 0.4)
+    fx.add(C["OPEN"], pick("chime", lambda: chime(880)), 0.8)
+    fx.add(C["OPEN"], pick("impact", lambda: impact(2.2, 44)), 0.35)
+    fx.add(C["OPEN"] + 0.25, pick("paper_fan", lambda: flutter(2.0, 140, 9)), 0.85)
+    fx.add(C["LINE"] - 0.2, pick("whoosh_soft", lambda: whoosh(0.35, False, 1.2)), 0.5)
+    fx.add(C["LINE"], pick("chime", lambda: chime(1046)), 0.45)
+    fx.add(C["SPOT"] - 0.05, pick("impact", lambda: impact(1.5, 60)), 0.25)
+    fx.add(C["SPOT"] + 0.1, pick("soft_applause", lambda: murmur(3.0, 12)), 0.55)
+    fx.add(START["13c"] - 0.25, sw(0), 0.5)
+    fx.add(START["13d"] + 0.4, pick("cash_flutter", lambda: flutter(0.8, 60, 13), 0, 1.2), 0.5)
+    fx.add(START["13d"] + 0.45, pick("stamp", thud), 0.4)
+    # end card: a logo sting under the blur
+    fx.add(C["END"] + 0.4, pick("logo_sting", lambda: impact(3.0, 40)), 0.95)
+    # stinger: the door, the sniper, the seal
+    fx.add(C["STINGER"] - 0.3, pick("whoosh_soft", lambda: whoosh(0.5)), 0.4)
+    fx.add(C["STINGER"], room_tone(5.0, 200, 0.05))
+    fx.add(C["STINGER"] + 0.05, pick("door_creak", lambda: servo(0.9, 300, 700)), 1.0)
+    fx.add(C["STINGER"] + 1.3, pick("riser", lambda: riser(1.5)), 0.3)
+    fx.add(C["STINGER"] + 0.6, pick("robot_footsteps", lambda: thud(), 0, 1.6), 0.6)
+    fx.add(C["STINGER"] + 1.9, pick("servo_whine", lambda: servo(0.5, 1200, 1900), 0, 1.2), 0.55)
+    fx.add(C["DOOR_SHUT"] - 0.05, pick("door_slam", lock_clunk), 1.4)
+    fx.add(C["DOOR_SHUT"], pick("impact", lambda: impact(2.0, 40)), 0.5)
+    fx.add(C["DOOR_SHUT"] + 0.25, pick("lock_clunk", lock_clunk), 1.0)
+    fx.add(C["DOOR_SHUT"] + 0.7, pick("sad_robot", lambda: servo(1.0, 800, 1500, sad=True)), 0.75)
     return fx.b
 
 
@@ -425,7 +458,7 @@ def voices():
     gains = dict(narrator=1.0, auctioneer=0.85, rival=1.0, smirker=0.8, neighbour=0.85)
     pans = dict(narrator=0, auctioneer=0, rival=-0.25, smirker=0.2, neighbour=0.3)
     for t, who, text in VO:
-        x = voice.line(text, who)
+        x = voice.line(text, who, vo_speed(t, who))
         if who != "narrator":
             x = reverb(x, 1.3, 0.22, 5000)  # the auction room
         else:

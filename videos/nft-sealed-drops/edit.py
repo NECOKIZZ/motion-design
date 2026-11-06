@@ -29,33 +29,30 @@ ART_ORDER = {0: "A_frog", -1: "B_girl", 1: "C_cat", -2: "D_slime", 2: "E_horn", 
 C = CUES
 FX = [
     ("fade_in", 0.0, 1.1, 1),
-    ("glitch", C["SCRATCH"] - 0.04, 0.32, 1.0), ("punch", C["SCRATCH"], 0.35, 0.06), ("neg", C["SCRATCH"], 2 / FPS, 1),
-    ("glitch", START["3a"] - 0.06, 0.22, 0.8), ("whip", START["3a"], 0.18, 1),
-    ("whip", START["3b"], 0.14, -1), ("whip", START["3c"], 0.14, 1),
-    ("neg", C["PISTOL"], 2 / FPS, 1), ("flash", C["PISTOL"] + 2 / FPS, 0.35, 0.9), ("shake", C["PISTOL"], 0.55, 22),
+    # the one glitch in the open: a small skip on the record scratch
+    ("glitch", C["SCRATCH"] - 0.02, 0.16, 0.45), ("punch", C["SCRATCH"], 0.35, 0.05),
+    ("whip", START["3a"], 0.2, 1), ("whip", START["3b"], 0.14, -1), ("whip", START["3c"], 0.14, 1),
+    ("neg", C["PISTOL"], 2 / FPS, 1), ("flash", C["PISTOL"] + 2 / FPS, 0.35, 0.8), ("shake", C["PISTOL"], 0.55, 20),
     ("whip", START["4b"], 0.16, 1), ("whip", START["5a"], 0.14, -1),
-    ("glitch", C["CAP_CRASH"], 0.14, 0.5), ("glitch", C["CAP_FAILED"], 0.14, 0.5), ("glitch", C["CAP_GAS"], 0.14, 0.5),
-    ("shake", C["THUD"], 0.45, 16), ("slowblur", C["TRIP"], 0.5, 1),
+    ("shake", C["THUD"], 0.45, 14), ("slowblur", C["TRIP"], 0.5, 1),
     ("whip", START["5c"], 0.12, 1), ("whip", START["6a"], 0.14, -1),
-    ("glitch", START["6b"] - 0.05, 0.3, 1.0), ("rgb", START["6b"], END["6c"] - START["6b"], 1.0),
+    ("whip", START["6b"], 0.16, 1), ("rgb", START["6b"], END["6c"] - START["6b"], 0.4),
     ("whip", START["6c"], 0.14, 1), ("whip", START["7a"], 0.16, -1),
-    ("glitch", C["CAP_BOTS"], 0.16, 0.6), ("whip", START["7b"], 0.12, 1), ("whip", START["7c"], 0.14, -1),
-    ("glitch", C["SMASH"] - 0.18, 0.42, 1.3), ("neg", C["SMASH"], 3 / FPS, 1), ("flash", C["SMASH"] + 3 / FPS, 0.3, 0.6),
+    ("whip", START["7b"], 0.12, 1), ("whip", START["7c"], 0.14, -1),
+    # race → auction: a hard whip and a white flash
+    ("whip", C["SMASH"], 0.24, 1.4), ("flash", C["SMASH"], 0.3, 0.55),
     ("dissolve", START["9b"], 0.25, 1), ("dissolve", START["9c"], 0.2, 1), ("whip", START["9d"], 0.14, 1),
     ("whip", START["10a"], 0.12, -1),
-    ("neg", C["GAVEL"], 2 / FPS, 1), ("flash", C["GAVEL"] + 2 / FPS, 0.25, 0.7), ("shake", C["GAVEL"], 0.4, 18),
-    ("glitch", C["CAP_SNIPED"], 0.16, 0.6),
-    ("glitch", C["TO_CLOAK"] - 0.22, 0.5, 1.2), ("blur_in", C["TO_CLOAK"], 0.7, 1), ("dim_in", C["TO_CLOAK"], 1.6, 1),
+    ("neg", C["GAVEL"], 2 / FPS, 1), ("flash", C["GAVEL"] + 2 / FPS, 0.25, 0.6), ("shake", C["GAVEL"], 0.4, 16),
+    # into Cloak: everything slows down, a long soft blur dissolve
+    ("dissolve", C["TO_CLOAK"], 0.9, 1),
     ("dissolve", START["11b"], 0.45, 1), ("dissolve", START["12a"], 0.4, 1), ("dissolve", START["12b"], 0.3, 1),
-    ("flash_teal", C["SEAL"], 0.3, 0.55), ("dissolve", START["12c"], 0.4, 1),
+    ("flash_teal", C["SEAL"], 0.3, 0.4), ("dissolve", START["12c"], 0.4, 1),
     ("bots", C["BOTS_FLASH"], 0.42, 1),
-    ("glitch", START["12d"] - 0.04, 0.14, 0.5),
-    ("flash", C["OPEN"], 0.35, 0.65), ("glitch", C["OPEN"] - 0.03, 0.18, 0.7),
-    ("flash_amber", C["LINE"], 0.35, 0.5),
-    ("dissolve", START["13b"], 0.3, 1), ("whip", START["13c"], 0.12, 1), ("dissolve", START["13d"], 0.3, 1),
-    ("glitch", C["CAP_CLOAK"], 0.14, 0.4),
-    ("glitch", C["END"] - 0.12, 0.34, 1.0),
-    ("glitch", C["STINGER"] - 0.05, 0.25, 0.9),
+    ("flash", C["OPEN"], 0.35, 0.55),
+    ("flash_amber", C["LINE"], 0.35, 0.45),
+    ("dissolve", START["13b"], 0.35, 1), ("whip", START["13c"], 0.12, 1), ("dissolve", START["13d"], 0.3, 1),
+    ("dip", C["STINGER"] - 0.25, 0.5, 1),
 ]
 
 
@@ -225,12 +222,8 @@ def grade(img, look):
         f = np.clip((f - 0.5) * 1.08 + 0.5, 0, 1)
         f *= vignette(0.9)
     elif look == "stinger":
-        lum = f @ np.array([0.114, 0.587, 0.299])
-        red = np.clip((f[..., 2] - f[..., 1] * 1.4) * 3, 0, 1)[..., None]  # keep the red eye
-        grey = np.repeat(lum[..., None], 3, 2) * 0.55
-        f = grey * (1 - red) + f * red * 1.6
-        f = np.clip((f - 0.12) * 1.3, 0, 1)
-        f *= vignette(1.4)
+        f = np.clip((f - 0.02) * 1.15, 0, 1) ** 1.1
+        f *= vignette(1.0)
     return np.clip(f * 255, 0, 255).astype(np.uint8)
 
 
@@ -239,8 +232,6 @@ STINGER_FOCUS = (645 / SW, 175 / SH)  # the centre robot's red eye
 
 
 def shot_frame(s, t_local):
-    if s["clip"] is None:
-        return np.full((H, W, 3), (19, 16, 11), np.uint8)  # #0b1013, the end card's ground
     speed = (s["b"] - s["a"]) / s["dur"]
     st = s["a"] + t_local * speed
     img = src_frame(s["clip"], st)
@@ -250,9 +241,6 @@ def shot_frame(s, t_local):
     p = ease(t_local / s["dur"])
     z = z0 + (z1 - z0) * p
     fx, fy = s.get("focus", (0.5, 0.5))
-    if s["look"] == "stinger":
-        z = 5.2 + 0.9 * p
-        fx, fy = STINGER_FOCUS
     scale = W / SW * z
     # keep the frame covered: clamp the centre so no edge shows
     cx = np.clip(fx * SW, SW / (2 * z), SW - SW / (2 * z))
@@ -262,7 +250,13 @@ def shot_frame(s, t_local):
     if z < 1.6:
         blur = cv2.GaussianBlur(out, (0, 0), 1.2)
         out = cv2.addWeighted(out, 1.45, blur, -0.45, 0)  # gentle unsharp after the upscale
-    return grade(out, s["look"])
+    out = grade(out, s["look"])
+    if s["look"] == "end":
+        p = ease(t_local / 1.8)
+        if p > 0.01:
+            out = cv2.GaussianBlur(out, (0, 0), 0.5 + 22 * p)
+        out = (out.astype(np.float32) * (1 - 0.45 * p)).astype(np.uint8)
+    return out
 
 
 def shot_at(t):
@@ -322,9 +316,9 @@ _bots_cache = {}
 
 
 def bots_frame(t):
-    """A glitched glimpse of the snipers, for "Not the bots"."""
-    s = dict(clip="robots_race", a=4.2, b=5.6, dur=1.4, look="race", zoom=(1.1, 1.1))
-    return shot_frame(s, (t * 1.0) % 1.4)
+    """A glimpse of the sniper's red eye, for "Not the bots"."""
+    s = dict(clip="door", a=3.9, b=4.9, dur=1.0, look="stinger", zoom=(1.15, 1.25))
+    return shot_frame(s, min(t * 1.6, 0.99))
 
 
 def render_frame(i):
@@ -391,11 +385,9 @@ def render_frame(i):
             M = cv2.getRotationMatrix2D((W / 2, H / 2), 0, z)
             img = cv2.warpAffine(img, M, (W, H), borderMode=cv2.BORDER_REFLECT)
         elif kind == "rgb":
-            r = rand(i * 13)
-            px = int(4 + 10 * abs(np.sin(t * 9)) + (r.random() < 0.15) * 22)
-            img = rgb_split(img, px)
-            if r.random() < 0.12:
-                img = glitch(img, 0.35, i * 101)
+            img = rgb_split(img, int(2 + 4 * amt * abs(np.sin(t * 7))))
+        elif kind == "dip":  # a dip through black, centred on the cut
+            img = (img.astype(np.float32) * min(1, abs(t - (at + d / 2)) / (d / 2)) ** 1.5).astype(np.uint8)
         elif kind == "blur_in":
             img = cv2.GaussianBlur(img, (0, 0), 0.1 + 14 * (1 - ease(p)))
         elif kind == "dim_in":
@@ -404,11 +396,10 @@ def render_frame(i):
             img = cv2.addWeighted(img, 0.75, cv2.GaussianBlur(img, (0, 0), 3), 0.25, 0)
         elif kind == "bots":
             r = rand(i * 17)
-            bot = glitch(rgb_split(bots_frame(t - at), 14), 0.45, i * 3)
-            bot = tint_flash(bot, (40, 30, 200), 0.25)
-            if r.random() < 0.75:
-                img = bot
-            img = glitch(img, 0.3, i * 5)
+            bot = rgb_split(bots_frame(t - at), 8)
+            if p < 0.12 or p > 0.88:
+                bot = glitch(bot, 0.35, i * 3)
+            img = bot
 
     # film grain, very light, so the upscaled Veo frames hold together
     g = rand(i * 2654435761).normal(0, 3.2, (H // 2, W // 2, 1)).astype(np.float32)

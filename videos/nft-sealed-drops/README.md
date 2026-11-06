@@ -1,6 +1,6 @@
 # Cloak · NFT Sealed Drops launch film
 
-A 78 s, 16:9, 1920×1080 film cut from the 21 Veo clips in `Video (2).zip`, `Video 2.zip` and `video 3.zip`, following the production bible (*Cloak NFT Sealed Drops · Video Production Bible*, Nov 4). Every step is code, so any change is one command away.
+An 82 s, 16:9, 1920×1080 film cut from the 21 Veo clips in `Video (2).zip`, `Video 2.zip` and `video 3.zip` plus two later shots (the sniper at the door, Maya's win), following the production bible (*Cloak NFT Sealed Drops · Video Production Bible*, Nov 4). Every step is code, so any change is one command away.
 
 **Render:** [`renders/cloak-nft-sealed-drops.mp4`](renders/cloak-nft-sealed-drops.mp4) · subtitles: [`cloak-nft-sealed-drops.srt`](cloak-nft-sealed-drops.srt) · shots still to generate: [`VEO-PROMPTS.md`](VEO-PROMPTS.md)
 
@@ -13,7 +13,7 @@ A 78 s, 16:9, 1920×1080 film cut from the 21 Veo clips in `Video (2).zip`, `Vid
 | 9–10 Open auction | 0:27 | Glitch smash cut to the auction house. Live bid board climbs to $10,000, then $10,001, gavel (negative flash), SOLD. "Cheeky boy." "Fairer. Still sniped by $1." |
 | 11–13 Cloak | 0:44 | The Cloak Auctioneer, blindfolded bidders, sealed envelopes ("BID SEALED"), "Who can read your bid" (bidders, bots, Cloak, all sealed), the timer, every envelope opens, the clearing line, blindfolds off, refunds. "No race. No bots. No cheeky boys." |
 | 14 End card | 1:09 | Cloak mark, "NFT sealed drops. Live on Cloak.", the five pieces in their slots, cloak.boblabs.tech |
-| 15 Stinger | 1:15 | A Sniper's red eye through a door gap, the door slams, SEALED |
+| 15 Stinger | 1:17 | A Sniper walks up to a door left ajar, its red eye fills the gap, the door shuts, SEALED lights up on it |
 
 The five pieces (`assets/art/`, cut from the footage itself) keep the bible's slots everywhere, left to right D B **A** C E, with Art A in the gold frame at the centre. The keyer finds every green-screen frame, groups pieces split by heads or glass into one frame, and fills it with the right piece, perspective-matched, with the people in front kept.
 
@@ -45,11 +45,13 @@ ffmpeg -i build/picture.mp4 -i build/mix.wav -c:v libx264 -preset slow -crf 23 -
 
 ## Voices
 
-All voices are [Kokoro](https://github.com/thewh1teagle/kokoro-onnx), run locally. The narrator is its deepest male voice (`am_onyx`), pitched down with formants kept, with chest and presence EQ and light compression. The Old Auctioneer (`bm_george`), the Rival (`am_fenrir`), the Smirker (`am_puck`, slowed) and the Neighbour (`bm_lewis`) each have their own voice and sit in the auction room's reverb. Change a voice in `CAST` in `voice.py`.
+All voices are [ElevenLabs](https://elevenlabs.io), generated once per line and cached in `assets/vo/` (committed, so rebuilds cost nothing). The narrator is **Bill**; the Old Auctioneer is **Daniel**, the Rival **Adam**, the Smirker **Callum**, the Neighbour **George**. Narration uses `eleven_multilingual_v2` (race lines read 8% quicker); the auction characters and the hushed open use the expressive `eleven_v3` with performance tags (`[whispers]`, `[shouting, confident]`, `[smugly, quietly] … [pause] …`, `[amused chuckle]`), listed in `DIRECTED` in `voice.py`. Every line was checked with ElevenLabs speech to text: all 32 transcribe exactly as written. `VO_ENGINE=kokoro` falls back to local Kokoro voices for uncached lines.
+
+The API key is never in the code: the session's network proxy adds it to requests to api.elevenlabs.io.
 
 ## Sound
 
-Music is from [Openverse](https://openverse.org) (Jamendo), cut so each act's music lands on the picture: the race track's full-band entry hits on the pistol, and the Cloak pad's lift arrives when every bid opens. Sound effects are synthesized in `audio.py` (pistol, gavel, record scratch, whooshes, glitches, servos, plane, wind, paper, ticks, chimes, impacts, the lock). Openverse's Wikimedia files were rate-limited from the build machine and its Freesound files were blocked, so those effects are synthesized; any file later saved in `sfx/` under the names `audio.py` looks for (`crowd_large`, `applause`, `airplane`, `pen`, `tick`) replaces its stand-in.
+Music is from [Openverse](https://openverse.org) (Jamendo), cut so each act's music lands on the picture: the race track's full-band entry hits on the pistol, and the Cloak pad's lift arrives when every bid opens. The 39 sound effects are generated with ElevenLabs text to sound effects (`tools/sfx_gen.py`, prompts in `sfx_el/prompts.json`) and peak-normalized on load; `audio.py` falls back to synthesized stand-ins for any missing file. Transitions are whooshes, whip pans and blur dissolves; glitches are kept to the record scratch and the sniper's eye on "Not the bots".
 
 ## Credits (required for CC BY music)
 
@@ -57,6 +59,6 @@ Music is from [Openverse](https://openverse.org) (Jamendo), cut so each act's mu
 - "Duet for Violin and Viola, K.423 Rondeau" (W. A. Mozart) by Ivan Dolgunov, [Jamendo](https://www.jamendo.com/track/1545466), CC BY 3.0
 - "Saint Wave" by Soft and Furious, [Jamendo](https://www.jamendo.com/track/1535210), CC BY 3.0
 
-All three are edited (cut, filtered, levelled). Suggested credit line for the post:
+All three are edited (cut, filtered, levelled). Voices and sound effects: ElevenLabs. On ElevenLabs' free plan the output must credit ElevenLabs and isn't licensed for commercial use; a paid plan removes both. Suggested credit line for the post:
 
 > Music: "The Power of Nature" by REC, Mozart's K.423 Rondeau by Ivan Dolgunov, "Saint Wave" by Soft and Furious (CC BY 3.0, via Jamendo).

@@ -1,71 +1,95 @@
-"""Voices: every line is synthesized locally with Kokoro (no API) and cached in build/vo/.
+"""Voices: ElevenLabs text to speech, one request per line, cached in assets/vo/ (committed, so rebuilds cost nothing).
 
-The narrator is Kokoro's deepest male voice pitched down with formants kept, plus chest and presence EQ.
-The auction characters each get their own voice so they read as different people.
+The API key is never in this code: the session's network proxy adds it to requests to api.elevenlabs.io.
+Set VO_ENGINE=kokoro to fall back to the local Kokoro voices for a line that isn't cached yet.
+
+  python3 voice.py narrator "Some line."     → prints the duration (generates and caches it if new)
 """
 import hashlib
+import json
 import os
 import subprocess
 import sys
+import urllib.request
 
 import numpy as np
 import soundfile as sf
-from scipy.signal import resample_poly
 
 SR = 48000
 HERE = os.path.dirname(os.path.abspath(__file__))
-MODEL_DIR = os.environ.get("KOKORO_DIR", os.path.join(HERE, "build", "models"))
-CACHE = os.path.join(HERE, "build", "vo")
+CACHE = os.path.join(HERE, "assets", "vo")
+API = "https://api.elevenlabs.io/v1/text-to-speech/{voice}?output_format=mp3_44100_128"
+MODEL = "eleven_multilingual_v2"
 
-# name, speed, pitch ratio (rubberband, formants kept), EQ chain
+# ElevenLabs built-in voices (usable on every plan)
 CAST = {
-    "narrator":   dict(voice="am_onyx",   speed=0.96, pitch=0.88, lang="en-us",
-                       eq="highpass=f=60,equalizer=f=120:t=q:w=1:g=3.5,equalizer=f=350:t=q:w=1.2:g=-2,"
-                          "equalizer=f=3200:t=q:w=1:g=2.5,acompressor=threshold=-20dB:ratio=3:attack=5:release=120"),
-    "auctioneer": dict(voice="bm_george", speed=1.12, pitch=0.94, lang="en-gb",
-                       eq="highpass=f=90,equalizer=f=2500:t=q:w=1:g=2,acompressor=threshold=-18dB:ratio=3"),
-    "rival":      dict(voice="am_fenrir", speed=1.05, pitch=0.95, lang="en-us",
-                       eq="highpass=f=80,equalizer=f=1800:t=q:w=1:g=3,acompressor=threshold=-22dB:ratio=4"),
-    "smirker":    dict(voice="am_puck",   speed=0.82, pitch=0.97, lang="en-us",
-                       eq="highpass=f=80,equalizer=f=4000:t=q:w=1:g=2,acompressor=threshold=-18dB:ratio=3"),
-    "neighbour":  dict(voice="bm_lewis",  speed=0.92, pitch=0.97, lang="en-gb",
-                       eq="highpass=f=80,equalizer=f=2200:t=q:w=1:g=2,acompressor=threshold=-18dB:ratio=3"),
+    "narrator":   dict(voice="pqHfZKP75CvOlQylNhV4", name="Bill",   stability=0.50, similarity=0.80, style=0.30, speed=1.00),
+    "auctioneer": dict(voice="onwK4e9ZLuTAKqWW03F9", name="Daniel", stability=0.40, similarity=0.80, style=0.45, speed=1.12),
+    "rival":      dict(voice="pNInz6obpgDQGcFmaJgB", name="Adam",   stability=0.30, similarity=0.80, style=0.65, speed=1.05),
+    "smirker":    dict(voice="N2lVS1w4EtoT3dr4eOWO", name="Callum", stability=0.35, similarity=0.80, style=0.60, speed=0.88),
+    "neighbour":  dict(voice="JBFqnCBsd6RMkjVDRZzb", name="George", stability=0.40, similarity=0.80, style=0.55, speed=0.95),
+}
+# lines performed with the expressive v3 model and a direction (the subtitles show the plain line)
+DIRECTED = {
+    ("narrator", "NFTs are art."): "[whispers] NFTs are art.",
+    ("narrator", "Or are they?"): "[curious, a half smile] Or are they?",
+    ("auctioneer", "One thousand."): "[briskly] One thousand.",
+    ("auctioneer", "One thousand and one."): "[briskly] One thousand and one.",
+    ("auctioneer", "Two thousand."): "[briskly, raising his voice] Two thousand!",
+    ("auctioneer", "Sold."): "[firmly, final] Sold.",
+    ("rival", "Ten thousand!"): "[shouting, confident] Ten thousand!",
+    ("smirker", "Ten thousand... and one."): "[smugly, quietly] Ten thousand... [pause] and one.",
+    ("neighbour", "Cheeky boy."): "[amused chuckle] Cheeky boy.",
 }
 
-_kokoro = None
+# post: a little low cut, gentle compression, no pitch change (these voices are already the voices we want)
+POST = "highpass=f=70,acompressor=threshold=-20dB:ratio=2.5:attack=8:release=150"
 
 
-def _engine():
-    global _kokoro
-    if _kokoro is None:
-        from kokoro_onnx import Kokoro
-        _kokoro = Kokoro(os.path.join(MODEL_DIR, "kokoro-v1.0.onnx"), os.path.join(MODEL_DIR, "voices-v1.0.bin"))
-    return _kokoro
-
-
-def line(text, who="narrator"):
-    """Mono float32 at 48 kHz, silence trimmed."""
+def _key(text, who, speed):
     c = CAST[who]
-    key = hashlib.sha1(f"{c}|{text}".encode()).hexdigest()[:12]
-    path = os.path.join(CACHE, f"{who}-{key}.wav")
+    d = DIRECTED.get((who, text))
+    parts = [MODEL, c, speed, text] if d is None else ["eleven_v3", c, speed, d]
+    return hashlib.sha1(json.dumps(parts).encode()).hexdigest()[:12]
+
+
+def path_for(text, who="narrator", speed=None):
+    return os.path.join(CACHE, f"{who}-{_key(text, who, speed)}.wav")
+
+
+def line(text, who="narrator", speed=None):
+    """Mono float32 at 48 kHz, silence trimmed. `speed` overrides the cast speed (0.7 to 1.2)."""
+    path = path_for(text, who, speed)
     if not os.path.exists(path):
+        if os.environ.get("VO_ENGINE") == "kokoro":
+            import voice_kokoro
+            return voice_kokoro.line(text, who)
         os.makedirs(CACHE, exist_ok=True)
-        samples, sr = _engine().create(text, voice=c["voice"], speed=c["speed"], lang=c["lang"])
-        audio = resample_poly(samples.astype(np.float64), SR, sr).astype(np.float32)
-        audio = _process(audio, c)
-        loud = np.flatnonzero(np.abs(audio) > 0.012)
+        c = CAST[who]
+        d = DIRECTED.get((who, text))
+        if d:  # v3 takes its direction from the tags; only stability applies
+            body = json.dumps(dict(text=d, model_id="eleven_v3", voice_settings=dict(stability=0.5))).encode()
+        else:
+            body = json.dumps(dict(text=text, model_id=MODEL, voice_settings=dict(
+                stability=c["stability"], similarity_boost=c["similarity"], style=c["style"],
+                use_speaker_boost=True, speed=speed or c["speed"]))).encode()
+        req = urllib.request.Request(API.format(voice=c["voice"]), data=body, method="POST",
+                                     headers={"Content-Type": "application/json", "Accept": "audio/mpeg"})
+        with urllib.request.urlopen(req, timeout=120) as r:
+            mp3 = r.read()
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-i", "-", "-af", POST, "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"],
+                             input=mp3, capture_output=True, check=True).stdout
+        audio = np.frombuffer(raw, np.float32).copy()
+        loud = np.flatnonzero(np.abs(audio) > 0.01)
         audio = audio[max(loud[0] - 480, 0): loud[-1] + 2400]
-        sf.write(path, audio, SR)
+        audio = audio / (np.abs(audio).max() + 1e-9) * 0.9
+        sf.write(path, audio, SR, subtype="PCM_16")
     audio, _ = sf.read(path, dtype="float32")
+    if who == "smirker":  # tighten his pause before "and one" to half a second, so the gavel can follow
+        a, b = int(1.40 * SR), int(1.95 * SR)
+        if len(audio) > b + SR // 2:
+            audio = np.concatenate([audio[:a], audio[b:]])
     return audio
-
-
-def _process(audio, c):
-    af = f"rubberband=pitch={c['pitch']}:formant=preserved:pitchq=quality,{c['eq']}"
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", "-",
-                          "-af", af, "-f", "f32le", "-"], input=audio.tobytes(), capture_output=True, check=True).stdout
-    out = np.frombuffer(raw, np.float32).copy()
-    return out / (np.abs(out).max() + 1e-9) * 0.9
 
 
 if __name__ == "__main__":

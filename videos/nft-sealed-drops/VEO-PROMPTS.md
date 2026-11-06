@@ -1,5 +1,7 @@
 # Shots to generate
 
+**Status:** shots 15 (the sniper at the door) and 13 (Maya's win) were generated and are in the cut. The "Not the bots" insert uses the sniper's red-eye close-up from the door shot, so the prompt below is optional.
+
 Three shots the bible asks for that aren't in the three zips. The current cut stands in for each one (noted below). Drop a new clip into `build/clips/`, point its shot in `timeline.py` at it, and rebuild.
 
 All three match the existing footage: photoreal, 16:9, 24 fps, 8 s, no on-screen text, no camera HUD or "24fps" overlay (two of the existing clips have one baked in, and the cut avoids those frames).

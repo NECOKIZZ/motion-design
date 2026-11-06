@@ -32,6 +32,8 @@ CLIPS = {
     "refund": "video_3__People_lifting_blindfolds_in_ga_5c81802f.mp4",
     "unmask": "video_3__People_removing_blindfolds_in_gallery_89731ce5.mp4",
     "grab": "video_3__Robots_lift_framed_panels_away_f2fb152b.mp4",
+    "door": "new__Robot_peers_through_door_gap_43527765.mp4",
+    "maya_win": "new__Woman_celebrates_auction_win_196621d2.mp4",
 }
 
 # (bible shot, clip, src a, src b, output dur, look, extra)
@@ -71,11 +73,11 @@ SHOTS = [
     ("12c", "envelopes",  5.48, 9.95, 3.60, "cloak",   dict(key=True, zoom=(1.0, 1.06))),
     ("12d", "opening",    0.00, 0.90, 0.90, "cloak",   dict(zoom=(1.0, 1.04))),
     ("13a", "opening",    1.48, 8.00, 5.40, "cloak",   dict()),
-    ("13b", "unmask",     0.00, 1.44, 1.45, "cloak",   dict()),
+    ("13b", "maya_win",   2.90, 6.90, 3.20, "cloak",   dict(zoom=(1.0, 1.06))),
     ("13c", "refund",     2.48, 3.48, 1.00, "cloak",   dict()),
     ("13d", "refund",     3.52, 6.50, 2.40, "cloak",   dict()),
-    ("14",  None,         0, 0,       5.50, "end",     dict()),
-    ("15",  "robots_art", 0.20, 1.40, 3.40, "stinger", dict()),
+    ("14",  "refund",     6.50, 8.00, 5.50, "end",     dict(zoom=(1.0, 1.08))),
+    ("15",  "door",       1.00, 7.60, 5.00, "stinger", dict()),
 ]
 
 
@@ -115,30 +117,39 @@ CUES = dict(
     TIMER=START["12d"],
     OPEN=START["13a"],                 # timer hits zero, every envelope opens
     LINE=at("13a", 6.55),              # the clearing line drops
-    CAP_RACE=START["3a"] + 0.25,       # "This is how NFTs get sold"
-    CAP_CRASH=START["5a"] + 0.30,      # "Site crashes."
-    CAP_FAILED=START["5a"] + 1.25,     # "Failed transactions."
-    CAP_GAS=START["5b"] + 0.95,        # "Gas wars."
-    CAP_BOTS=START["7a"] + 0.90,       # "Every mint is a bot race"
     CAP_SNIPED=START["10d"] + 0.10,    # "Fairer. Still sniped by $1."
-    BOTS_FLASH=START["12c"] + 1.62,    # "Not the bots." a glitch of the snipers
-    CAP_CLOAK=START["13b"] + 0.10,     # "No race. No bots. No cheeky boys."
+    BOTS_FLASH=START["12c"] + 1.62,    # "Not the bots." a glitch of the sniper's eye
+    UNMASK=at("13b", 3.45),            # Maya's blindfold comes off
+    SPOT=at("13b", 3.75),              # her spotlight snaps on
+    CAP_CLOAK=at("13b", 3.80),         # "No race. No bots. No cheeky boys."
+    DOOR_SHUT=at("15", 5.40),          # the door closes on the sniper
     END=START["14"],
     STINGER=START["15"],
 )
 
 # narrator and cast: (time, speaker, line). Times are where each line starts.
 VO = [
-    (0.70, "narrator", "NFTs are art."),
+    (0.35, "narrator", "NFTs are art."),
     (START["2"] + 0.40, "narrator", "Or are they?"),
-    (START["3a"] + 0.35, "narrator", "This is how they get sold."),
+    (START["3a"] + 0.25, "narrator", "This is how they get sold."),
+    (START["3c"] + 0.05, "narrator", "Thousands of buyers. One button."),
+    (CUES["PISTOL"] + 0.42, "narrator", "Gas spikes."),
+    (START["4b"] + 0.55, "narrator", "The site crashes."),
+    (START["5a"] + 0.75, "narrator", "Transactions fail..."),
+    (CUES["TRIP"] + 0.25, "narrator", "and you still pay the fees."),
+    (START["6a"] + 0.05, "narrator", "While you're still refreshing..."),
+    (START["6b"] + 0.30, "narrator", "the bots are already done."),
+    (START["7a"] + 0.15, "narrator", "Bots don't wait in line."),
+    (START["7b"] + 0.05, "narrator", "They take the whole drop..."),
+    (START["7c"] + 0.45, "narrator", "and sell it back to you."),
+    (START["8"] + 0.35, "narrator", "Welcome to the mint race."),
     (START["9a"] + 0.25, "narrator", "But art was never sold like this."),
     (START["9b"] + 0.15, "auctioneer", "One thousand."),
     (START["9b"] + 1.30, "auctioneer", "One thousand and one."),
-    (START["9c"] + 0.85, "auctioneer", "Two thousand."),
-    (START["10a"] + 0.35, "rival", "Ten thousand!"),
-    (START["10b"] + 0.75, "smirker", "Ten thousand... and one."),
-    (CUES["GAVEL"] + 0.05, "auctioneer", "Sold."),
+    (START["9c"] + 1.15, "auctioneer", "Two thousand."),
+    (START["10a"] + 0.2, "rival", "Ten thousand!"),
+    (START["10b"] + 0.4, "smirker", "Ten thousand... and one."),
+    (CUES["GAVEL"] + 0.4, "auctioneer", "Sold."),
     (START["10e"] + 0.55, "neighbour", "Cheeky boy."),
     (START["11a"] + 0.25, "narrator", "At Cloak, we take it one step further."),
     (START["12a"] + 0.20, "narrator", "Every bid is sealed."),
@@ -151,6 +162,7 @@ VO = [
     (START["13a"] + 5.05, "narrator", "And every winner pays the same price."),
     (START["14"] + 0.80, "narrator", "NFT sealed drops. Live on Cloak."),
 ]
+RACE_SPEED = 1.08  # the race lines are read a touch quicker
 
 
 def write_js(vo_durations=None):
@@ -163,9 +175,13 @@ def write_js(vo_durations=None):
     return path
 
 
+def vo_speed(t, who):
+    return RACE_SPEED if who == "narrator" and START["3c"] <= t < START["9a"] else None
+
+
 def vo_durations():
     import voice
-    return {x: len(voice.line(x, w)) / voice.SR for _, w, x in VO}
+    return {x: len(voice.line(x, w, vo_speed(t, w))) / voice.SR for t, w, x in VO}
 
 
 if __name__ == "__main__":

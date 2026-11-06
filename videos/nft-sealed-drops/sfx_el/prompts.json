@@ -1,0 +1,197 @@
+{
+  "stadium_murmur": {
+    "seconds": 14,
+    "prompt_influence": 0.4,
+    "prompt": "Large outdoor athletics stadium, crowd murmuring and chattering before a race starts, anticipation, open air, distant"
+  },
+  "crowd_roar": {
+    "seconds": 4,
+    "prompt_influence": 0.5,
+    "prompt": "Stadium crowd erupts into a loud roaring cheer as a race starts, outdoor"
+  },
+  "starter_pistol": {
+    "seconds": 2,
+    "prompt_influence": 0.7,
+    "prompt": "A single starter pistol shot fired outdoors in a stadium, sharp crack with a slapback echo off the stands"
+  },
+  "running_footsteps": {
+    "seconds": 5,
+    "prompt_influence": 0.5,
+    "prompt": "A crowd of people in leather dress shoes sprinting fast on a rubber running track, heavy breathing, close"
+  },
+  "body_fall": {
+    "seconds": 1.5,
+    "prompt_influence": 0.6,
+    "prompt": "A person falls hard onto a rubber running track, heavy body thud with clothes rustle, no voice"
+  },
+  "cash_flutter": {
+    "seconds": 3,
+    "prompt_influence": 0.5,
+    "prompt": "A thick stack of paper banknotes thrown and scattering in the wind, bills fluttering through the air"
+  },
+  "servo_whine": {
+    "seconds": 2.5,
+    "prompt_influence": 0.6,
+    "prompt": "High pitched robotic servo motors whining as a fast humanoid robot sprints past, mechanical, sci-fi"
+  },
+  "robot_footsteps": {
+    "seconds": 3,
+    "prompt_influence": 0.6,
+    "prompt": "Heavy metal robot feet sprinting fast on asphalt, rhythmic mechanical clanks and hydraulic hiss"
+  },
+  "plane_flyby": {
+    "seconds": 4,
+    "prompt_influence": 0.5,
+    "prompt": "A small propeller plane flies low overhead and climbs away into the sky, engine roar fading"
+  },
+  "wind": {
+    "seconds": 4,
+    "prompt_influence": 0.4,
+    "prompt": "Desolate wind blowing across an empty stadium, lonely and quiet"
+  },
+  "stamp": {
+    "seconds": 1,
+    "prompt_influence": 0.7,
+    "prompt": "A heavy rubber stamp slammed down hard on paper, punchy thump"
+  },
+  "target_lock": {
+    "seconds": 1,
+    "prompt_influence": 0.6,
+    "prompt": "Electronic targeting system locks on, quick rising beeps ending in a sharp lock tone, sci-fi HUD"
+  },
+  "counter_up": {
+    "seconds": 2,
+    "prompt_influence": 0.6,
+    "prompt": "Digital counter rapidly ticking up, fast electronic clicks accelerating"
+  },
+  "error_buzz": {
+    "seconds": 1,
+    "prompt_influence": 0.6,
+    "prompt": "Computer error buzz, harsh low digital fail sound"
+  },
+  "auction_murmur": {
+    "seconds": 12,
+    "prompt_influence": 0.4,
+    "prompt": "Posh auction house room tone, well dressed crowd murmuring quietly, wood panelled hall with soft reverb"
+  },
+  "gavel_tap": {
+    "seconds": 1,
+    "prompt_influence": 0.6,
+    "prompt": "A light single tap of a wooden gavel on a sound block in a large quiet room"
+  },
+  "paddle_swish": {
+    "seconds": 1,
+    "prompt_influence": 0.6,
+    "prompt": "Several cardboard bidding paddles raised quickly in an auction, quick swish of movement and cloth rustle"
+  },
+  "snort_laugh": {
+    "seconds": 1.5,
+    "prompt_influence": 0.6,
+    "prompt": "A single man gives a short amused snort of laughter through his nose, close up, indoors"
+  },
+  "crowd_gasp": {
+    "seconds": 2,
+    "prompt_influence": 0.5,
+    "prompt": "An auction room audience gasps in surprise together, then a murmur"
+  },
+  "pen_scratch": {
+    "seconds": 3,
+    "prompt_influence": 0.6,
+    "prompt": "A fountain pen writing on thick paper, close up, scratching strokes, quiet room"
+  },
+  "wax_seal": {
+    "seconds": 1.5,
+    "prompt_influence": 0.6,
+    "prompt": "A brass wax seal stamp pressed firmly into warm wax on an envelope, soft squish and solid press"
+  },
+  "envelope_drop": {
+    "seconds": 1,
+    "prompt_influence": 0.6,
+    "prompt": "A sealed paper envelope dropping into a glass box onto a pile of envelopes, soft papery thud"
+  },
+  "clock_tick": {
+    "seconds": 4,
+    "prompt_influence": 0.6,
+    "prompt": "A precise mechanical clock ticking, steady seconds, close and clean, final tick louder"
+  },
+  "chime": {
+    "seconds": 3,
+    "prompt_influence": 0.6,
+    "prompt": "A single crystal clear bell chime, elegant and bright, long shimmering tail, reveal moment"
+  },
+  "paper_fan": {
+    "seconds": 3,
+    "prompt_influence": 0.5,
+    "prompt": "Dozens of paper envelopes bursting out of a box and flying through the air, fluttering whoosh of paper"
+  },
+  "soft_applause": {
+    "seconds": 4,
+    "prompt_influence": 0.5,
+    "prompt": "A small elegant audience applauding softly and warmly in a gallery, with a delighted gasp"
+  },
+  "whoosh_fast_1": {
+    "seconds": 1,
+    "prompt_influence": 0.6,
+    "prompt": "Fast cinematic whoosh, air swish passing by quickly from left to right, clean"
+  },
+  "whoosh_fast_2": {
+    "seconds": 1,
+    "prompt_influence": 0.6,
+    "prompt": "Quick punchy whip pan whoosh transition, cinematic swish"
+  },
+  "whoosh_fast_3": {
+    "seconds": 1,
+    "prompt_influence": 0.6,
+    "prompt": "Short sharp cinematic swoosh with a slight low rumble, trailer transition"
+  },
+  "whoosh_soft": {
+    "seconds": 1.5,
+    "prompt_influence": 0.5,
+    "prompt": "Soft airy breathy whoosh transition, gentle and elegant"
+  },
+  "impact": {
+    "seconds": 3,
+    "prompt_influence": 0.6,
+    "prompt": "Deep cinematic trailer boom impact with a heavy sub bass tail"
+  },
+  "riser": {
+    "seconds": 2,
+    "prompt_influence": 0.6,
+    "prompt": "Cinematic tension riser building quickly up into a hit, rising noise and synth"
+  },
+  "logo_sting": {
+    "seconds": 4,
+    "prompt_influence": 0.5,
+    "prompt": "Elegant cinematic logo reveal, a soft deep impact then a shimmering synth swell and sparkle, premium and calm"
+  },
+  "record_scratch": {
+    "seconds": 1,
+    "prompt_influence": 0.7,
+    "prompt": "A vinyl record scratch stopping the music abruptly, comedic"
+  },
+  "glitch": {
+    "seconds": 0.8,
+    "prompt_influence": 0.6,
+    "prompt": "Short subtle digital glitch, data stutter"
+  },
+  "door_creak": {
+    "seconds": 2,
+    "prompt_influence": 0.6,
+    "prompt": "A heavy wooden door slowly creaking open in a quiet corridor"
+  },
+  "door_slam": {
+    "seconds": 1.5,
+    "prompt_influence": 0.6,
+    "prompt": "A heavy door slams shut hard, solid wooden bang with a short echo in a corridor"
+  },
+  "lock_clunk": {
+    "seconds": 1,
+    "prompt_influence": 0.7,
+    "prompt": "A heavy metal lock bolt clunks shut, deep mechanical click"
+  },
+  "sad_robot": {
+    "seconds": 2,
+    "prompt_influence": 0.6,
+    "prompt": "A disappointed robot powering down, sad descending servo whir and a low beep"
+  }
+}

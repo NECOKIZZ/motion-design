@@ -5,307 +5,407 @@
     <meta name="viewport" content="width=1920, height=1080" />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <script src="timeline.js"></script>
+    <script src="tracks.js"></script>
     <style>
       @font-face { font-family: "Inter Tight"; src: url("assets/intertight.woff2") format("woff2"); font-weight: 100 900; }
       @font-face { font-family: "Mono"; src: url("assets/mono.woff2") format("woff2"); font-weight: 100 900; }
+      @font-face { font-family: "Ink"; src: url("assets/caveat.woff2") format("woff2"); font-weight: 600; }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1920px; height: 1080px; overflow: hidden; background: transparent; }
-      :root {
-        --ink: #eef1f0; --mute: rgba(238, 241, 240, 0.72); --line: rgba(238, 241, 240, 0.16);
-        --sig: #6cb6cb; --seal: #e3a95a; --race: #ffd23f; --red: #e0384a; --ground: #0b1013;
-      }
+      :root { --ink: #eef1f0; --sig: #6cb6cb; --seal: #e3a95a; --race: #ffd23f; --red: #e8364a; }
       #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Inter Tight", sans-serif; color: var(--ink); }
       .layer { position: absolute; inset: 0; }
-      .soft { will-change: transform, opacity, filter; }
-      .shadow { text-shadow: 0 2px 3px rgba(0, 0, 0, 0.75), 0 0 24px rgba(0, 0, 0, 0.45); }
+      .a { position: absolute; opacity: 0; will-change: transform, opacity, filter; }
+      .sh { text-shadow: 0 3px 4px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 0, 0, 0.45); }
       .mono { font-family: "Mono", monospace; }
-      .hudcard { position: absolute; background: rgba(8, 11, 13, 0.62); border: 1px solid var(--line); border-radius: 22px; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
-      .seal { border-radius: 8px; background: repeating-linear-gradient(90deg, rgba(238, 241, 240, 0.4) 0 12px, rgba(238, 241, 240, 0.16) 12px 24px); }
+      .w { display: inline-block; }
+      .ch { display: inline-block; white-space: pre; }
 
-      /* chapter tags */
-      .chapter { position: absolute; left: 72px; top: 62px; font-family: "Mono"; font-size: 21px; letter-spacing: 0.16em; display: flex; align-items: center; gap: 14px; opacity: 0; }
-      .chapter i { width: 10px; height: 10px; border-radius: 50%; }
-      .chapter b { display: inline-block; font-weight: 500; color: var(--mute); }
+      /* subtitles: plain text, no boxes */
+      #subs .sub { position: absolute; left: 0; right: 0; top: 972px; text-align: center; font-size: 36px; font-weight: 560; opacity: 0; }
+      #subs .sub em { font-style: normal; font-family: "Mono"; font-size: 20px; letter-spacing: 0.18em; font-weight: 700; margin-right: 14px; color: #ff8a96; vertical-align: 4px; }
 
-      /* subtitles */
-      #subs .sub { position: absolute; left: 0; right: 0; top: 968px; text-align: center; font-size: 38px; font-weight: 560; letter-spacing: -0.01em; opacity: 0; }
-      #subs .sub em { font-style: normal; font-family: "Mono"; font-size: 19px; letter-spacing: 0.16em; font-weight: 600; margin-right: 14px; padding: 5px 10px 4px; border-radius: 6px; vertical-align: 6px; }
+      /* race */
+      #sold { left: 0; right: 0; top: 760px; text-align: center; font-size: 76px; font-weight: 820; letter-spacing: -0.04em; }
+      #buy1 { left: 120px; top: 150px; font-size: 64px; font-weight: 700; letter-spacing: -0.03em; }
+      #buy2 { left: 112px; top: 222px; font-size: 150px; font-weight: 900; letter-spacing: -0.05em; color: var(--race); transform-origin: left center; }
+      #go { left: 1150px; top: 300px; width: 0; height: 0; }
+      #go b { position: absolute; transform: translate(-50%, -50%); font-size: 320px; font-weight: 900; letter-spacing: -0.06em; color: #fff; -webkit-text-stroke: 6px var(--race); line-height: 1; }
+      #gaswrap { left: 0; right: 0; top: 560px; height: 380px; perspective: 900px; opacity: 1; }
+      #gas { left: 50%; top: 40px; transform-origin: 50% 100%; white-space: nowrap; font-family: "Mono"; font-weight: 700; color: var(--race); font-size: 150px; letter-spacing: -0.02em; text-shadow: 0 0 1px rgba(0,0,0,.4); }
+      #gas small { font-size: 70px; color: #fff; margin-left: 24px; }
+      #gas i { font-style: normal; font-size: 70px; color: #fff; margin-right: 28px; }
+      #crash { left: 0; right: 0; top: 280px; text-align: center; font-size: 120px; font-weight: 880; letter-spacing: -0.04em; }
+      #fail1 { left: 120px; top: 130px; font-size: 72px; font-weight: 760; letter-spacing: -0.03em; }
+      #failed { left: 300px; top: 0; font-size: 210px; font-weight: 900; letter-spacing: -0.04em; color: var(--red); }
+      #fees { left: 120px; top: 130px; font-size: 72px; font-weight: 760; letter-spacing: -0.03em; }
+      #fees span { color: var(--red); }
+      .fee { font-family: "Mono"; font-weight: 700; color: var(--red); }
+      #refresh { left: 120px; top: 150px; font-size: 92px; font-weight: 780; letter-spacing: -0.035em; display: flex; align-items: center; gap: 26px; }
+      #refresh .spin { display: inline-block; font-size: 110px; color: var(--race); line-height: 1; }
+      #done { left: 0; right: 0; top: 330px; text-align: center; font-size: 190px; font-weight: 900; font-style: italic; letter-spacing: -0.05em; color: var(--red); }
+      #bracket { left: 0; top: 0; width: 100px; height: 100px; }
+      #bracket i { position: absolute; width: 46px; height: 46px; border: 0 solid var(--red); }
+      #bracket .tl { left: 0; top: 0; border-left-width: 6px; border-top-width: 6px; }
+      #bracket .tr { right: 0; top: 0; border-right-width: 6px; border-top-width: 6px; }
+      #bracket .bl { left: 0; bottom: 0; border-left-width: 6px; border-bottom-width: 6px; }
+      #bracket .br { right: 0; bottom: 0; border-right-width: 6px; border-bottom-width: 6px; }
+      #bracket .lab { position: absolute; left: 0; top: -44px; font-family: "Mono"; font-size: 26px; font-weight: 700; color: var(--red); white-space: nowrap; letter-spacing: 0.08em; }
+      #wait { left: 0; right: 0; top: 70px; text-align: center; font-size: 96px; font-weight: 820; letter-spacing: -0.04em; }
+      #wait .x { position: relative; display: inline-block; }
+      #wait .x i { position: absolute; left: -6px; right: -6px; top: 54%; height: 9px; background: var(--red); transform-origin: left center; }
+      .stamp { width: 0; height: 0; }
+      .stamp b { position: absolute; transform: translate(-50%, -50%); font-size: 104px; font-weight: 900; letter-spacing: 0.04em; color: var(--red); padding: 4px 0; border-top: 7px solid var(--red); border-bottom: 7px solid var(--red); line-height: 1; mix-blend-mode: normal; }
+      #whole { left: 0; right: 0; top: 300px; text-align: center; font-size: 250px; font-weight: 900; letter-spacing: -0.06em; color: rgba(255, 255, 255, 0.1); -webkit-text-stroke: 4px rgba(255, 255, 255, 0.92); line-height: 0.9; }
+      #plane { left: 0; top: 0; width: 0; height: 0; }
+      #plane .rope { position: absolute; left: 70px; top: 10px; width: 300px; height: 3px; background: rgba(255, 255, 255, 0.85); transform-origin: left center; transform: rotate(10deg); }
+      #plane .ban { position: absolute; left: 360px; top: 20px; font-size: 130px; font-weight: 900; letter-spacing: -0.03em; white-space: nowrap; transform-origin: left center; color: #fff; }
+      #plane .ban span { color: var(--red); }
+      #mint { left: 0; right: 0; top: 70px; text-align: center; font-size: 120px; font-weight: 900; letter-spacing: -0.05em; }
+      #mint .y { color: var(--race); }
 
-      /* captions: lower third, at most eight words */
-      .cap { position: absolute; left: 0; right: 0; top: 760px; text-align: center; font-size: 68px; font-weight: 760; letter-spacing: -0.035em; opacity: 0; }
-      .cap .w { display: inline-block; }
-      #capfail { position: absolute; left: 120px; top: 560px; display: grid; gap: 16px; }
-      #capfail div { font-size: 54px; font-weight: 780; letter-spacing: -0.03em; opacity: 0; display: flex; align-items: center; gap: 18px; }
-      #capfail div i { font-style: normal; font-family: "Mono"; font-size: 22px; font-weight: 700; color: #111; background: var(--race); border-radius: 6px; padding: 6px 10px 5px; letter-spacing: 0.1em; }
+      /* auction */
+      .bid { width: 0; height: 0; }
+      .bid b { position: absolute; transform: translate(-50%, -50%); font-size: 96px; font-weight: 820; letter-spacing: -0.04em; white-space: nowrap; color: #fff; text-shadow: 0 4px 0 #6a1220, 0 0 30px rgba(0,0,0,.6); }
+      #rival b { font-size: 150px; color: #fff; text-shadow: 0 5px 0 var(--red), 0 0 30px rgba(0,0,0,.6); }
+      #paddle { left: 0; top: 0; width: 0; height: 0; }
+      #paddle .face { position: absolute; transform: translate(-50%, -50%); font-size: 80px; font-weight: 880; letter-spacing: -0.04em; color: #2a1517; white-space: nowrap; }
+      #paddle .one { position: absolute; left: 0; top: 0; transform: translate(-50%, 24px) rotate(-6deg); font-family: "Ink"; font-size: 70px; color: var(--red); white-space: nowrap; }
+      #sold2 { left: 1060px; top: 520px; width: 0; height: 0; }
+      #sold2 b { position: absolute; transform: translate(-50%, -50%); font-size: 280px; font-weight: 900; letter-spacing: -0.05em; color: var(--red); text-shadow: 0 0 40px rgba(0,0,0,.5); }
+      #sold2 svg { position: absolute; left: -500px; top: -300px; width: 1000px; height: 600px; overflow: visible; }
+      #sniped { left: 0; right: 0; top: 780px; text-align: center; font-size: 76px; font-weight: 820; letter-spacing: -0.04em; }
+      #sniped .r { color: var(--red); }
 
-      /* race HUD */
-      #gas { right: 64px; top: 52px; width: 330px; height: 112px; padding: 18px 26px; opacity: 0; }
-      #gas .lbl { font-family: "Mono"; font-size: 17px; letter-spacing: 0.16em; color: var(--mute); display: flex; justify-content: space-between; }
-      #gas .lbl span { color: var(--red); display: flex; align-items: center; gap: 8px; }
-      #gas .lbl span i { width: 9px; height: 9px; border-radius: 50%; background: var(--red); }
-      #gas .val { font-family: "Mono"; font-size: 44px; font-weight: 600; color: var(--race); margin-top: 6px; }
-      #gas .val small { font-size: 18px; color: var(--mute); margin-left: 8px; }
-
-      /* auction HUD */
-      #bid { right: 64px; top: 52px; width: 380px; height: 150px; padding: 20px 28px; opacity: 0; }
-      #bid .lbl { font-family: "Mono"; font-size: 17px; letter-spacing: 0.16em; color: var(--mute); }
-      #bid .val { font-size: 72px; font-weight: 760; letter-spacing: -0.04em; margin-top: 4px; }
-      #bid .plus { position: absolute; right: 26px; top: 66px; font-family: "Mono"; font-size: 28px; font-weight: 700; color: var(--red); opacity: 0; }
-      #sold { position: absolute; right: 120px; top: 226px; font-size: 64px; font-weight: 850; letter-spacing: 0.06em; color: var(--red); border: 6px solid var(--red); border-radius: 12px; padding: 0 22px; transform: rotate(-9deg); opacity: 0; background: rgba(20, 4, 6, 0.35); }
-
-      /* cloak HUD */
-      #sealstamp { position: absolute; left: 50%; top: 150px; width: 520px; margin-left: -260px; padding: 24px 30px; opacity: 0; text-align: center; }
-      #sealstamp .t { font-family: "Mono"; font-size: 24px; letter-spacing: 0.22em; color: var(--sig); display: flex; align-items: center; justify-content: center; gap: 12px; }
-      #sealstamp .t i { width: 10px; height: 10px; border-radius: 50%; background: var(--sig); }
-      #sealstamp .seal { height: 30px; margin-top: 16px; }
-      #sees { right: 64px; top: 52px; width: 430px; padding: 22px 28px 26px; opacity: 0; }
-      #sees .lbl { font-family: "Mono"; font-size: 17px; letter-spacing: 0.16em; color: var(--mute); margin-bottom: 14px; }
-      #sees .row { display: grid; grid-template-columns: 150px 1fr; align-items: center; gap: 16px; margin-top: 12px; font-size: 24px; font-weight: 560; opacity: 0; }
-      #sees .row .seal { height: 22px; }
-      #closes { position: absolute; left: 0; right: 0; top: 120px; text-align: center; font-family: "Mono"; font-size: 24px; letter-spacing: 0.24em; color: var(--sig); opacity: 0; }
-      #clearing { position: absolute; left: 1000px; top: 262px; opacity: 0; }
-      #clearing .t { font-family: "Mono"; font-size: 24px; letter-spacing: 0.2em; color: var(--seal); font-weight: 600; }
-      #clearing .s { font-size: 30px; font-weight: 560; margin-top: 6px; }
-      #wins { position: absolute; right: 1000px; top: 262px; text-align: right; opacity: 0; }
-      #wins .t { font-family: "Mono"; font-size: 24px; letter-spacing: 0.2em; color: var(--sig); font-weight: 600; }
-      #wins .s { font-size: 30px; font-weight: 560; margin-top: 6px; }
-      #refund { position: absolute; left: 1180px; top: 640px; padding: 12px 22px; border-radius: 999px; background: rgba(8, 11, 13, 0.7); border: 1px solid rgba(108, 182, 203, 0.6); font-family: "Mono"; font-size: 27px; letter-spacing: 0.16em; color: var(--sig); opacity: 0; display: flex; gap: 12px; align-items: center; }
-      #refund i { width: 10px; height: 10px; border-radius: 50%; background: var(--sig); }
-      #nametag { position: absolute; left: 120px; top: 690px; opacity: 0; }
-      #nametag .t { font-family: "Mono"; font-size: 22px; letter-spacing: 0.2em; color: var(--sig); display: flex; align-items: center; gap: 12px; }
-      #nametag .t i { width: 10px; height: 10px; border-radius: 50%; background: var(--sig); }
-      #nametag .n { font-size: 44px; font-weight: 640; letter-spacing: -0.02em; margin-top: 6px; }
+      /* cloak */
+      #nametag { left: 120px; top: 690px; }
+      #nametag .t { font-family: "Mono"; font-size: 22px; letter-spacing: 0.2em; color: var(--sig); }
+      #nametag .n { font-size: 46px; font-weight: 660; letter-spacing: -0.02em; margin-top: 6px; }
       #nametag .bar { height: 3px; width: 100%; margin-top: 12px; background: linear-gradient(90deg, var(--sig), rgba(108, 182, 203, 0)); transform-origin: left; }
+      #inked { left: 0; right: 0; top: 40px; text-align: center; font-family: "Ink"; font-size: 210px; color: var(--sig); text-shadow: 0 0 30px rgba(0,0,0,.5); }
+      #waxword { left: 600px; top: 790px; width: 0; height: 0; }
+      #waxword b { position: absolute; transform: translate(-50%, -50%) rotate(-8deg); font-size: 64px; font-weight: 820; letter-spacing: 0.32em; color: var(--sig); text-shadow: 0 2px 0 rgba(0,0,0,.6), 0 0 22px rgba(108,182,203,.55); white-space: nowrap; }
+      #nobody { left: 1480px; top: 560px; }
+      #nobody div { position: relative; font-size: 86px; font-weight: 820; letter-spacing: -0.03em; line-height: 1.15; opacity: 0; width: max-content; }
+      #nobody div i { position: absolute; left: -8px; right: -8px; top: 52%; height: 8px; background: var(--sig); transform-origin: left center; box-shadow: 0 0 18px rgba(108,182,203,.8); }
+      #wins { right: 1010px; top: 230px; text-align: right; }
+      #wins .t, #clear .t { font-family: "Mono"; font-size: 26px; letter-spacing: 0.22em; font-weight: 700; }
+      #wins .t { color: var(--sig); }
+      #wins .s, #clear .s { font-size: 34px; font-weight: 560; margin-top: 6px; }
+      #clear { left: 1000px; top: 230px; }
+      #clear .t { color: var(--seal); }
+      #norace { left: 0; right: 0; top: 790px; text-align: center; font-size: 80px; font-weight: 820; letter-spacing: -0.04em; }
+      #norace .t { color: var(--sig); }
+      #refund { left: 0; top: 0; width: 0; height: 0; }
+      #refund b { position: absolute; transform: translate(-50%, -50%) rotate(-12deg); font-size: 52px; font-weight: 860; letter-spacing: 0.28em; color: var(--sig); white-space: nowrap; padding: 6px 0; border-top: 3px solid var(--sig); border-bottom: 3px solid var(--sig); text-shadow: 0 2px 6px rgba(0,0,0,.8); }
       #bug { position: absolute; right: 70px; bottom: 120px; height: 46px; opacity: 0; }
 
-      /* end card */
-      #end { opacity: 1; }
-      #endbg { position: absolute; inset: 0; background: var(--ground); }
-      #glass { position: absolute; top: 0; left: -660px; width: 3240px; height: 1080px; background: url("assets/glass.jpg") center/cover no-repeat; opacity: 0.9; }
-      #shade { position: absolute; inset: 0; background: radial-gradient(1300px 820px at 50% 48%, rgba(11, 16, 19, 0.86), rgba(11, 16, 19, 0.55) 64%, rgba(11, 16, 19, 0.35)); }
-      #glow { position: absolute; left: 50%; top: 50%; width: 1500px; height: 1000px; margin: -500px 0 0 -750px; border-radius: 50%; background: radial-gradient(closest-side, rgba(108, 182, 203, 0.18), rgba(108, 182, 203, 0)); }
-      #endmark { position: absolute; left: 50%; top: 96px; height: 112px; margin-left: -48px; }
-      #endtitle { position: absolute; left: 0; right: 0; top: 248px; text-align: center; font-size: 82px; font-weight: 560; letter-spacing: -0.045em; }
+      /* end card: over the blurred last shot */
+      #endmark { left: 50%; top: 110px; height: 120px; margin-left: -52px; }
+      #endtitle { left: 0; right: 0; top: 268px; text-align: center; font-size: 88px; font-weight: 600; letter-spacing: -0.045em; }
       #endtitle span { color: var(--sig); }
-      #artrow { position: absolute; left: 0; right: 0; top: 406px; display: flex; justify-content: center; align-items: center; gap: 34px; }
-      #artrow .f { width: 190px; height: 236px; padding: 10px; background: #050607; border: 1px solid rgba(238, 241, 240, 0.18); border-radius: 6px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55); position: relative; overflow: hidden; }
-      #artrow .f.hero { width: 236px; height: 292px; padding: 12px; background: linear-gradient(135deg, #b8862f, #f3d37a 40%, #8a5f1c 70%, #e8c065); border: none; }
+      #artrow { left: 0; right: 0; top: 430px; display: flex; justify-content: center; align-items: center; gap: 34px; opacity: 1; }
+      #artrow .f { width: 190px; height: 236px; padding: 10px; background: #050607; border-radius: 4px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6); position: relative; overflow: hidden; opacity: 0; }
+      #artrow .f.hero { width: 236px; height: 292px; padding: 12px; background: linear-gradient(135deg, #b8862f, #f3d37a 40%, #8a5f1c 70%, #e8c065); }
       #artrow .f div { width: 100%; height: 100%; background-size: cover; background-position: center; }
-      #artrow .f .sheen { position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.32) 50%, transparent 65%); transform: translateX(-120%); }
-      #endpill { position: absolute; left: 50%; top: 772px; transform: translateX(-50%); padding: 18px 36px; border-radius: 999px; font-family: "Mono"; font-size: 34px; background: rgba(238, 241, 240, 0.07); border: 1px solid var(--line); backdrop-filter: blur(24px); white-space: nowrap; }
-      #endsub { position: absolute; left: 0; right: 0; top: 880px; display: flex; justify-content: center; align-items: center; gap: 12px; font-family: "Mono"; font-size: 22px; letter-spacing: 0.14em; color: var(--mute); }
-      #endsub i { width: 10px; height: 10px; border-radius: 50%; background: var(--sig); }
+      #artrow .f .sheen { position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.3) 50%, transparent 65%); transform: translateX(-120%); }
+      #endurl { left: 0; right: 0; top: 800px; text-align: center; font-family: "Mono"; font-size: 40px; letter-spacing: 0.02em; }
+      #endurl u { text-decoration: none; border-bottom: 3px solid var(--sig); padding-bottom: 6px; }
+      #endsub { left: 0; right: 0; top: 890px; text-align: center; font-family: "Mono"; font-size: 22px; letter-spacing: 0.16em; color: rgba(238,241,240,.78); }
 
-      /* stinger: a door left ajar, then sealed */
-      .door { position: absolute; top: 0; height: 1080px; width: 1100px; background: linear-gradient(90deg, #040506, #0b0f12 85%, #12181c); }
-      #doorL { left: -140px; transform-origin: left; }
-      #doorR { right: -140px; background: linear-gradient(270deg, #040506, #0b0f12 85%, #12181c); }
-      #doorL::after, #doorR::after { content: ""; position: absolute; top: 0; bottom: 0; width: 3px; background: rgba(238, 241, 240, 0.12); }
-      #doorL::after { right: 0; }
-      #doorR::after { left: 0; }
-      #lock { position: absolute; left: 50%; top: 50%; width: 560px; margin: -120px 0 0 -280px; padding: 30px 36px; text-align: center; border-radius: 30px; background: rgba(238, 241, 240, 0.06); border: 1px solid rgba(108, 182, 203, 0.45); opacity: 0; }
-      #lock .t { font-family: "Mono"; font-size: 46px; font-weight: 700; letter-spacing: 0.3em; color: var(--sig); display: flex; align-items: center; justify-content: center; gap: 22px; }
-      #lock .t svg { height: 52px; }
-      #lock .seal { height: 34px; margin-top: 22px; }
+      /* stinger */
+      #doorseal { left: 50%; top: 50%; width: 0; height: 0; }
+      #doorseal .t { position: absolute; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 26px; font-size: 92px; font-weight: 800; letter-spacing: 0.32em; color: var(--sig); text-shadow: 0 0 28px rgba(108,182,203,.75), 0 0 80px rgba(108,182,203,.35); white-space: nowrap; }
+      #doorseal svg { height: 96px; filter: drop-shadow(0 0 18px rgba(108,182,203,.8)); }
+      #doorseal .line { position: absolute; left: -330px; width: 660px; top: 76px; height: 4px; background: linear-gradient(90deg, rgba(108,182,203,0), var(--sig), rgba(108,182,203,0)); transform-origin: center; }
       #blackout { position: absolute; inset: 0; background: #000; opacity: 0; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="78.54" data-width="1920" data-height="1080">
-      <div id="chapters" class="clip layer" data-start="0" data-duration="69.62" data-track-index="0">
-        <div id="ch1" class="chapter shadow"><i style="background: var(--race)"></i>01 <b>THE MINT RACE</b></div>
-        <div id="ch2" class="chapter shadow"><i style="background: var(--red)"></i>02 <b>THE OPEN AUCTION</b></div>
-        <div id="ch3" class="chapter shadow"><i style="background: var(--sig)"></i>03 <b>THE CLOAK AUCTION</b></div>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="81.88" data-width="1920" data-height="1080">
+      <div id="race" class="clip layer" data-start="0" data-duration="27.5" data-track-index="0">
+        <div id="sold" class="a sh"><span class="w">This</span> <span class="w">is</span> <span class="w">how</span> <span class="w">NFTs</span> <span class="w">get</span> <span class="w" style="color: var(--race)">sold</span></div>
+        <div id="buy1" class="a sh">Thousands of buyers.</div>
+        <div id="buy2" class="a sh">One button.</div>
+        <div id="go" class="a"><b>GO</b></div>
+        <div id="gaswrap" class="layer"><div id="gas" class="a"><i>GAS</i><b id="gasv">38</b><small>GWEI</small></div></div>
+        <div id="crash" class="a sh"></div>
+        <div id="fail1" class="a sh">Transactions fail…</div>
+        <div id="failed" class="a sh">FAILED</div>
+        <div id="fees" class="a sh">…and you still pay <span>the fees.</span></div>
+        <div id="fee1" class="a fee sh" style="left: 1240px; top: 520px; font-size: 84px">−$48</div>
+        <div id="fee2" class="a fee sh" style="left: 1500px; top: 330px; font-size: 64px">−$112</div>
+        <div id="fee3" class="a fee sh" style="left: 980px; top: 280px; font-size: 56px">−$27</div>
+        <div id="fee4" class="a fee sh" style="left: 1640px; top: 640px; font-size: 72px">−$73</div>
+        <div id="refresh" class="a sh"><span class="spin">↻</span><span>still refreshing…</span></div>
+        <div id="done" class="a sh">already done.</div>
+        <div id="bracket" class="a"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="lab">BOT_01 · 0.002s</span></div>
+        <div id="wait" class="a sh">Bots don't <span class="x">wait in line<i></i></span>.</div>
+        <div id="st1" class="a stamp" style="left: 355px; top: 600px"><b style="transform: translate(-50%, -50%) rotate(-12deg)">SNIPED</b></div>
+        <div id="st2" class="a stamp" style="left: 955px; top: 600px"><b style="transform: translate(-50%, -50%) rotate(7deg)">SNIPED</b></div>
+        <div id="st3" class="a stamp" style="left: 1545px; top: 600px"><b style="transform: translate(-50%, -50%) rotate(-5deg)">SNIPED</b></div>
+        <div id="whole" class="a">THE WHOLE<br />DROP</div>
+        <div id="plane" class="a"><i class="rope"></i><div class="ban sh">SOLD <span>OUT</span></div></div>
+        <div id="mint" class="a sh"><span class="w">Every</span> <span class="w">mint</span> <span class="w">is</span> <span class="w">a</span> <span class="w y">bot</span> <span class="w y">race.</span></div>
       </div>
 
-      <div id="hud" class="clip layer" data-start="0" data-duration="69.62" data-track-index="1">
-        <div id="gas" class="hudcard soft"><div class="lbl">GAS <span><i></i>MINT LIVE</span></div><div class="val"><b id="gasv">38</b><small>GWEI</small></div></div>
-        <div id="bid" class="hudcard soft"><div class="lbl">LOT 07 · CURRENT BID</div><div class="val" id="bidv">$1,000</div><div class="plus" id="plus">+$1</div></div>
-        <div id="sold" class="soft" data-layout-allow-overlap>SOLD</div>
-        <div id="sealstamp" class="hudcard soft"><div class="t"><i></i>BID SEALED</div><div class="seal"></div></div>
-        <div id="sees" class="hudcard soft">
-          <div class="lbl">WHO CAN READ YOUR BID</div>
-          <div class="row" id="r1"><span>Bidders</span><div class="seal"></div></div>
-          <div class="row" id="r2"><span>Bots</span><div class="seal"></div></div>
-          <div class="row" id="r3"><span>Cloak</span><div class="seal"></div></div>
-        </div>
-        <div id="closes" class="shadow soft">BIDDING CLOSES</div>
-        <div id="wins" class="shadow soft"><div class="t">HIGHEST BIDS WIN</div><div class="s">sorted high to low</div></div>
-        <div id="clearing" class="shadow soft"><div class="t">CLEARING PRICE</div><div class="s">every winner pays this</div></div>
-        <div id="nametag" class="shadow soft"><div class="t"><i></i>YOUR NARRATOR</div><div class="n">The Cloak Auctioneer</div><div class="bar"></div></div>
-        <div id="refund" class="soft"><i></i>BID TOO LOW · REFUNDED</div>
+      <div id="auction" class="clip layer" data-start="27.4" data-duration="17.1" data-track-index="1">
+        <div id="b1" class="a bid" style="left: 600px; top: 200px"><b>$1,000</b></div>
+        <div id="b2" class="a bid" style="left: 1420px; top: 250px"><b>$1,001</b></div>
+        <div id="b3" class="a bid" style="left: 560px; top: 300px"><b>$2,000</b></div>
+        <div id="b4" class="a bid" style="left: 1210px; top: 320px"><b>$3,500</b></div>
+        <div id="b5" class="a bid" style="left: 1560px; top: 400px"><b>$5,000</b></div>
+        <div id="b6" class="a bid" style="left: 430px; top: 260px"><b>$6,250</b></div>
+        <div id="b7" class="a bid" style="left: 820px; top: 190px"><b>$8,000</b></div>
+        <div id="b8" class="a bid" style="left: 1320px; top: 170px"><b>$9,500</b></div>
+        <div id="rival" class="a bid" style="left: 900px; top: 200px"><b>$10,000!</b></div>
+        <div id="paddle" class="a"><b class="face">$10,001</b><span class="one">+$1</span></div>
+        <div id="sold2" class="a"><svg viewBox="-500 -300 1000 600"><g stroke="#e8364a" stroke-width="5" fill="none" stroke-linecap="round">
+          <path class="crk" d="M-260 40 L-360 90 L-430 70 L-500 120" /><path class="crk" d="M250 -40 L340 -90 L420 -70 L500 -130" />
+          <path class="crk" d="M-120 120 L-160 200 L-150 260 L-200 300" /><path class="crk" d="M150 120 L200 210 L180 280" />
+          <path class="crk" d="M-80 -130 L-120 -210 L-90 -280" /><path class="crk" d="M110 -130 L150 -220 L230 -260" /></g></svg><b>SOLD.</b></div>
+        <div id="sniped" class="a sh"><span class="w">Fairer.</span> <span class="w">Still</span> <span class="w">sniped</span> <span class="w">by</span> <span class="w r">$1.</span></div>
+      </div>
+
+      <div id="cloak" class="clip layer" data-start="44.4" data-duration="27.0" data-track-index="2">
+        <div id="nametag" class="a sh"><div class="t">YOUR NARRATOR</div><div class="n">The Cloak Auctioneer</div><div class="bar"></div></div>
+        <div id="inked" class="a"></div>
+        <div id="waxword" class="a"><b>SEALED</b></div>
+        <div id="nobody" class="a" style="opacity: 1"><div id="n1" class="sh">Bidders<i></i></div><div id="n2" class="sh">Bots<i></i></div><div id="n3" class="sh">Us<i></i></div></div>
+        <div id="wins" class="a sh"><div class="t">HIGHEST BIDS WIN</div><div class="s">sorted high to low</div></div>
+        <div id="clear" class="a sh"><div class="t">CLEARING PRICE</div><div class="s">every winner pays this</div></div>
+        <div id="norace" class="a sh"><span class="w">No race.</span> <span class="w">No bots.</span> <span class="w t">No cheeky boys.</span></div>
+        <div id="refund" class="a"><b>REFUNDED</b></div>
         <svg id="bug" viewBox="0 0 279 322"><path d="M149.671 0C119.989 12.7135 73.3456 40.2595 58.5046 74.1622C41.5434 118.659 37.3031 192.822 3.38073 266.984C-2.97971 279.697 -0.859564 288.173 13.9815 294.53C62.7449 317.838 117.869 326.314 160.272 319.957C209.035 315.719 247.198 298.768 279 275.459L232.357 209.773C213.275 230.962 187.834 243.676 160.272 245.795C117.869 250.032 86.0665 226.724 86.0665 186.465C86.0665 137.73 115.749 93.2324 149.671 69.9243C172.993 84.7568 194.194 108.065 206.915 133.492L257.799 103.827C234.477 57.2108 189.954 19.0703 149.671 0Z" fill="#EEF1F0" fill-opacity="0.85" /></svg>
       </div>
 
-      <div id="caps" class="clip layer" data-start="0" data-duration="69.62" data-track-index="2">
-        <div class="cap shadow" id="c1"><span class="w">This</span> <span class="w">is</span> <span class="w">how</span> <span class="w">NFTs</span> <span class="w">get</span> <span class="w" style="color: var(--race)">sold</span></div>
-        <div id="capfail">
-          <div id="f1" class="shadow"><i>ERR</i>Site crashes.</div>
-          <div id="f2" class="shadow"><i>ERR</i>Failed transactions.</div>
-          <div id="f3" class="shadow"><i>ERR</i>Gas wars.</div>
+      <div id="subs" class="clip layer" data-start="0" data-duration="71.38" data-track-index="3"></div>
+
+      <div id="end" class="clip layer" data-start="71.38" data-duration="5.5" data-track-index="4">
+        <svg id="endmark" class="a" viewBox="0 0 279 322"><path d="M149.671 0C119.989 12.7135 73.3456 40.2595 58.5046 74.1622C41.5434 118.659 37.3031 192.822 3.38073 266.984C-2.97971 279.697 -0.859564 288.173 13.9815 294.53C62.7449 317.838 117.869 326.314 160.272 319.957C209.035 315.719 247.198 298.768 279 275.459L232.357 209.773C213.275 230.962 187.834 243.676 160.272 245.795C117.869 250.032 86.0665 226.724 86.0665 186.465C86.0665 137.73 115.749 93.2324 149.671 69.9243C172.993 84.7568 194.194 108.065 206.915 133.492L257.799 103.827C234.477 57.2108 189.954 19.0703 149.671 0Z" fill="#EEF1F0" /></svg>
+        <div id="endtitle" class="a sh">NFT sealed drops. <span>Live on Cloak.</span></div>
+        <div id="artrow" class="layer" style="position: absolute; height: 300px">
+          <div class="f"><div style="background-image: url(assets/art/D_slime.jpg)"></div><i class="sheen"></i></div>
+          <div class="f"><div style="background-image: url(assets/art/B_girl.jpg)"></div><i class="sheen"></i></div>
+          <div class="f hero"><div style="background-image: url(assets/art/A_frog.jpg)"></div><i class="sheen"></i></div>
+          <div class="f"><div style="background-image: url(assets/art/C_cat.jpg)"></div><i class="sheen"></i></div>
+          <div class="f"><div style="background-image: url(assets/art/E_horn.jpg)"></div><i class="sheen"></i></div>
         </div>
-        <div class="cap shadow" id="c3"><span class="w">Every</span> <span class="w">mint</span> <span class="w">is</span> <span class="w">a</span> <span class="w" style="color: var(--race)">bot</span> <span class="w" style="color: var(--race)">race</span></div>
-        <div class="cap shadow" id="c4"><span class="w">Fairer.</span> <span class="w">Still</span> <span class="w">sniped</span> <span class="w">by</span> <span class="w" style="color: var(--red)">$1.</span></div>
-        <div class="cap shadow" id="c5"><span class="w">No race.</span> <span class="w">No bots.</span> <span class="w" style="color: var(--sig)">No cheeky boys.</span></div>
+        <div id="endurl" class="a sh"><u>cloak.boblabs.tech</u></div>
+        <div id="endsub" class="a sh">SEALED BIDS · ONE FAIR PRICE · ON ELYSIUM</div>
       </div>
 
-      <div id="subs" class="clip layer" data-start="0" data-duration="69.62" data-track-index="3"></div>
-
-      <div id="end" class="clip layer" data-start="69.62" data-duration="5.5" data-track-index="4">
-        <div id="endbg"><div id="glass"></div><div id="shade"></div><div id="glow"></div></div>
-        <svg id="endmark" class="soft" viewBox="0 0 279 322"><path d="M149.671 0C119.989 12.7135 73.3456 40.2595 58.5046 74.1622C41.5434 118.659 37.3031 192.822 3.38073 266.984C-2.97971 279.697 -0.859564 288.173 13.9815 294.53C62.7449 317.838 117.869 326.314 160.272 319.957C209.035 315.719 247.198 298.768 279 275.459L232.357 209.773C213.275 230.962 187.834 243.676 160.272 245.795C117.869 250.032 86.0665 226.724 86.0665 186.465C86.0665 137.73 115.749 93.2324 149.671 69.9243C172.993 84.7568 194.194 108.065 206.915 133.492L257.799 103.827C234.477 57.2108 189.954 19.0703 149.671 0Z" fill="#EEF1F0" /></svg>
-        <div id="endtitle" class="soft">NFT sealed drops. <span>Live on Cloak.</span></div>
-        <div id="artrow">
-          <div class="f soft"><div style="background-image: url(assets/art/D_slime.jpg)"></div><i class="sheen"></i></div>
-          <div class="f soft"><div style="background-image: url(assets/art/B_girl.jpg)"></div><i class="sheen"></i></div>
-          <div class="f hero soft"><div style="background-image: url(assets/art/A_frog.jpg)"></div><i class="sheen"></i></div>
-          <div class="f soft"><div style="background-image: url(assets/art/C_cat.jpg)"></div><i class="sheen"></i></div>
-          <div class="f soft"><div style="background-image: url(assets/art/E_horn.jpg)"></div><i class="sheen"></i></div>
-        </div>
-        <div id="endpill" class="soft">cloak.boblabs.tech</div>
-        <div id="endsub" class="soft"><i></i>SEALED BIDS · ONE FAIR PRICE · ON ELYSIUM</div>
-      </div>
-
-      <div id="sting" class="clip layer" data-start="75.12" data-duration="3.42" data-track-index="5">
-        <div id="doorL" class="door"></div>
-        <div id="doorR" class="door"></div>
-        <div id="lock">
-          <div class="t"><svg viewBox="0 0 279 322"><path d="M149.671 0C119.989 12.7135 73.3456 40.2595 58.5046 74.1622C41.5434 118.659 37.3031 192.822 3.38073 266.984C-2.97971 279.697 -0.859564 288.173 13.9815 294.53C62.7449 317.838 117.869 326.314 160.272 319.957C209.035 315.719 247.198 298.768 279 275.459L232.357 209.773C213.275 230.962 187.834 243.676 160.272 245.795C117.869 250.032 86.0665 226.724 86.0665 186.465C86.0665 137.73 115.749 93.2324 149.671 69.9243C172.993 84.7568 194.194 108.065 206.915 133.492L257.799 103.827C234.477 57.2108 189.954 19.0703 149.671 0Z" fill="#6cb6cb" /></svg>SEALED</div>
-          <div class="seal"></div>
-        </div>
+      <div id="sting" class="clip layer" data-start="76.88" data-duration="5.0" data-track-index="5">
+        <div id="doorseal" class="a"><div class="t"><svg viewBox="0 0 279 322"><path d="M149.671 0C119.989 12.7135 73.3456 40.2595 58.5046 74.1622C41.5434 118.659 37.3031 192.822 3.38073 266.984C-2.97971 279.697 -0.859564 288.173 13.9815 294.53C62.7449 317.838 117.869 326.314 160.272 319.957C209.035 315.719 247.198 298.768 279 275.459L232.357 209.773C213.275 230.962 187.834 243.676 160.272 245.795C117.869 250.032 86.0665 226.724 86.0665 186.465C86.0665 137.73 115.749 93.2324 149.671 69.9243C172.993 84.7568 194.194 108.065 206.915 133.492L257.799 103.827C234.477 57.2108 189.954 19.0703 149.671 0Z" fill="#6cb6cb" /></svg>SEALED</div><i class="line"></i></div>
         <div id="blackout"></div>
       </div>
     </div>
 
     <script>
       const tl = gsap.timeline({ paused: true });
-      const S = T.start, E = T.end, C = T.cues, D = T.duration;
-      const accent = { auctioneer: "#e0384a", rival: "#e0384a", smirker: "#e0384a", neighbour: "#e0384a" };
-      const tag = { auctioneer: "AUCTIONEER", rival: "BIDDER", smirker: "BIDDER", neighbour: "NEIGHBOUR" };
+      const S = T.start, E = T.end, C = T.cues;
+      const V = (txt) => T.vo.find((v) => v.text === txt);
+      const vt = (txt) => V(txt).t;
+      const ve = (txt) => V(txt).t + V(txt).d;
 
-      const inUp = (sel, at, o = {}) => tl.fromTo(sel, { opacity: 0, y: o.y ?? 18, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: o.d ?? 0.45, ease: "power3.out", stagger: o.stagger ?? 0 }, at);
-      const outUp = (sel, at, o = {}) => tl.to(sel, { opacity: 0, y: o.y ?? -10, filter: "blur(8px)", duration: o.d ?? 0.3, ease: "power2.in" }, at);
-      const stamp = (sel, at, o = {}) => tl.fromTo(sel, { opacity: 0, scale: o.from ?? 1.6, filter: "blur(6px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.22, ease: "power4.in" }, at);
+      const show = (sel, at, o = {}) => tl.fromTo(sel, { opacity: 0, y: o.y ?? 20, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: o.d ?? 0.4, ease: "power3.out" }, at);
+      const hide = (sel, at, o = {}) => tl.to(sel, { opacity: 0, y: o.y ?? -10, filter: "blur(8px)", duration: o.d ?? 0.25, ease: "power2.in" }, at);
+      const words = (sel, at, stagger = 0.08) => {
+        tl.set(sel, { opacity: 1 }, at);
+        tl.fromTo(sel + " .w", { opacity: 0, y: 30, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, ease: "power3.out", stagger }, at);
+      };
+      const slam = (sel, at, from = 1.8) => tl.fromTo(sel, { opacity: 0, scale: from, filter: "blur(6px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.14, ease: "power4.in" }, at);
+      const pop = (sel, at, life = 0.75) => {
+        tl.fromTo(sel, { opacity: 0, scale: 0.5, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.22, ease: "back.out(2.6)" }, at);
+        tl.to(sel, { opacity: 0, y: -40, duration: 0.3, ease: "power2.in" }, at + life);
+      };
+      // split text into letters (deterministic, before the timeline is built)
+      const letters = (el, text) => { el.innerHTML = ""; [...text].forEach((c) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = c; el.appendChild(s); }); };
+      // follow a list of [t, x, y, ...] keyframes with sets on every sample (seek-safe)
+      const follow = (sel, keys, fn) => keys.forEach((k) => tl.set(sel, fn(k), k[0]));
+      const lerpKeys = (keys, step = 1 / 24) => {
+        const out = [];
+        for (let t = keys[0][0]; t <= keys[keys.length - 1][0] + 1e-6; t += step) {
+          let i = 0; while (i < keys.length - 2 && keys[i + 1][0] < t) i++;
+          const a = keys[i], b = keys[i + 1], p = Math.min(1, Math.max(0, (t - a[0]) / (b[0] - a[0])));
+          out.push(a.map((v, j) => (j === 0 ? t : v + (b[j] - v) * p)));
+        }
+        return out;
+      };
 
-      // ── chapters
-      [["#ch1", S["3a"] + 0.1, S["9a"]], ["#ch2", S["9a"] + 0.25, S["11a"]], ["#ch3", S["11a"] + 0.6, S["14"]]].forEach(([id, a, b]) => {
-        inUp(id, a, { y: 0 });
-        tl.fromTo(id + " b", { x: 18 }, { x: 0, duration: 0.8, ease: "power3.out" }, a);
-        outUp(id, b - 0.32, { y: 0 });
-      });
-
-      // ── subtitles, one per spoken line (the end card says the last line itself)
+      // ── subtitles
       const subs = document.getElementById("subs");
+      const tag = { auctioneer: "AUCTIONEER", rival: "BIDDER", smirker: "BIDDER", neighbour: "NEIGHBOUR" };
       T.vo.forEach((v, k) => {
         if (v.t >= S["14"]) return;
         const el = document.createElement("div");
-        el.className = "sub shadow";
-        el.id = "sub" + k;
-        if (tag[v.who]) {
-          const em = document.createElement("em");
-          em.textContent = tag[v.who];
-          em.style.color = "#fff";
-          em.style.background = accent[v.who];
-          el.appendChild(em);
-        }
+        el.className = "sub sh"; el.id = "sub" + k;
+        if (tag[v.who]) { const em = document.createElement("em"); em.textContent = tag[v.who]; el.appendChild(em); }
         el.appendChild(document.createTextNode(v.text.replace("...", "…")));
         subs.appendChild(el);
         const next = T.vo[k + 1];
-        const out = Math.min(v.t + v.d + 0.45, next ? next.t - 0.04 : v.t + v.d + 0.45);
-        tl.fromTo(el, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.16, ease: "power2.out" }, v.t - 0.05);
-        tl.to(el, { opacity: 0, duration: 0.14, ease: "power1.in" }, out - 0.14);
+        const out = Math.min(v.t + v.d + 0.4, next ? next.t - 0.04 : v.t + v.d + 0.4);
+        tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.12 }, v.t - 0.04);
+        tl.to(el, { opacity: 0, duration: 0.12 }, out - 0.12);
       });
 
       // ── race
-      tl.fromTo("#c1 .w", { opacity: 0, y: 26, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, ease: "power3.out", stagger: 0.08 }, C.CAP_RACE);
-      tl.set("#c1", { opacity: 1 }, C.CAP_RACE);
-      outUp("#c1", S["4a"] - 0.25);
-      inUp("#gas", C.PISTOL + 0.15, { y: -12 });
-      tl.fromTo("#gas .lbl span i", { opacity: 1 }, { opacity: 0.15, duration: 0.3, repeat: 30, yoyo: true, ease: "none" }, C.PISTOL);
-      const gasSteps = [38, 92, 184, 260, 377, 512, 640, 811, 1024, 1290, 1655, 2048, 2700, 3412, 4180];
-      const gasA = C.PISTOL + 0.2, gasB = E["7c"];
-      gasSteps.forEach((g, k) => tl.set("#gasv", { textContent: g.toLocaleString("en-US") }, gasA + ((gasB - gasA) * k) / gasSteps.length));
-      tl.fromTo("#gas", { scale: 1 }, { scale: 1.06, duration: 0.12, repeat: 1, yoyo: true }, C.CAP_GAS);
-      outUp("#gas", S["8"] + 0.3, { y: -12 });
-      [["#f1", C.CAP_CRASH], ["#f2", C.CAP_FAILED], ["#f3", C.CAP_GAS]].forEach(([id, at]) => {
-        tl.fromTo(id, { opacity: 0, x: -60, skewX: -12 }, { opacity: 1, x: 0, skewX: 0, duration: 0.24, ease: "power4.out" }, at);
-      });
-      outUp("#f1, #f2, #f3", S["6a"] - 0.1, { y: 0, d: 0.25 });
-      tl.fromTo("#c3 .w", { opacity: 0, scale: 1.5, filter: "blur(8px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.22, ease: "power4.in", stagger: 0.07 }, C.CAP_BOTS);
-      tl.set("#c3", { opacity: 1 }, C.CAP_BOTS);
-      outUp("#c3", E["7c"] - 0.15);
+      words("#sold", vt("This is how they get sold.") - 0.05);
+      hide("#sold", S["3c"] - 0.12);
+      show("#buy1", vt("Thousands of buyers. One button."), { y: 14 });
+      slam("#buy2", vt("Thousands of buyers. One button.") + 1.05, 1.5);
+      tl.set(["#buy1", "#buy2"], { opacity: 0 }, S["4a"]);
 
-      // ── open auction: the bid board climbs, the last bid wins by a dollar
-      inUp("#bid", S["9b"] + 0.1, { y: -12 });
-      const bids = [
-        [S["9b"] + 0.15, "$1,000"], [S["9b"] + 1.3, "$1,001"], [S["9c"] + 0.85, "$2,000"],
-        [S["9d"] + 0.1, "$3,500"], [S["9d"] + 0.4, "$5,000"], [S["9d"] + 0.7, "$6,250"], [S["9d"] + 1.0, "$8,000"], [S["9d"] + 1.3, "$9,500"],
-        [S["10a"] + 0.35, "$10,000"], [S["10b"] + 1.6, "$10,001"],
-      ];
-      bids.forEach(([at, v]) => {
-        tl.set("#bidv", { textContent: v }, at);
-        tl.fromTo("#bidv", { scale: 1.12, color: "#e0384a" }, { scale: 1, color: "#eef1f0", duration: 0.35, ease: "power3.out" }, at);
+      slam("#go", C.PISTOL + 0.04, 2.4);
+      [[0.05, 14, -8], [0.1, -12, 10], [0.15, 9, -6], [0.2, -6, 4], [0.27, 3, -2], [0.34, 0, 0]].forEach(([dt, x, y]) => tl.set("#go b", { x, y }, C.PISTOL + 0.04 + dt));
+      tl.to("#go", { opacity: 0, scale: 1.3, filter: "blur(12px)", duration: 0.3, ease: "power2.in" }, E["4a"] - 0.3);
+
+      // gas: painted on the track, counting up under the runners
+      tl.set("#gas", { xPercent: -50, rotateX: 60 }, 0);
+      tl.fromTo("#gas", { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out" }, vt("Gas spikes.") - 0.12);
+      tl.to("#gas", { y: 90, scale: 1.15, duration: S["5a"] + 0.5 - vt("Gas spikes."), ease: "none" }, vt("Gas spikes."));
+      [38, 96, 210, 412, 780, 1290, 2048, 3100, 4180].forEach((g, k) => tl.set("#gasv", { textContent: g.toLocaleString("en-US") }, vt("Gas spikes.") + k * 0.11));
+      tl.to("#gas", { opacity: 0, duration: 0.2 }, S["5a"] + 0.5);
+
+      // the site crashes: the words fall apart
+      const crash = document.getElementById("crash");
+      letters(crash, "The site crashes.");
+      const tc = vt("The site crashes.");
+      tl.fromTo("#crash", { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 0.18, ease: "power3.out" }, tc - 0.05);
+      crash.querySelectorAll(".ch").forEach((c, k) => {
+        const r = ((k * 37) % 11) / 10, dir = k % 2 ? 1 : -1;
+        tl.to(c, { y: 760 + r * 260, rotation: dir * (30 + r * 90), x: dir * r * 60, duration: 0.75, ease: "power2.in" }, tc + 0.55 + r * 0.25);
       });
-      tl.set("#bidv", { transformOrigin: "left center" }, 0);
-      tl.fromTo("#plus", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.25, ease: "back.out(3)" }, S["10b"] + 1.6);
-      tl.fromTo("#sold", { opacity: 0, scale: 2.2, rotate: -2 }, { opacity: 1, scale: 1, rotate: -9, duration: 0.16, ease: "power4.in" }, C.GAVEL - 0.1);
-      outUp("#bid, #sold, #plus", E["10e"] - 0.3, { y: -12 });
-      tl.fromTo("#c4 .w", { opacity: 0, y: 26, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, ease: "power3.out", stagger: 0.1 }, C.CAP_SNIPED);
-      tl.set("#c4", { opacity: 1 }, C.CAP_SNIPED);
-      tl.fromTo("#c4 .w:last-child", { scale: 1.6 }, { scale: 1, duration: 0.3, ease: "back.out(3)" }, C.CAP_SNIPED + 0.45);
-      outUp("#c4", E["10e"] - 0.25);
+      tl.set("#crash", { opacity: 0 }, tc + 1.6);
+
+      // transactions fail: FAILED drops with Maya and lands on the thud
+      show("#fail1", vt("Transactions fail..."), { y: 12 });
+      tl.fromTo("#failed", { opacity: 1, y: -260, rotation: -6 }, { y: 700, rotation: 3, duration: C.THUD - C.TRIP, ease: "power3.in" }, C.TRIP);
+      tl.to("#failed", { y: 680, duration: 0.08, ease: "power1.out", yoyo: true, repeat: 1 }, C.THUD);
+      tl.to("#failed", { opacity: 0, duration: 0.3 }, E["5b"] - 0.25);
+      hide("#fail1", vt("and you still pay the fees.") - 0.15, { y: 0 });
+      show("#fees", vt("and you still pay the fees."), { y: 12 });
+      ["#fee1", "#fee2", "#fee3", "#fee4"].forEach((id, k) => {
+        const at = C.THUD + 0.05 + k * 0.18;
+        tl.fromTo(id, { opacity: 0, y: 30, scale: 0.6 }, { opacity: 1, y: 0, scale: 1, duration: 0.2, ease: "back.out(3)" }, at);
+        tl.to(id, { y: -90, opacity: 0, duration: 0.7, ease: "power1.in" }, at + 0.35);
+      });
+      hide("#fees", E["5c"] - 0.2, { y: 0 });
+
+      // still refreshing / already done
+      show("#refresh", vt("While you're still refreshing..."), { y: 12 });
+      tl.fromTo("#refresh .spin", { rotation: 0 }, { rotation: 900, duration: 1.6, ease: "none" }, vt("While you're still refreshing..."));
+      tl.to("#refresh", { opacity: 0, x: -60, duration: 0.18, ease: "power2.in" }, S["6b"] - 0.05);
+      const td = vt("the bots are already done.") + 0.35;
+      tl.fromTo("#done", { opacity: 0, x: -1500, skewX: -25, filter: "blur(24px)" }, { opacity: 1, x: 0, skewX: 0, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, td);
+      tl.to("#done", { x: 1500, skewX: -25, filter: "blur(24px)", opacity: 0, duration: 0.16, ease: "power4.in" }, E["6b"] - 0.1);
+
+      // targeting brackets on the lead sniper
+      const bot = TRACKS.bot;
+      tl.set("#bracket", { opacity: 1 }, S["6c"] + 0.05);
+      follow("#bracket", bot, (k) => ({ x: k[1] - 20, y: k[2] - 10, width: k[3] + 40, height: k[4] + 20 }));
+      tl.fromTo("#bracket i", { scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.18, ease: "power3.out" }, S["6c"] + 0.05);
+      tl.fromTo("#bracket .lab", { opacity: 0 }, { opacity: 1, duration: 0.1, repeat: 3, yoyo: true }, S["6c"] + 0.2);
+      tl.set("#bracket", { opacity: 0 }, E["6c"] - 0.05);
+
+      // bots don't wait in line, SNIPED on every piece as it's lifted
+      show("#wait", vt("Bots don't wait in line."), { y: -12 });
+      tl.fromTo("#wait .x i", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power3.out" }, vt("Bots don't wait in line.") + 0.75);
+      hide("#wait", E["7a"] - 0.15, { y: 0 });
+      [["#st1", 0.45], ["#st2", 0.75], ["#st3", 1.05]].forEach(([id, dt]) => slam(id, S["7a"] + dt, 2.2));
+      tl.set(["#st1", "#st2", "#st3"], { opacity: 0 }, E["7a"]);
+
+      // the whole drop
+      tl.fromTo("#whole", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out" }, vt("They take the whole drop...") - 0.05);
+      tl.to("#whole", { scale: 1.08, duration: 1.2, ease: "none" }, vt("They take the whole drop...") + 0.25);
+      tl.to("#whole", { opacity: 0, duration: 0.15 }, S["7c"] - 0.1);
+
+      // SOLD OUT trails behind the plane, up into the sky
+      const planeKeys = lerpKeys([[S["7c"] + 0.1, 960, 190, 1.0], [23.6, 950, 170, 0.67], [24.4, 960, 420, 0.17], [E["7c"], 960, 445, 0.1]]);
+      tl.set("#plane", { opacity: 1 }, S["7c"] + 0.15);
+      follow("#plane", planeKeys, (k) => ({ x: k[1], y: k[2], scale: k[3] }));
+      tl.fromTo("#plane .rope", { scaleX: 0 }, { scaleX: 1, duration: 0.25, ease: "power2.out" }, S["7c"] + 0.15);
+      tl.fromTo("#plane .ban", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.35, ease: "power3.out" }, S["7c"] + 0.3);
+      tl.set("#plane", { opacity: 0 }, E["7c"]);
+
+      words("#mint", vt("Welcome to the mint race.") + 0.1, 0.1);
+      tl.to("#mint", { opacity: 0, duration: 0.2 }, S["9a"] - 0.15);
+
+      // ── open auction: every bid pops off its paddle
+      pop("#b1", vt("One thousand.") + 0.05);
+      pop("#b2", vt("One thousand and one.") + 0.1);
+      pop("#b3", vt("Two thousand."));
+      ["#b4", "#b5", "#b6", "#b7", "#b8"].forEach((id, k) => pop(id, S["9d"] + 0.08 + k * 0.28, 0.42));
+      tl.fromTo("#rival", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.18, ease: "back.out(3)" }, vt("Ten thousand!"));
+      [[0.04, 6, -4], [0.08, -5, 5], [0.12, 4, -2], [0.18, 0, 0]].forEach(([dt, x, y]) => tl.set("#rival b", { x, y }, vt("Ten thousand!") + 0.18 + dt));
+      tl.to("#rival", { opacity: 0, duration: 0.2 }, E["10a"] - 0.15);
+      // the smirker's paddle reads $10,001
+      const padKeys = lerpKeys([[38.0, 630, 175, 250], [38.5, 572, 200, 320], [39.0, 515, 240, 400], [E["10b"], 495, 245, 440]]);
+      const tp = vt("Ten thousand... and one.") + 1.65;
+      follow("#paddle", padKeys.filter((k) => k[0] >= tp - 0.05), (k) => ({ x: k[1], y: k[2], scale: k[3] / 330 }));
+      tl.fromTo("#paddle", { opacity: 0 }, { opacity: 1, duration: 0.2 }, tp);
+      tl.fromTo("#paddle .one", { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(3)" }, vt("Ten thousand... and one.") + 1.95);
+      tl.set("#paddle", { opacity: 0 }, E["10b"]);
+      // SOLD. cracks onto the gavel strike
+      tl.fromTo("#sold2", { opacity: 0, scale: 2.4 }, { opacity: 1, scale: 1, duration: 0.1, ease: "power4.in" }, C.GAVEL - 0.08);
+      tl.fromTo("#sold2 .crk", { strokeDasharray: 400, strokeDashoffset: 400 }, { strokeDashoffset: 0, duration: 0.25, ease: "power3.out", stagger: 0.02 }, C.GAVEL + 0.02);
+      tl.to("#sold2", { opacity: 0, duration: 0.15 }, E["10c"] - 0.05);
+      words("#sniped", C.CAP_SNIPED, 0.1);
+      tl.fromTo("#sniped .r", { scale: 1.7 }, { scale: 1, duration: 0.3, ease: "back.out(3)" }, C.CAP_SNIPED + 0.45);
+      hide("#sniped", E["10e"] - 0.25);
 
       // ── cloak
-      inUp("#bug", S["11a"] + 0.8, { y: 0, d: 0.8 });
+      inUpBug();
+      function inUpBug() {
+        tl.fromTo("#bug", { opacity: 0 }, { opacity: 1, duration: 0.8 }, S["11a"] + 0.8);
+        tl.to("#bug", { opacity: 0, duration: 0.3 }, S["14"] - 0.3);
+      }
       tl.fromTo("#nametag", { opacity: 0, x: -30, filter: "blur(8px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.55, ease: "power3.out" }, S["11a"] + 0.5);
       tl.fromTo("#nametag .bar", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, S["11a"] + 0.7);
-      outUp("#nametag", E["11a"] - 0.3, { y: 0 });
-      tl.to("#bug", { opacity: 0, duration: 0.3 }, S["14"] - 0.3);
-      tl.fromTo("#sealstamp", { opacity: 0, scale: 1.25, filter: "blur(8px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.24, ease: "power4.in" }, C.SEAL - 0.18);
-      tl.fromTo("#sealstamp .seal", { backgroundPositionX: 0 }, { backgroundPositionX: 120, duration: 2.5, ease: "none" }, C.SEAL);
-      outUp("#sealstamp", S["12c"] - 0.1);
-      inUp("#sees", S["12c"] + 0.0, { y: -12 });
-      const lines = T.vo.filter((v) => v.text.startsWith("Not "));
-      ["#r1", "#r2", "#r3"].forEach((id, k) => {
-        tl.fromTo(id, { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, lines[k].t);
-        tl.fromTo(id + " .seal", { scaleX: 0, transformOrigin: "left" }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, lines[k].t + 0.1);
+      hide("#nametag", E["11a"] - 0.3, { y: 0 });
+      // "sealed." written in ink as they write their bids
+      const inked = document.getElementById("inked");
+      letters(inked, "sealed.");
+      tl.set("#inked", { opacity: 1 }, vt("Every bid is sealed.") + 0.45);
+      tl.fromTo("#inked .ch", { opacity: 0, y: 10, filter: "blur(6px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.25, ease: "power2.out", stagger: 0.13 }, vt("Every bid is sealed.") + 0.45);
+      tl.to("#inked", { opacity: 0, filter: "blur(10px)", duration: 0.35 }, E["12a"] - 0.3);
+      // the wax seal presses the word in
+      tl.fromTo("#waxword", { opacity: 0, scale: 1.35 }, { opacity: 1, scale: 1, duration: 0.14, ease: "power4.in" }, C.SEAL - 0.1);
+      tl.to("#waxword", { opacity: 0, duration: 0.3 }, E["12b"] - 0.3);
+      // nobody sees it: each one struck through as it's said
+      [["#n1", "Not the other bidders."], ["#n2", "Not the bots."], ["#n3", "Not even us."]].forEach(([id, line]) => {
+        tl.fromTo(id, { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, vt(line));
+        tl.fromTo(id + " i", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power3.out" }, vt(line) + 0.4);
+        tl.to(id, { opacity: 0.55, duration: 0.3 }, vt(line) + 0.75);
       });
-      tl.fromTo("#sees .seal", { backgroundPositionX: 0 }, { backgroundPositionX: 96, duration: 3.5, ease: "none" }, S["12c"]);
-      outUp("#sees", S["12d"] - 0.05, { y: -12 });
-      inUp("#closes", S["12d"] + 0.05, { y: 0, d: 0.3 });
-      tl.to("#closes", { opacity: 0, duration: 0.15 }, S["13a"] - 0.05);
-      inUp("#wins", C.LINE - 0.9);
-      inUp("#clearing", C.LINE + 0.1);
-      tl.fromTo("#clearing .t", { x: -24 }, { x: 0, duration: 0.7, ease: "power3.out" }, C.LINE + 0.1);
-      outUp("#wins, #clearing", E["13a"] - 0.3);
-      inUp("#refund", S["13d"] + 0.5);
-      outUp("#refund", E["13d"] - 0.3);
-      tl.set("#c5", { opacity: 1 }, C.CAP_CLOAK);
-      tl.fromTo("#c5 .w", { opacity: 0, y: 26, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power3.out", stagger: 0.55 }, C.CAP_CLOAK);
-      outUp("#c5", E["13d"] - 0.3);
+      tl.to("#nobody div", { opacity: 0, duration: 0.25 }, S["13a"] - 0.3);
+      show("#wins", C.LINE - 0.9);
+      show("#clear", C.LINE + 0.1);
+      hide("#wins, #clear", E["13a"] - 0.3);
+      tl.set("#norace", { opacity: 1 }, C.CAP_CLOAK);
+      tl.fromTo("#norace .w", { opacity: 0, y: 30, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power3.out", stagger: 0.5 }, C.CAP_CLOAK);
+      hide("#norace", E["13c"] - 0.2);
+      // REFUNDED, printed on the band round the cash
+      const cashKeys = lerpKeys([[S["13d"] + 0.2, 1200, 860], [69.6, 1120, 830], [70.1, 1060, 860], [70.6, 965, 850], [E["13d"], 880, 860]]);
+      follow("#refund", cashKeys, (k) => ({ x: k[1], y: k[2] }));
+      tl.fromTo("#refund", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.18, ease: "power4.in" }, S["13d"] + 0.45);
+      tl.to("#refund", { opacity: 0, duration: 0.3 }, E["13d"] - 0.3);
 
-      // ── end card
+      // ── end card over the slowly blurring last shot
       const T0 = S["14"];
-      tl.fromTo("#endbg", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out" }, T0);
-      tl.fromTo("#glass", { x: 0, scale: 1.05 }, { x: 240, scale: 1, duration: 5.5, ease: "none" }, T0);
-      tl.fromTo("#glow", { opacity: 0.5, scale: 0.9 }, { opacity: 1, scale: 1.08, duration: 5.5, ease: "sine.inOut" }, T0);
-      tl.fromTo("#endmark", { opacity: 0, scale: 0.7, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.7, ease: "power3.out" }, T0 + 0.15);
-      inUp("#endtitle", T0 + 0.75, { d: 0.7 });
-      tl.fromTo("#artrow .f", { opacity: 0, y: 40, filter: "blur(12px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.7, ease: "power3.out", stagger: { each: 0.1, from: "center" } }, T0 + 1.2);
-      tl.fromTo("#artrow .sheen", { x: "-120%" }, { x: "120%", duration: 1.1, ease: "power2.inOut", stagger: 0.08 }, T0 + 2.2);
-      tl.fromTo("#artrow", { scale: 1 }, { scale: 1.03, duration: 4, ease: "sine.inOut" }, T0 + 1.2);
-      tl.fromTo("#endpill", { opacity: 0, y: 14, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.65, ease: "power3.out" }, T0 + 1.9);
-      tl.fromTo("#endsub", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, T0 + 2.3);
+      tl.fromTo("#endmark", { opacity: 0, scale: 0.7, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.7, ease: "power3.out" }, T0 + 0.6);
+      show("#endtitle", T0 + 1.0, { d: 0.7 });
+      tl.fromTo("#artrow .f", { opacity: 0, y: 40, filter: "blur(12px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.7, ease: "power3.out", stagger: { each: 0.1, from: "center" } }, T0 + 1.5);
+      tl.fromTo("#artrow .sheen", { x: "-120%" }, { x: "120%", duration: 1.1, ease: "power2.inOut", stagger: 0.08 }, T0 + 2.5);
+      tl.fromTo("#artrow", { scale: 1 }, { scale: 1.03, duration: 3.8, ease: "sine.inOut" }, T0 + 1.5);
+      show("#endurl", T0 + 2.2, { y: 14 });
+      tl.fromTo("#endurl u", { borderBottomColor: "rgba(108,182,203,0)" }, { borderBottomColor: "rgba(108,182,203,1)", duration: 0.6 }, T0 + 2.5);
+      tl.fromTo("#endsub", { opacity: 0 }, { opacity: 1, duration: 0.5 }, T0 + 2.6);
 
-      // ── stinger: the door is ajar, a sniper peeks, the door seals
-      const T1 = S["15"], SLAM = T1 + 1.9;
-      tl.fromTo("#doorL", { x: -30 }, { x: -210, duration: 0.9, ease: "power2.out" }, T1);
-      tl.fromTo("#doorR", { x: 30 }, { x: 210, duration: 0.9, ease: "power2.out" }, T1);
-      tl.to("#doorL", { x: 0, duration: 0.14, ease: "power4.in" }, SLAM - 0.14);
-      tl.to("#doorR", { x: 0, duration: 0.14, ease: "power4.in" }, SLAM - 0.14);
-      tl.fromTo("#lock", { opacity: 0, scale: 1.5, filter: "blur(8px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.in" }, SLAM + 0.05);
-      tl.fromTo("#lock .seal", { backgroundPositionX: 0 }, { backgroundPositionX: 72, duration: 1.4, ease: "none" }, SLAM);
-      tl.to("#blackout", { opacity: 1, duration: 0.4, ease: "power2.in" }, T1 + 3.0);
+      // ── stinger: the door shuts on the sniper, and seals
+      tl.fromTo("#doorseal", { opacity: 0, scale: 1.25, filter: "blur(10px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.22, ease: "power4.in" }, C.DOOR_SHUT + 0.05);
+      tl.fromTo("#doorseal .line", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out" }, C.DOOR_SHUT + 0.2);
+      tl.to("#blackout", { opacity: 1, duration: 0.45, ease: "power2.in" }, 81.88 - 0.5);
 
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
