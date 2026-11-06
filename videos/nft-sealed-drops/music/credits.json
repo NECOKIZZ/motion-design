@@ -1,0 +1,38 @@
+{
+  "m_race_power": {
+    "id": "8742bb03-d57e-4ebc-801f-bc8efa545c5f",
+    "title": "The Power of Nature",
+    "creator": "REC",
+    "creator_url": "https://www.jamendo.com/artist/462491/REC_(3)",
+    "license": "by",
+    "license_version": "3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0/",
+    "foreign_landing_url": "https://www.jamendo.com/track/1199522",
+    "source": "jamendo",
+    "attribution": "\"The Power of Nature\" by REC is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/."
+  },
+  "m_auction_rondeau": {
+    "id": "392a41e4-fb2b-4f16-a585-dac219da4baa",
+    "title": "Duet for Violin and Viola, K.423 Rondeau",
+    "creator": "Ivan Dolgunov",
+    "creator_url": "https://www.jamendo.com/artist/357807/Ivan_Dolgunov",
+    "license": "by",
+    "license_version": "3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0/",
+    "foreign_landing_url": "https://www.jamendo.com/track/1545466",
+    "source": "jamendo",
+    "attribution": "\"Duet for Violin and Viola, K.423 Rondeau\" by Ivan Dolgunov is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/."
+  },
+  "m_cloak_saintwave": {
+    "id": "d6d4216d-9083-4421-9110-53c917da855b",
+    "title": "Saint Wave",
+    "creator": "Soft and Furious",
+    "creator_url": "https://www.jamendo.com/artist/507971/Soft_and_Furious",
+    "license": "by",
+    "license_version": "3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0/",
+    "foreign_landing_url": "https://www.jamendo.com/track/1535210",
+    "source": "jamendo",
+    "attribution": "\"Saint Wave\" by Soft and Furious is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/."
+  }
+}

@@ -1,0 +1,83 @@
+1
+00:00:00,700 --> 00:00:02,445
+NFTs are art.
+
+2
+00:00:03,400 --> 00:00:04,757
+Or are they?
+
+3
+00:00:05,433 --> 00:00:07,578
+This is how they get sold.
+
+4
+00:00:27,667 --> 00:00:30,100
+But art was never sold like this.
+
+5
+00:00:30,150 --> 00:00:31,260
+AUCTIONEER: One thousand.
+
+6
+00:00:31,300 --> 00:00:32,810
+AUCTIONEER: One thousand and one.
+
+7
+00:00:32,850 --> 00:00:34,233
+AUCTIONEER: Two thousand.
+
+8
+00:00:35,850 --> 00:00:37,055
+BIDDER: Ten thousand!
+
+9
+00:00:37,708 --> 00:00:39,495
+BIDDER: Ten thousand… and one.
+
+10
+00:00:39,758 --> 00:00:40,847
+AUCTIONEER: Sold.
+
+11
+00:00:42,383 --> 00:00:43,757
+NEIGHBOUR: Cheeky boy.
+
+12
+00:00:44,667 --> 00:00:47,363
+At Cloak, we take it one step further.
+
+13
+00:00:50,325 --> 00:00:52,035
+Every bid is sealed.
+
+14
+00:00:52,075 --> 00:00:54,257
+Nobody sees anyone else's.
+
+15
+00:00:54,883 --> 00:00:56,443
+Not the other bidders.
+
+16
+00:00:56,483 --> 00:00:57,643
+Not the bots.
+
+17
+00:00:57,683 --> 00:00:59,136
+Not even us.
+
+18
+00:00:59,483 --> 00:01:02,543
+When bidding closes, every bid opens at once.
+
+19
+00:01:02,583 --> 00:01:04,343
+The highest bids win.
+
+20
+00:01:04,383 --> 00:01:06,991
+And every winner pays the same price.
+
+21
+00:01:10,425 --> 00:01:13,422
+NFT sealed drops. Live on Cloak.
